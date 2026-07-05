@@ -119,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   'assets/images/login_background.jpeg',
                   fit: BoxFit.cover,
                   colorBlendMode: BlendMode.darken,
-                  color: Colors.black.withOpacity(0.6),
+                  color: Colors.black.withValues(alpha: 0.6),
                 ),
               ),
               
@@ -133,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     shape: BoxShape.circle,
                     gradient: RadialGradient(
                       colors: [
-                        goldColor.withOpacity(0.15),
+                        goldColor.withValues(alpha: 0.15),
                         Colors.transparent,
                       ],
                     ),
@@ -149,8 +149,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                         colors: [
-                          Colors.black.withOpacity(0.2),
-                          Colors.black.withOpacity(0.9),
+                          Colors.black.withValues(alpha: 0.2),
+                          Colors.black.withValues(alpha: 0.9),
                         ],
                       ),
                     ),
@@ -220,14 +220,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                               },
                                               activeColor: goldColor,
                                               checkColor: Colors.black,
-                                              side: BorderSide(color: Colors.white.withOpacity(0.3)),
+                                              side: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
                                             ),
                                           ),
                                           const SizedBox(width: 8),
                                           Text(
                                             'Remember me',
                                             style: TextStyle(
-                                              color: Colors.white.withOpacity(0.5),
+                                              color: Colors.white.withValues(alpha: 0.5),
                                               fontSize: 13,
                                             ),
                                           ),
@@ -257,7 +257,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       children: [
                                         Text(
                                           "Don't have an account? ",
-                                          style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 14),
+                                          style: TextStyle(color: Colors.white.withValues(alpha: 0.6), fontSize: 14),
                                         ),
                                         GestureDetector(
                                           onTapDown: (_) => setState(() => _linkScale = 0.90),
@@ -284,6 +284,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                           ),
+                          const SizedBox(height: 40),
+                          _buildFooter(isDesktop),
+                          const SizedBox(height: 20),
                         ],
                       ),
                     ),
@@ -310,7 +313,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: goldColor.withOpacity(0.2),
+                    color: goldColor.withValues(alpha: 0.2),
                     blurRadius: 40,
                     spreadRadius: 8,
                   ),
@@ -352,7 +355,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: goldColor.withOpacity(0.8),
+                      color: goldColor.withValues(alpha: 0.8),
                       blurRadius: 10,
                       spreadRadius: 2,
                     )
@@ -405,14 +408,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: isSelected ? goldColor.withOpacity(0.1) : Colors.transparent,
+                                  color: isSelected ? goldColor.withValues(alpha: 0.1) : Colors.transparent,
                                   border: Border.all(
-                                    color: isSelected ? goldColor : Colors.white.withOpacity(0.1),
+                                    color: isSelected ? goldColor : Colors.white.withValues(alpha: 0.1),
                                     width: 2,
                                   ),
                                   boxShadow: isSelected ? [
                                     BoxShadow(
-                                      color: goldColor.withOpacity(0.2),
+                                      color: goldColor.withValues(alpha: 0.2),
                                       blurRadius: 20,
                                       spreadRadius: 2,
                                     )
@@ -428,7 +431,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               Text(
                                 role['name'],
                                 style: TextStyle(
-                                  color: isSelected ? goldColor : Colors.white.withOpacity(0.5),
+                                  color: isSelected ? goldColor : Colors.white.withValues(alpha: 0.5),
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: 1.2,
@@ -475,9 +478,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.07),
+        color: Colors.white.withValues(alpha: 0.07),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withOpacity(0.1)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: TextFormField(
         controller: controller,
@@ -485,14 +488,14 @@ class _LoginScreenState extends State<LoginScreen> {
         style: const TextStyle(color: Colors.white, fontSize: 14),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: TextStyle(color: Colors.white.withOpacity(0.3)),
+          hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.3)),
           contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           border: InputBorder.none,
           suffixIcon: isPassword
               ? IconButton(
                   icon: Icon(
                     obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                    color: Colors.white.withOpacity(0.3),
+                    color: Colors.white.withValues(alpha: 0.3),
                     size: 22,
                   ),
                   onPressed: togglePassword,
@@ -518,14 +521,14 @@ class _LoginScreenState extends State<LoginScreen> {
           height: 60,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [goldColor, goldColor.withOpacity(0.7)],
+              colors: [goldColor, goldColor.withValues(alpha: 0.7)],
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: goldColor.withOpacity(0.4),
+                color: goldColor.withValues(alpha: 0.4),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
               ),
@@ -572,7 +575,7 @@ class _LoginScreenState extends State<LoginScreen> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: isDesktop ? 11 : 9,
-              color: Colors.white.withOpacity(0.4),
+              color: Colors.white.withValues(alpha: 0.4),
               letterSpacing: 2,
               fontWeight: FontWeight.w500,
             ),
@@ -591,9 +594,9 @@ class ArcPainter extends CustomPainter {
     final paint = Paint()
       ..shader = LinearGradient(
         colors: [
-          goldColor.withOpacity(0.0),
-          goldColor.withOpacity(0.4),
-          goldColor.withOpacity(0.0),
+          goldColor.withValues(alpha: 0.0),
+          goldColor.withValues(alpha: 0.4),
+          goldColor.withValues(alpha: 0.0),
         ],
       ).createShader(Rect.fromLTWH(0, 0, size.width, size.height))
       ..style = PaintingStyle.stroke

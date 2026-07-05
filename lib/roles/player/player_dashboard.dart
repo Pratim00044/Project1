@@ -45,11 +45,33 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
       },
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: SafeArea(
-          bottom: false,
-          child: CustomScrollView(
+        body: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/logo.png',
+                      height: 35,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(width: 10),
+                    const Text(
+                      'STATIXA',
+                      style: TextStyle(
+                        color: Color(0xFFC0C0C0),
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
@@ -105,9 +127,8 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
           ],
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   Widget _buildActiveContent() {
     switch (_activeTab) {
@@ -122,7 +143,6 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
       case 'Stats':
         return StatsSection(
           onSeeHistory: () {
-            // History navigation removed as requested
           },
         );
       default:

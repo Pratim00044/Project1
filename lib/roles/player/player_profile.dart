@@ -57,12 +57,6 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
             backgroundColor: const Color(0xFF0D0D0D),
             elevation: 0,
             automaticallyImplyLeading: false,
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.settings_outlined, color: goldColor),
-                onPressed: () => Scaffold.of(context).openEndDrawer(),
-              ),
-            ],
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
                 fit: StackFit.expand,
