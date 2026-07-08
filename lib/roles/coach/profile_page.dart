@@ -16,107 +16,152 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: darkBg,
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              expandedHeight: 320,
-              pinned: true,
-              backgroundColor: const Color(0xFF0D0D0D),
-              elevation: 0,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Image.asset('assets/images/login_background.jpeg', fit: BoxFit.cover),
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [Colors.transparent, darkBg.withOpacity(0.6), darkBg],
-                        ),
+    return NestedScrollView(
+      headerSliverBuilder: (context, innerBoxIsScrolled) {
+        return [
+          SliverAppBar(
+            expandedHeight: 320,
+            pinned: true,
+            backgroundColor: const Color(0xFF0D0D0D),
+            elevation: 0,
+            automaticallyImplyLeading: false,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.asset('assets/images/login_background.jpeg', fit: BoxFit.cover),
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.transparent, darkBg.withValues(alpha: 0.6), darkBg],
                       ),
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 40),
-                        Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: goldColor, width: 2),
-                            boxShadow: [BoxShadow(color: goldColor.withOpacity(0.2), blurRadius: 20)],
-                          ),
-                          child: const CircleAvatar(
-                            radius: 55,
-                            backgroundColor: Color(0xFF1A1A1A),
-                            child: Icon(Icons.person, size: 60, color: goldColor),
-                          ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 40),
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: goldColor, width: 2),
+                          boxShadow: [BoxShadow(color: goldColor.withValues(alpha: 0.2), blurRadius: 20)],
                         ),
-                        const SizedBox(height: 15),
-                        const Text('COACH JAMES',
-                          style: TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900, letterSpacing: 1)),
-                        const SizedBox(height: 8),
-                        _buildHeaderPill('HEAD COACH | CORE FC', isGold: true),
-                        const SizedBox(height: 15),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _buildSmallStat('12', 'EXP'),
-                            const SizedBox(width: 20),
-                            _buildSmallStat('150', 'GAMES'),
-                            const SizedBox(width: 20),
-                            _buildSmallStat('A+', 'RATE'),
-                          ],
+                        child: const CircleAvatar(
+                          radius: 55,
+                          backgroundColor: Color(0xFF1A1A1A),
+                          child: Icon(Icons.person, size: 60, color: goldColor),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                      const SizedBox(height: 15),
+                      const Text('COACH JAMES',
+                        style: TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                      const SizedBox(height: 8),
+                      _buildHeaderPill('HEAD COACH | CORE FC', isGold: true),
+                      const SizedBox(height: 15),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _buildSmallStat('12', 'EXP'),
+                          const SizedBox(width: 20),
+                          _buildSmallStat('150', 'GAMES'),
+                          const SizedBox(width: 20),
+                          _buildSmallStat('A+', 'RATE'),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              actions: [
-                IconButton(onPressed: () {}, icon: const Icon(Icons.edit_outlined, color: goldColor)),
-              ],
             ),
-          ];
-        },
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(25),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildSectionHeader('SEASON PERFORMANCE'),
-              const SizedBox(height: 15),
-              _buildStatsGrid(),
-              
-              const SizedBox(height: 35),
-              _buildSectionHeader('CAREER OVERVIEW'),
-              const SizedBox(height: 15),
-              _buildCareerGrid(),
-              
-              const SizedBox(height: 35),
-              _buildSectionHeader('MATCH ACHIEVEMENTS'),
-              const SizedBox(height: 15),
-              _buildAchievementItem('Clean Sheet', 'v Mohun Bagan'),
-              _buildAchievementItem('Goal Scored', 'v Kerala Blasters'),
-              
-              const SizedBox(height: 35),
-              _buildSectionHeader('ACCOUNT & SETTINGS'),
-              const SizedBox(height: 15),
-              _buildMenuOption(context, Icons.security, 'Privacy & Security', const PrivacySecurityPage()),
-              _buildMenuOption(context, Icons.notifications_active_outlined, 'Notifications', const NotificationsSettingsPage()),
-              _buildMenuOption(context, Icons.dark_mode_outlined, 'Display Theme', const DisplayThemePage()),
-              const SizedBox(height: 30),
-              _buildLogoutButton(context),
-              const SizedBox(height: 12),
-              _buildDeleteAccountButton(context),
-              const SizedBox(height: 60),
+            actions: [
+              IconButton(onPressed: () {}, icon: const Icon(Icons.edit_outlined, color: goldColor)),
             ],
           ),
+        ];
+      },
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(25),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildSectionHeader('SEASON PERFORMANCE'),
+            const SizedBox(height: 15),
+            _buildStatsGrid(),
+            
+            const SizedBox(height: 35),
+            _buildSectionHeader('CAREER OVERVIEW'),
+            const SizedBox(height: 15),
+            _buildCareerGrid(),
+            
+            const SizedBox(height: 35),
+            _buildSectionHeader('MATCH ACHIEVEMENTS'),
+            const SizedBox(height: 15),
+            _buildAchievementItem('Clean Sheet', 'v Mohun Bagan'),
+            _buildAchievementItem('Goal Scored', 'v Kerala Blasters'),
+            
+            const SizedBox(height: 35),
+            _buildSectionHeader('ACADEMY RECRUITMENT'),
+            const SizedBox(height: 15),
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: surfaceColor,
+                borderRadius: BorderRadius.circular(25),
+                border: Border.all(color: goldColor.withOpacity(0.1)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('COACH CV', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(color: goldColor.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
+                        child: const Text('PRO', style: TextStyle(color: goldColor, fontSize: 10, fontWeight: FontWeight.w900)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  const Text('Upload your professional CV to be discovered by top academies across the UAE.', 
+                    style: TextStyle(color: Colors.white38, fontSize: 12)),
+                  const SizedBox(height: 20),
+                  ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(Icons.upload_file_rounded, color: Colors.black, size: 18),
+                    label: const Text('UPLOAD CV', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 13)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: goldColor,
+                      minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  const Center(
+                    child: Text('Recruitment fee: 50 AED / upload', 
+                      style: TextStyle(color: Colors.white24, fontSize: 9, fontStyle: FontStyle.italic)),
+                  ),
+                ],
+              ),
+            ),
+            
+            const SizedBox(height: 35),
+            _buildSectionHeader('ACCOUNT & SETTINGS'),
+            const SizedBox(height: 15),
+            _buildMenuOption(context, Icons.security, 'Privacy & Security', const PrivacySecurityPage()),
+            _buildMenuOption(context, Icons.notifications_active_outlined, 'Notifications', const NotificationsSettingsPage()),
+            _buildMenuOption(context, Icons.dark_mode_outlined, 'Display Theme', const DisplayThemePage()),
+            const SizedBox(height: 30),
+            _buildLogoutButton(context),
+            const SizedBox(height: 12),
+            _buildDeleteAccountButton(context),
+            const SizedBox(height: 60),
+          ],
         ),
       ),
     );
@@ -149,7 +194,7 @@ class ProfilePage extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: 2,
-      childAspectRatio: 2.2,
+      childAspectRatio: 1.8,
       crossAxisSpacing: 12,
       mainAxisSpacing: 12,
       children: [
@@ -198,14 +243,12 @@ class ProfilePage extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: 2,
-      childAspectRatio: 3,
+      childAspectRatio: 2.5,
       crossAxisSpacing: 12,
       mainAxisSpacing: 12,
       children: [
         _buildInfoCard(Icons.badge, 'LICENSE', 'UEFA Pro'),
         _buildInfoCard(Icons.sports_soccer, 'PREV', 'Bengal Warriors'),
-        _buildInfoCard(Icons.height, 'HEIGHT', '182 cm'),
-        _buildInfoCard(Icons.monitor_weight_outlined, 'WEIGHT', '76 kg'),
       ],
     );
   }

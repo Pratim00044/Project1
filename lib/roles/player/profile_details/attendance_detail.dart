@@ -9,39 +9,47 @@ class AttendanceDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: darkBg,
-      appBar: AppBar(
-        backgroundColor: darkBg,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text('ATTENDANCE HISTORY', 
-          style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w900, letterSpacing: 2)),
-        centerTitle: true,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(color: Colors.white.withValues(alpha: 0.05), height: 1),
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/Core FC Theme .jpeg'),
+          fit: BoxFit.cover,
         ),
       ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: RadialGradient(
-            center: const Alignment(-0.8, -0.6),
-            radius: 1.2,
-            colors: [goldColor.withValues(alpha: 0.05), darkBg],
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
+            onPressed: () => Navigator.pop(context),
+          ),
+          title: const Text('ATTENDANCE HISTORY', 
+            style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w900, letterSpacing: 2)),
+          centerTitle: true,
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(1),
+            child: Container(color: Colors.white.withValues(alpha: 0.05), height: 1),
           ),
         ),
-        child: ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          itemCount: 20,
-          itemBuilder: (context, index) {
-            return _buildTimelineRecord(index);
-          },
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            gradient: RadialGradient(
+              center: const Alignment(-0.8, -0.6),
+              radius: 1.2,
+              colors: [goldColor.withValues(alpha: 0.05), Colors.black.withValues(alpha: 0.6)],
+            ),
+          ),
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            itemCount: 20,
+            itemBuilder: (context, index) {
+              return _buildTimelineRecord(index);
+            },
+          ),
         ),
       ),
     );

@@ -9,38 +9,46 @@ class HelpCenterDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: darkBg,
-      appBar: AppBar(
-        backgroundColor: darkBg,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text('HELP CENTER', 
-          style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w900, letterSpacing: 2)),
-        centerTitle: true,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(color: Colors.white.withValues(alpha: 0.05), height: 1),
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/Core FC Theme .jpeg'),
+          fit: BoxFit.cover,
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildSearchBox(),
-            const SizedBox(height: 35),
-            const Text('FREQUENTLY ASKED', style: TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1.5)),
-            const SizedBox(height: 20),
-            _buildFaqItem('How to update my stats?', 'Your coach manages all performance stats directly from the manager dashboard.'),
-            _buildFaqItem('Where can I see my schedule?', 'Navigate to the "Session" tab on your main dashboard to see upcoming drills.'),
-            _buildFaqItem('How to report an injury?', 'Go to the Fitness section and click "Report Issue" or contact your club doctor.'),
-            const SizedBox(height: 40),
-            _buildContactCard(),
-          ],
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
+            onPressed: () => Navigator.pop(context),
+          ),
+          title: const Text('HELP CENTER', 
+            style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w900, letterSpacing: 2)),
+          centerTitle: true,
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(1),
+            child: Container(color: Colors.white.withValues(alpha: 0.05), height: 1),
+          ),
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildSearchBox(),
+              const SizedBox(height: 35),
+              const Text('FREQUENTLY ASKED', style: TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1.5)),
+              const SizedBox(height: 20),
+              _buildFaqItem('How to update my stats?', 'Your coach manages all performance stats directly from the manager dashboard.'),
+              _buildFaqItem('Where can I see my schedule?', 'Navigate to the "Session" tab on your main dashboard to see upcoming drills.'),
+              _buildFaqItem('How to report an injury?', 'Go to the Fitness section and click "Report Issue" or contact your club doctor.'),
+              const SizedBox(height: 40),
+              _buildContactCard(),
+            ],
+          ),
         ),
       ),
     );

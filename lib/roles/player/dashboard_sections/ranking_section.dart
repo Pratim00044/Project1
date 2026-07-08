@@ -23,8 +23,6 @@ class RankingSection extends StatelessWidget {
           const SizedBox(height: 20),
           _buildRankingCard('Current Rank', '#14', 'Top 5% in Region', Icons.trending_up, Colors.greenAccent),
           const SizedBox(height: 15),
-          _buildRankingCard('Club Rank', '#2', 'Star Performer', Icons.shield, goldColor),
-          const SizedBox(height: 15),
           _buildRankingCard('Season Points', '2,450', '+250 from last match', Icons.bolt, Colors.blueAccent),
           const SizedBox(height: 30),
           const Text('LEADERBOARD',

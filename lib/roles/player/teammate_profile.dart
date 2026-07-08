@@ -45,99 +45,109 @@ class _TeammateProfileState extends State<TeammateProfile> with SingleTickerProv
         ? '${widget.playerPosition} | #${widget.playerNumber}' 
         : 'FORWARD | #11';
 
-    return Scaffold(
-      backgroundColor: darkBg,
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              expandedHeight: 320,
-              pinned: true,
-              backgroundColor: const Color(0xFF0D0D0D),
-              elevation: 0,
-              automaticallyImplyLeading: false,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () => Navigator.pop(context),
-              ),
-              flexibleSpace: FlexibleSpaceBar(
-                background: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Image.asset('assets/images/login_background.jpeg', fit: BoxFit.cover),
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [Colors.transparent, darkBg.withValues(alpha: 0.6), darkBg],
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/Core FC Theme .jpeg'),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              SliverAppBar(
+                expandedHeight: 320,
+                pinned: true,
+                backgroundColor: const Color(0xFF0D0D0D),
+                elevation: 0,
+                automaticallyImplyLeading: false,
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.asset('assets/images/login_background.jpeg', fit: BoxFit.cover),
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Colors.transparent, darkBg.withValues(alpha: 0.6), darkBg],
+                          ),
                         ),
                       ),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 40),
-                        Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: goldColor, width: 2),
-                            boxShadow: [BoxShadow(color: goldColor.withValues(alpha: 0.2), blurRadius: 20)],
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 40),
+                          Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: goldColor, width: 2),
+                              boxShadow: [BoxShadow(color: goldColor.withValues(alpha: 0.2), blurRadius: 20)],
+                            ),
+                            child: const CircleAvatar(
+                              radius: 55,
+                              backgroundImage: AssetImage('assets/images/sunil.png'),
+                            ),
                           ),
-                          child: const CircleAvatar(
-                            radius: 55,
-                            backgroundImage: AssetImage('assets/images/sunil.png'),
+                          const SizedBox(height: 15),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(displayName.toUpperCase(),
+                              maxLines: 1,
+                              style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900, letterSpacing: 1)),
                           ),
                         ),
-                        const SizedBox(height: 15),
-                        Text(displayName.toUpperCase(),
-                          style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900, letterSpacing: 1)),
                         const SizedBox(height: 8),
-                        _buildHeaderPill(displaySub),
-                        const SizedBox(height: 10),
-                        const Text('CORE FC', style: TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
-                        const SizedBox(height: 15),
-                      ],
-                    ),
-                  ],
+                          _buildHeaderPill(displaySub),
+                          const SizedBox(height: 10),
+                          const Text('UNDER 8s', style: TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
+                          const SizedBox(height: 15),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            SliverToBoxAdapter(
-              child: Container(
-                color: darkBg,
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    bool isMobile = constraints.maxWidth < 600;
-                    return TabBar(
-                      controller: _tabController,
-                      isScrollable: isMobile,
-                      tabAlignment: isMobile ? TabAlignment.start : TabAlignment.fill,
-                      indicatorColor: goldColor,
-                      labelColor: goldColor,
-                      unselectedLabelColor: Colors.white38,
-                      indicatorSize: TabBarIndicatorSize.label,
-                      labelStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 0.5),
-                      tabs: const [
-                        Tab(text: 'PROFILE'),
-                        Tab(text: 'MATCHES'),
-                        Tab(text: 'STATS'),
-                      ],
-                    );
-                  }
+              SliverToBoxAdapter(
+                child: Container(
+                  color: Colors.transparent,
+                  child: TabBar(
+                    controller: _tabController,
+                    isScrollable: false,
+                    tabAlignment: TabAlignment.fill,
+                    indicatorColor: goldColor,
+                    labelColor: goldColor,
+                    unselectedLabelColor: Colors.white38,
+                    indicatorSize: TabBarIndicatorSize.label,
+                    labelStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 0.5),
+                    tabs: const [
+                      Tab(text: 'PROFILE'),
+                      Tab(text: 'MATCHES'),
+                      Tab(text: 'STATS'),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ];
-        },
-        body: TabBarView(
-          controller: _tabController,
-          children: [
-            _buildProfileTab(),
-            _buildMatchesTab(),
-            _buildStatsTab(),
-          ],
+            ];
+          },
+          body: TabBarView(
+            controller: _tabController,
+            children: [
+              _buildProfileTab(),
+              _buildMatchesTab(),
+              _buildStatsTab(),
+            ],
+          ),
         ),
       ),
     );
@@ -377,33 +387,103 @@ class _TeammateProfileState extends State<TeammateProfile> with SingleTickerProv
   }
 
   Widget _buildMatchesTab() {
+    final matches = [
+      {'date': 'Today', 'opp': 'Dubai City Football Club', 'score': '2 - 0', 'mins': '90\'', 'rating': '8.4', 'comp': 'PRO LEAGUE', 'logo': Icons.shield},
+      {'date': 'Tue 30 Jun', 'opp': 'United Football Club', 'score': '1 - 1', 'mins': '120\'', 'rating': '7.2', 'comp': 'DUBAI CUP', 'logo': Icons.shield},
+      {'date': 'Fri 26 Jun', 'opp': 'Eagle FC', 'score': '3 - 0', 'mins': '90\'', 'rating': '9.1', 'comp': 'PRO LEAGUE', 'logo': Icons.shield},
+      {'date': 'Sat 20 Jun', 'opp': 'Emirates Club', 'score': '0 - 1', 'mins': '90\'', 'rating': '6.8', 'comp': 'FRIENDLY', 'logo': Icons.shield},
+      {'date': 'Sat 13 Jun', 'opp': 'Gulf united FC', 'score': '4 - 1', 'mins': '90\'', 'rating': '8.7', 'comp': 'PRO LEAGUE', 'logo': Icons.shield},
+    ];
+
     return ListView.builder(
-      padding: const EdgeInsets.all(15),
-      itemCount: 5,
-      itemBuilder: (context, index) => Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(18),
-        decoration: BoxDecoration(color: surfaceColor, borderRadius: BorderRadius.circular(15)),
-        child: Row(
+      padding: const EdgeInsets.all(20),
+      itemCount: matches.length,
+      itemBuilder: (context, index) {
+        final match = matches[index];
+        double rating = double.parse(match['rating'] as String);
+        Color ratingColor = rating >= 8.0 ? const Color(0xFF2ECC71) : (rating >= 7.0 ? Colors.orangeAccent : Colors.redAccent);
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            if (index == 0) ...[
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.03),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.public, color: Colors.blueAccent, size: 14),
+                    const SizedBox(width: 8),
+                    const Text('UAE Pro League', style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 25),
+            ],
+            Row(
               children: [
-                Text('30 JAN', style: TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold)),
-                Text('Emirates Club', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                Text(match['date'] as String, style: const TextStyle(color: Colors.white38, fontSize: 11, fontWeight: FontWeight.bold)),
+                const Spacer(),
+                Text(match['comp'] as String, style: const TextStyle(color: Colors.white12, fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1)),
               ],
             ),
-            const Spacer(),
-            const Text('2 - 0', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16)),
-            const SizedBox(width: 20),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(color: Colors.green.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(5)),
-              child: const Text('WIN', style: TextStyle(color: Colors.greenAccent, fontSize: 9, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 15),
+            Row(
+              children: [
+                Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.03),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(match['logo'] as IconData, color: goldColor.withValues(alpha: 0.5), size: 20),
+                ),
+                const SizedBox(width: 15),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(match['opp'] as String, style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 4),
+                      Text(match['score'] as String, style: const TextStyle(color: Colors.white38, fontSize: 13, fontWeight: FontWeight.w500)),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.05),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(match['mins'] as String, style: const TextStyle(color: Colors.white60, fontSize: 11, fontWeight: FontWeight.w900)),
+                ),
+                const SizedBox(width: 10),
+                Container(
+                  width: 40,
+                  height: 28,
+                  decoration: BoxDecoration(
+                    color: ratingColor,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [BoxShadow(color: ratingColor.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 2))],
+                  ),
+                  child: Center(
+                    child: Text(match['rating'] as String, style: const TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w900)),
+                  ),
+                ),
+              ],
             ),
+            const SizedBox(height: 20),
+            if (index < matches.length - 1) 
+              Divider(color: Colors.white.withValues(alpha: 0.05), height: 1, thickness: 1),
+            const SizedBox(height: 20),
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 

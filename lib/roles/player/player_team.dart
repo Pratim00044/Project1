@@ -37,7 +37,7 @@ class MyTeamsPage extends StatelessWidget {
                   const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('CORE FC', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                      Text('UNDER 8s', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                       Text('India | Pro League', style: TextStyle(color: Colors.white38, fontSize: 11)),
                     ],
                   ),

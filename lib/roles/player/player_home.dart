@@ -3,6 +3,7 @@ import 'player_dashboard.dart' hide surfaceColor;
 import 'player_team.dart' hide surfaceColor;
 import 'player_games.dart';
 import 'player_profile.dart';
+import 'professional_pathway.dart';
 import 'profile_details/security_detail.dart';
 import 'profile_details/help_center_detail.dart';
 
@@ -39,48 +40,61 @@ class PlayerHomeState extends State<PlayerHome> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: _selectedIndex == 0 && _history.length <= 1,
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop) return;
-        if (_history.length > 1) {
-          setState(() {
-            _history.removeLast();
-            _selectedIndex = _history.last;
-          });
-        }
-      },
-      child: Scaffold(
-      backgroundColor: darkBg,
-      appBar: null,
-      endDrawer: _buildDrawer(context),
-      body: SafeArea(
-        bottom: false,
-        child: _pages[_selectedIndex],
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          border: Border(top: BorderSide(color: goldColor.withValues(alpha: 0.1), width: 0.5)),
-          color: const Color(0xFF0D0D0D),
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/Core FC Theme .jpeg'),
+          fit: BoxFit.cover,
         ),
-        child: SafeArea(
-          child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            selectedItemColor: goldColor,
-            unselectedItemColor: Colors.white24,
-            currentIndex: _selectedIndex,
-            onTap: changeTab,
-            selectedFontSize: 10,
-            unselectedFontSize: 10,
-            showUnselectedLabels: true,
-            items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'DASHBOARD'),
-              BottomNavigationBarItem(icon: Icon(Icons.groups_rounded), label: 'TEAM'),
-              BottomNavigationBarItem(icon: Icon(Icons.calendar_today_rounded), label: 'GAMES'),
-              BottomNavigationBarItem(icon: Icon(Icons.person_outline_rounded), label: 'PROFILE'),
-            ],
+      ),
+      child: PopScope(
+        canPop: _selectedIndex == 0 && _history.length <= 1,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) return;
+          if (_history.length > 1) {
+            setState(() {
+              _history.removeLast();
+              _selectedIndex = _history.last;
+            });
+          }
+        },
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: null,
+          endDrawer: _buildDrawer(context),
+          body: SafeArea(
+            bottom: false,
+            child: Column(
+              children: [
+                _buildHeader(context),
+                Expanded(child: _pages[_selectedIndex]),
+              ],
+            ),
+          ),
+          bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            border: Border(top: BorderSide(color: goldColor.withValues(alpha: 0.1), width: 0.5)),
+            color: const Color(0xFF0D0D0D),
+          ),
+          child: SafeArea(
+            child: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              selectedItemColor: goldColor,
+              unselectedItemColor: Colors.white24,
+              currentIndex: _selectedIndex,
+              onTap: changeTab,
+              selectedFontSize: 10,
+              unselectedFontSize: 10,
+              showUnselectedLabels: true,
+              items: const [
+                BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'DASHBOARD'),
+                BottomNavigationBarItem(icon: Icon(Icons.groups_rounded), label: 'TEAM'),
+                BottomNavigationBarItem(icon: Icon(Icons.calendar_today_rounded), label: 'GAMES'),
+                BottomNavigationBarItem(icon: Icon(Icons.person_outline_rounded), label: 'PROFILE'),
+              ],
+            ),
           ),
         ),
       ),
@@ -168,11 +182,44 @@ class PlayerHomeState extends State<PlayerHome> {
     );
   }
 
-  Widget _buildDrawerItem(IconData icon, String title, VoidCallback onTap, {bool isRed = false}) {
-    return ListTile(
-      leading: Icon(icon, color: isRed ? Colors.redAccent.withValues(alpha: 0.7) : Colors.white38, size: 22),
-      title: Text(title, style: TextStyle(color: isRed ? Colors.redAccent : Colors.white70, fontSize: 14)),
-      onTap: onTap,
+  Widget _buildDrawerItem(IconData icon, String title, VoidCallback onTap, {bool isRed = false, bool isSelected = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: ListTile(
+        dense: true,
+        visualDensity: const VisualDensity(vertical: -2),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        leading: Icon(icon, color: isSelected ? goldColor : (isRed ? Colors.redAccent.withValues(alpha: 0.7) : Colors.white38), size: 20),
+        title: Text(title, style: TextStyle(color: isSelected ? goldColor : (isRed ? Colors.redAccent : Colors.white70), fontSize: 13, fontWeight: isSelected ? FontWeight.bold : FontWeight.w500)),
+        onTap: onTap,
+        selected: isSelected,
+        selectedTileColor: goldColor.withValues(alpha: 0.05),
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+      child: Row(
+        children: [
+          Image.asset('assets/logo.png', height: 35, fit: BoxFit.contain),
+          const SizedBox(width: 10),
+          const Text('STATIXA PLAYER',
+              style: TextStyle(
+                  color: Color(0xFFC0C0C0),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.5)),
+          const Spacer(),
+          Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.menu, color: goldColor),
+              onPressed: () => Scaffold.of(context).openEndDrawer(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

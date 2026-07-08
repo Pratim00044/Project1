@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 import 'dart:math' as math;
 
 import '../roles/super_admin/super_admin_home.dart';
 import '../roles/organization/organization_home.dart';
-import '../roles/staff/staff_home.dart';
 import '../roles/player/player_home.dart';
-import '../roles/captain/captain_home.dart';
 import '../roles/coach/coach_home.dart';
 import '../roles/manager/manager_home.dart';
 
@@ -27,17 +26,16 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _rememberMe = false;
 
   final List<Map<String, dynamic>> _roles = [
-    {'name': 'SUPER ADMIN', 'icon': Icons.admin_panel_settings_outlined},
-    {'name': 'ORGANIZER', 'icon': Icons.business_center_outlined},
-    {'name': 'COACH', 'icon': Icons.sports_outlined},
-    {'name': 'MANAGER', 'icon': Icons.manage_accounts_outlined},
-    {'name': 'CAPTAIN', 'icon': Icons.copyright_outlined},
-    {'name': 'PLAYER', 'icon': Icons.directions_run_outlined},
-    {'name': 'STAFF', 'icon': Icons.groups_outlined},
+    {'name': 'PLAYER', 'icon': Icons.directions_run_outlined, 'color': Colors.blueAccent},
+    {'name': 'ORGANIZER/HOST', 'icon': Icons.groups_outlined, 'color': Colors.greenAccent},
+    {'name': 'COACH', 'icon': Icons.sports_outlined, 'color': Colors.orangeAccent},
+    {'name': 'MANAGER', 'icon': Icons.manage_accounts_outlined, 'color': Colors.purpleAccent},
+    {'name': 'SUPER ADMIN', 'icon': Icons.admin_panel_settings_outlined, 'color': goldColor},
   ];
 
   late PageController _pageController;
-  int _currentIndex = 1;
+  late VideoPlayerController _videoController;
+  int _currentIndex = 0;
   double _buttonScale = 1.0;
   double _linkScale = 1.0;
 
@@ -48,6 +46,13 @@ class _LoginScreenState extends State<LoginScreen> {
       viewportFraction: 0.25,
       initialPage: _currentIndex,
     );
+    _videoController = VideoPlayerController.asset('assets/Video/Banner.mp4')
+      ..initialize().then((_) {
+        setState(() {});
+        _videoController.setLooping(true);
+        _videoController.setVolume(0);
+        _videoController.play();
+      });
   }
 
   @override
@@ -55,27 +60,24 @@ class _LoginScreenState extends State<LoginScreen> {
     _pageController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _videoController.dispose();
     super.dispose();
   }
 
   void _handleLogin() {
-    if (_formKey.currentState!.validate()) {
+    final bool isOrganizer = _roles[_currentIndex]['name'] == 'ORGANIZER/HOST';
+    
+    if (isOrganizer || _formKey.currentState!.validate()) {
       Widget homePage;
       switch (_roles[_currentIndex]['name']) {
         case 'SUPER ADMIN':
           homePage = const SuperAdminHome();
           break;
-        case 'ORGANIZER':
+        case 'ORGANIZER/HOST':
           homePage = const OrganizationHome();
-          break;
-        case 'STAFF':
-          homePage = const StaffHome();
           break;
         case 'PLAYER':
           homePage = const PlayerHome();
-          break;
-        case 'CAPTAIN':
-          homePage = const CaptainHome();
           break;
         case 'COACH':
           homePage = const CoachHome();
@@ -115,10 +117,22 @@ class _LoginScreenState extends State<LoginScreen> {
           return Stack(
             children: [
               Positioned.fill(
-                child: Image.asset(
-                  'assets/images/login_background.jpeg',
-                  fit: BoxFit.cover,
-                  colorBlendMode: BlendMode.darken,
+                child: _videoController.value.isInitialized
+                    ? FittedBox(
+                        fit: BoxFit.cover,
+                        child: SizedBox(
+                          width: _videoController.value.size.width,
+                          height: _videoController.value.size.height,
+                          child: VideoPlayer(_videoController),
+                        ),
+                      )
+                    : Image.asset(
+                        'assets/images/login_background.jpeg',
+                        fit: BoxFit.cover,
+                      ),
+              ),
+              Positioned.fill(
+                child: Container(
                   color: Colors.black.withValues(alpha: 0.6),
                 ),
               ),
@@ -393,6 +407,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   double opacity = (1 - (diff.abs() * 0.6)).clamp(0.1, 1.0);
                   bool isSelected = index == _currentIndex;
 
+                  final roleColor = role['color'] as Color;
                   return Center(
                     child: Transform.translate(
                       offset: Offset(0, yOffset),
@@ -408,14 +423,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: isSelected ? goldColor.withValues(alpha: 0.1) : Colors.transparent,
+                                  color: isSelected ? roleColor.withValues(alpha: 0.1) : Colors.transparent,
                                   border: Border.all(
-                                    color: isSelected ? goldColor : Colors.white.withValues(alpha: 0.1),
+                                    color: isSelected ? roleColor : Colors.white.withValues(alpha: 0.1),
                                     width: 2,
                                   ),
                                   boxShadow: isSelected ? [
                                     BoxShadow(
-                                      color: goldColor.withValues(alpha: 0.2),
+                                      color: roleColor.withValues(alpha: 0.2),
                                       blurRadius: 20,
                                       spreadRadius: 2,
                                     )
@@ -423,7 +438,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 child: Icon(
                                   role['icon'],
-                                  color: isSelected ? goldColor : Colors.white,
+                                  color: isSelected ? roleColor : Colors.white,
                                   size: 32,
                                 ),
                               ),
@@ -431,7 +446,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               Text(
                                 role['name'],
                                 style: TextStyle(
-                                  color: isSelected ? goldColor : Colors.white.withValues(alpha: 0.5),
+                                  color: isSelected ? roleColor : Colors.white.withValues(alpha: 0.5),
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: 1.2,

@@ -13,6 +13,7 @@ class SessionSection extends StatefulWidget {
 class _SessionSectionState extends State<SessionSection> {
   Map<String, dynamic>? _selectedSession;
   String? _filterMode;
+  final Set<String> _confirmedSessions = {};
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +83,8 @@ class _SessionSectionState extends State<SessionSection> {
   }
 
   Widget _buildSessionCard(String title, String time, String location, IconData icon, Map<String, dynamic> data, {bool completed = false}) {
+    bool isConfirmed = _confirmedSessions.contains(title);
+    
     return GestureDetector(
       onTap: () => setState(() => _selectedSession = {
         'title': title,
@@ -96,14 +99,14 @@ class _SessionSectionState extends State<SessionSection> {
         decoration: BoxDecoration(
           color: surfaceColor,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.03)),
+          border: Border.all(color: isConfirmed ? goldColor.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.03)),
         ),
         child: Row(
           children: [
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: completed ? Colors.green.withValues(alpha: 0.1) : goldColor.withValues(alpha: 0.1),
+                color: completed ? Colors.green.withValues(alpha: 0.1) : (isConfirmed ? goldColor.withValues(alpha: 0.2) : goldColor.withValues(alpha: 0.1)),
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Icon(icon, color: completed ? Colors.green : goldColor, size: 22),
@@ -113,11 +116,23 @@ class _SessionSectionState extends State<SessionSection> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold)),
+                  Row(
+                    children: [
+                      Text(title,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold)),
+                      if (isConfirmed && !completed) ...[
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(color: goldColor.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(4)),
+                          child: const Text('CONFIRMED', style: TextStyle(color: goldColor, fontSize: 8, fontWeight: FontWeight.bold)),
+                        ),
+                      ],
+                    ],
+                  ),
                   const SizedBox(height: 4),
                   Text('$time • $location',
                       style: const TextStyle(
@@ -125,8 +140,8 @@ class _SessionSectionState extends State<SessionSection> {
                 ],
               ),
             ),
-            Icon(completed ? Icons.verified : Icons.arrow_forward_ios,
-                color: completed ? Colors.green.withValues(alpha: 0.5) : Colors.white10,
+            Icon(completed || isConfirmed ? Icons.verified : Icons.arrow_forward_ios,
+                color: completed ? Colors.green.withValues(alpha: 0.5) : (isConfirmed ? goldColor : Colors.white10),
                 size: 14),
           ],
         ),
@@ -135,7 +150,10 @@ class _SessionSectionState extends State<SessionSection> {
   }
 
   Widget _buildSessionDetail(Map<String, dynamic> session) {
-    return Padding(
+    bool isUpcoming = !(session['completed'] ?? false);
+    bool isConfirmed = _confirmedSessions.contains(session['title']);
+
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,12 +163,35 @@ class _SessionSectionState extends State<SessionSection> {
             icon: const Icon(Icons.arrow_back, color: goldColor),
           ),
           const SizedBox(height: 10),
-          Text(session['title'],
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 0.5)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(session['title'],
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 0.5)),
+              ),
+              if (isConfirmed)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: goldColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: goldColor.withValues(alpha: 0.2)),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.check_circle, color: goldColor, size: 14),
+                      const SizedBox(width: 8),
+                      const Text('CONFIRMED', style: TextStyle(color: goldColor, fontSize: 10, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                ),
+            ],
+          ),
           const SizedBox(height: 25),
           Container(
             width: double.infinity,
@@ -172,6 +213,23 @@ class _SessionSectionState extends State<SessionSection> {
               ],
             ),
           ),
+          if (isUpcoming && !isConfirmed) ...[
+            const SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _confirmedSessions.add(session['title']);
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: goldColor,
+                minimumSize: const Size(double.infinity, 60),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              ),
+              child: const Text('CONFIRM ATTENDANCE', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
+            ),
+          ],
+          const SizedBox(height: 40),
         ],
       ),
     );

@@ -11,18 +11,19 @@ class SquadPage extends StatefulWidget {
 }
 
 class _SquadPageState extends State<SquadPage> {
-  String _selectedTeam = 'CORE FC';
-  final List<String> _myTeams = ['CORE FC', 'Dubai FC', 'City Football', 'AFC'];
+  String _selectedTeam = 'Under 8s';
+  String _selectedLocation = 'Town Square';
+  final List<String> _myTeams = ['Under 8s', 'Under 10s', 'Under 18'];
+  final List<String> _locations = ['Town Square', 'Sports City', 'Jumeirah'];
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(25, 25, 25, 10),
-            child: Column(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(25, 25, 25, 10),
+          child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text('TEAM COMMANDER',
@@ -35,12 +36,14 @@ class _SquadPageState extends State<SquadPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('SQUAD LIST',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 28,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1)),
+                    const Expanded(
+                      child: Text('SQUAD LIST',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 28,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1)),
+                    ),
                     _buildPlayerCountBadge(),
                   ],
                 ),
@@ -49,6 +52,13 @@ class _SquadPageState extends State<SquadPage> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: _myTeams.map((team) => _buildTeamChip(team)).toList(),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: _locations.map((loc) => _buildLocationChip(loc)).toList(),
                   ),
                 ),
               ],
@@ -99,8 +109,7 @@ class _SquadPageState extends State<SquadPage> {
             ),
           ),
         ],
-      ),
-    );
+      );
   }
 
   Widget _buildPlayerCountBadge() {
@@ -142,6 +151,36 @@ class _SquadPageState extends State<SquadPage> {
             fontSize: 12,
             fontWeight: FontWeight.bold,
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLocationChip(String loc) {
+    bool isSelected = _selectedLocation == loc;
+    return GestureDetector(
+      onTap: () => setState(() => _selectedLocation = loc),
+      child: Container(
+        margin: const EdgeInsets.only(right: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.white.withOpacity(0.1) : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: isSelected ? goldColor.withOpacity(0.5) : Colors.white10),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.location_on_outlined, color: isSelected ? goldColor : Colors.white24, size: 12),
+            const SizedBox(width: 6),
+            Text(
+              loc,
+              style: TextStyle(
+                color: isSelected ? Colors.white : Colors.white24,
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -213,9 +252,11 @@ class _SquadPageState extends State<SquadPage> {
                         child: Text(position, style: const TextStyle(color: goldColor, fontSize: 9, fontWeight: FontWeight.bold)),
                       ),
                       const SizedBox(width: 8),
-                      Text('Squad No: $number', style: const TextStyle(color: Colors.white24, fontSize: 10)),
+                      const Text('TOWN SQUARE', style: TextStyle(color: Colors.white24, fontSize: 9, fontWeight: FontWeight.bold)),
                     ],
                   ),
+                  const SizedBox(height: 4),
+                  const Text('Parent Phone: +971 50 123 4567', style: TextStyle(color: Colors.white24, fontSize: 10)),
                 ],
               ),
             ),

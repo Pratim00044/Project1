@@ -27,12 +27,12 @@ class PendingApprovalPage extends StatelessWidget {
               ),
               const SizedBox(height: 40),
               const Text(
-                'ACCOUNT PENDING',
+                'CDL ACCOUNT PENDING',
                 style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900, letterSpacing: 2),
               ),
               const SizedBox(height: 15),
               const Text(
-                'Your organizer application is currently being reviewed by our Super Admin. This usually takes 24-48 hours.',
+                'Your CDL organizer application is currently being reviewed by our Super Admin. This usually takes 24-48 hours.',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white38, fontSize: 14, height: 1.5),
               ),

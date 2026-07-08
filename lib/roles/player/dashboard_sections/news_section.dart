@@ -48,26 +48,27 @@ class _NewsSectionState extends State<NewsSection> {
 
   List<Widget> _buildNewsList() {
     return [
-      _buildNewsCard('MATCH PREVIEW: CORE FC VS DUBAI CITY', 'Jan 30, 2024 • 5 min read'),
-      _buildNewsCard('CHHETRI HITS 90 GOAL MARK', 'Jan 28, 2024 • 3 min read'),
-      _buildNewsCard('NEW TRAINING FACILITY OPENED', 'Jan 25, 2024 • 4 min read'),
+      _buildNewsCard('MATCH PREVIEW: CORE FC VS DUBAI CITY', 'Jan 30, 2024 • 5 min read', 'assets/images/league_green.png'),
+      _buildNewsCard('CHHETRI HITS 90 GOAL MARK', 'Jan 28, 2024 • 3 min read', 'assets/images/league_gold.png'),
+      _buildNewsCard('NEW TRAINING FACILITY OPENED', 'Jan 25, 2024 • 4 min read', 'assets/images/league_blue.png'),
     ];
   }
 
-  Widget _buildNewsCard(String title, String meta) {
+  Widget _buildNewsCard(String title, String meta, String bgImage) {
     return GestureDetector(
       onTap: () {
         setState(() {
           _selectedNews = {
             'title': title,
             'meta': meta,
+            'image': bgImage,
             'content': [
               {
                 'type': 'text',
                 'data':
                     'The club has officially announced the opening of its latest training facility. This world-class center features state-of-the-art equipment, multiple indoor pitches, and specialized recovery zones for players.'
               },
-              {'type': 'image', 'data': 'assets/images/login_background.jpeg'},
+              {'type': 'image', 'data': bgImage},
               {
                 'type': 'text',
                 'data':
@@ -90,7 +91,7 @@ class _NewsSectionState extends State<NewsSection> {
             child: Stack(
               children: [
                 Image.asset(
-                  'assets/images/login_background.jpeg',
+                  bgImage,
                   height: double.infinity,
                   width: double.infinity,
                   fit: BoxFit.cover,

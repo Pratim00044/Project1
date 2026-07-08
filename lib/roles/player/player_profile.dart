@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'custom_painters.dart';
 import 'profile_details/attendance_detail.dart';
-import 'profile_details/help_center_detail.dart';
-import 'profile_details/security_detail.dart';
+
+import 'professional_pathway.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
@@ -32,7 +32,7 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 6, vsync: this);
   }
 
   @override
@@ -53,7 +53,8 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
         return [
           SliverAppBar(
             expandedHeight: 320,
-            pinned: true,
+            pinned: false,
+            toolbarHeight: 0,
             backgroundColor: const Color(0xFF0D0D0D),
             elevation: 0,
             automaticallyImplyLeading: false,
@@ -88,8 +89,15 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
                         ),
                       ),
                       const SizedBox(height: 15),
-                      Text(displayName.toUpperCase(),
-                        style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(displayName.toUpperCase(),
+                            maxLines: 1,
+                            style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                        ),
+                      ),
                       const SizedBox(height: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -113,7 +121,7 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
                         ],
                       ),
                       const SizedBox(height: 10),
-                      const Text('CORE FC', style: TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
+                      const Text('UNDER 8s', style: TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
                       const SizedBox(height: 15),
                     ],
                   ),
@@ -123,7 +131,7 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
           ),
           SliverToBoxAdapter(
             child: Container(
-              color: darkBg,
+              color: Colors.transparent,
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   bool isMobile = constraints.maxWidth < 600;
@@ -138,10 +146,11 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
                     labelStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 0.5),
                     tabs: const [
                       Tab(text: 'PROFILE'),
+                      Tab(text: 'PATHWAY'),
                       Tab(text: 'MATCHES'),
                       Tab(text: 'STATS'),
                       Tab(text: 'ATTENDANCE'),
-                      Tab(text: 'NOTES'),
+                      Tab(text: 'FEEDBACK'),
                     ],
                   );
                 }
@@ -154,10 +163,11 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
         controller: _tabController,
         children: [
           _buildProfileTab(),
+          const ProfessionalPathwayPage(),
           _buildMatchesTab(),
           _buildStatsTab(),
           _buildAttendanceTab(),
-          _buildNotesTab(),
+          _buildFeedbackTab(),
         ],
       ),
     );
@@ -205,8 +215,24 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(child: _buildFotMobInfo('170 cm', 'Height')),
-                    Expanded(child: _buildFotMobInfo('39 years', '24 Jun 1987')),
-                    Expanded(child: _buildFotMobInfo('IND', 'Country', flag: true)),
+                    Expanded(child: _buildFotMobInfo('12 years', '24 Jun 2012')),
+                    Expanded(child: _buildFotMobInfo('IND', 'India', emoji: '🇮🇳')),
+                  ],
+                ),
+                const SizedBox(height: 25),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(child: _buildFotMobInfo('parent@email.com', 'Parent Email')),
+                    Expanded(child: _buildFotMobInfo('TOWN SQUARE', 'Location')),
+                  ],
+                ),
+                const SizedBox(height: 25),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(child: _buildFotMobInfo('TUES & THURS', 'Assigned Days')),
+                    Expanded(child: _buildFotMobInfo('6-7 PM', 'Session Time')),
                   ],
                 ),
                 const SizedBox(height: 25),
@@ -220,6 +246,14 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
                 ),
                 const SizedBox(height: 25),
                 const Divider(color: Colors.white10),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildWalletStat('525 AED', 'Total Wallet'),
+                    _buildWalletStat('65 AED', 'Remaining', isWarning: true),
+                  ],
+                ),
                 const SizedBox(height: 20),
                 Center(
                   child: _buildFotMobInfo('₹1.4B', 'Estimated Market Value'),
@@ -243,7 +277,7 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
                   children: [
                     const Icon(Icons.shield, color: goldColor, size: 16),
                     const SizedBox(width: 8),
-                    const Text('Major League 2024', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
+                    const Text('Current Stat 2026', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -369,14 +403,36 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
     );
   }
 
-  Widget _buildFotMobInfo(String val, String label, {bool flag = false, bool isGold = false}) {
+  Widget _buildWalletStat(String val, String label, {bool isWarning = false}) {
+    return Column(
+      children: [
+        Text(val, style: TextStyle(color: isWarning ? Colors.orangeAccent : Colors.greenAccent, fontWeight: FontWeight.bold, fontSize: 16)),
+        Text(label, style: const TextStyle(color: Colors.white38, fontSize: 10)),
+        if (isWarning)
+          const Padding(
+            padding: EdgeInsets.only(top: 4),
+            child: Text('LOW BALANCE!', style: TextStyle(color: Colors.redAccent, fontSize: 8, fontWeight: FontWeight.bold)),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildFotMobInfo(String val, String label, {String? emoji, String? flagAsset, bool isGold = false}) {
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (flag) const Icon(Icons.public, color: Colors.blueAccent, size: 14),
-            if (flag) const SizedBox(width: 4),
+            if (flagAsset != null)
+              Padding(
+                padding: const EdgeInsets.only(right: 6),
+                child: Image.asset(flagAsset, width: 20, height: 14, fit: BoxFit.cover),
+              )
+            else if (emoji != null)
+              Padding(
+                padding: const EdgeInsets.only(right: 6),
+                child: Text(emoji, style: const TextStyle(fontSize: 14)),
+              ),
             Text(val, style: TextStyle(color: isGold ? goldColor : Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
           ],
         ),
@@ -397,33 +453,103 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
   }
 
   Widget _buildMatchesTab() {
+    final matches = [
+      {'date': 'Today', 'opp': 'Dubai City Football Club', 'score': '2 - 0', 'mins': '90\'', 'rating': '8.4', 'comp': 'PRO LEAGUE', 'logo': Icons.shield},
+      {'date': 'Tue 30 Jun', 'opp': 'United Football Club', 'score': '1 - 1', 'mins': '120\'', 'rating': '7.2', 'comp': 'DUBAI CUP', 'logo': Icons.shield},
+      {'date': 'Fri 26 Jun', 'opp': 'Eagle FC', 'score': '3 - 0', 'mins': '90\'', 'rating': '9.1', 'comp': 'PRO LEAGUE', 'logo': Icons.shield},
+      {'date': 'Sat 20 Jun', 'opp': 'Emirates Club', 'score': '0 - 1', 'mins': '90\'', 'rating': '6.8', 'comp': 'FRIENDLY', 'logo': Icons.shield},
+      {'date': 'Sat 13 Jun', 'opp': 'Gulf united FC', 'score': '4 - 1', 'mins': '90\'', 'rating': '8.7', 'comp': 'PRO LEAGUE', 'logo': Icons.shield},
+    ];
+
     return ListView.builder(
-      padding: const EdgeInsets.all(15),
-      itemCount: 5,
-      itemBuilder: (context, index) => Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(18),
-        decoration: BoxDecoration(color: surfaceColor, borderRadius: BorderRadius.circular(15)),
-        child: Row(
+      padding: const EdgeInsets.all(20),
+      itemCount: matches.length,
+      itemBuilder: (context, index) {
+        final match = matches[index];
+        double rating = double.parse(match['rating'] as String);
+        Color ratingColor = rating >= 8.0 ? const Color(0xFF2ECC71) : (rating >= 7.0 ? Colors.orangeAccent : Colors.redAccent);
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            if (index == 0) ...[
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.03),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.public, color: Colors.blueAccent, size: 14),
+                    const SizedBox(width: 8),
+                    const Text('UAE Pro League', style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 25),
+            ],
+            Row(
               children: [
-                Text('30 JAN', style: TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold)),
-                Text('Emirates Club', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                Text(match['date'] as String, style: const TextStyle(color: Colors.white38, fontSize: 11, fontWeight: FontWeight.bold)),
+                const Spacer(),
+                Text(match['comp'] as String, style: const TextStyle(color: Colors.white12, fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 1)),
               ],
             ),
-            const Spacer(),
-            const Text('2 - 0', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16)),
-            const SizedBox(width: 20),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(color: Colors.green.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(5)),
-              child: const Text('WIN', style: TextStyle(color: Colors.greenAccent, fontSize: 9, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 15),
+            Row(
+              children: [
+                Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.03),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(match['logo'] as IconData, color: goldColor.withValues(alpha: 0.5), size: 20),
+                ),
+                const SizedBox(width: 15),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(match['opp'] as String, style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 4),
+                      Text(match['score'] as String, style: const TextStyle(color: Colors.white38, fontSize: 13, fontWeight: FontWeight.w500)),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.05),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(match['mins'] as String, style: const TextStyle(color: Colors.white60, fontSize: 11, fontWeight: FontWeight.w900)),
+                ),
+                const SizedBox(width: 10),
+                Container(
+                  width: 40,
+                  height: 28,
+                  decoration: BoxDecoration(
+                    color: ratingColor,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [BoxShadow(color: ratingColor.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 2))],
+                  ),
+                  child: Center(
+                    child: Text(match['rating'] as String, style: const TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w900)),
+                  ),
+                ),
+              ],
             ),
+            const SizedBox(height: 20),
+            if (index < matches.length - 1) 
+              Divider(color: Colors.white.withValues(alpha: 0.05), height: 1, thickness: 1),
+            const SizedBox(height: 20),
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -529,9 +655,18 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
     );
   }
 
-  Widget _buildNotesTab() {
+  Widget _buildFeedbackTab() {
+    final List<Map<String, dynamic>> themeVariations = [
+      {'heading': const Color(0xFFD4AF37), 'text': const Color(0xFFFFE59E)},
+      {'heading': const Color(0xFF42A5F5), 'text': const Color(0xFFBBDEFB)},
+      {'heading': const Color(0xFF66BB6A), 'text': const Color(0xFFC8E6C9)},
+      {'heading': const Color(0xFFEC407A), 'text': const Color(0xFFF8BBD0)},
+      {'heading': const Color(0xFFAB47BC), 'text': const Color(0xFFE1BEE7)},
+      {'heading': const Color(0xFFFFA726), 'text': const Color(0xFFFFE0B2)},
+    ];
+
     return Container(
-      color: const Color(0xFF050505),
+      color: Colors.transparent,
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -543,42 +678,161 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(color: goldColor.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
-                  child: const Text('NEW NOTE', style: TextStyle(color: goldColor, fontSize: 10, fontWeight: FontWeight.bold)),
+                  child: const Text('NEW FEEDBACK', style: TextStyle(color: goldColor, fontSize: 10, fontWeight: FontWeight.bold)),
                 ),
               ],
             ),
             const SizedBox(height: 25),
             Column(
               children: List.generate(6, (index) {
-                bool isEven = index % 2 == 0;
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: isEven ? surfaceColor : const Color(0xFF161616),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.02)),
+                final theme = themeVariations[index % themeVariations.length];
+                String noteText = index % 2 == 0 
+                  ? 'Excellent work rate in the final third. Keep pressing the defenders. You have shown great improvement in your positioning during counter-attacks and your vision for long balls is exceptional.' 
+                  : 'Focus on transition speed during counter-attacks. Try to be more clinical in front of the goal when you receive a cross from the right wing. Your stamina is good, but work on explosive sprints.';
+                
+                return GestureDetector(
+                  onTap: () => _showFullFeedback(context, 'MATCH PERFORMANCE', noteText, theme['heading']!, theme['text']!, '3rd JULY 2026'),
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 15),
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: surfaceColor,
+                      borderRadius: BorderRadius.circular(25),
+                      border: Border.all(color: theme['heading']!.withValues(alpha: 0.1)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme['heading']!.withValues(alpha: 0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        )
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('MATCH PERFORMANCE', 
+                              style: TextStyle(color: theme['heading'], fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
+                            const Icon(Icons.push_pin_outlined, color: Colors.white12, size: 14),
+                          ],
+                        ),
+                        const SizedBox(height: 15),
+                        Text(
+                          noteText, 
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: theme['text'], fontSize: 15, fontWeight: FontWeight.w500, height: 1.5)
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            const Icon(Icons.access_time, color: Colors.white24, size: 10),
+                            const SizedBox(width: 5),
+                            const Text('3rd JULY 2026', style: TextStyle(color: Colors.white24, fontSize: 9, fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
+                );
+              }),
+            ),
+            const SizedBox(height: 50),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showFullFeedback(BuildContext context, String title, String content, Color headingColor, Color bodyColor, String date) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => Container(
+        height: MediaQuery.of(context).size.height * 0.85,
+        decoration: BoxDecoration(
+          color: const Color(0xFF161616),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(35)),
+          border: Border.all(color: headingColor.withValues(alpha: 0.2), width: 1.5),
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              top: 0, right: 0,
+              child: Opacity(
+                opacity: 0.05,
+                child: Icon(Icons.format_quote, size: 200, color: headingColor),
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 15),
+                Center(child: Container(width: 45, height: 5, decoration: BoxDecoration(color: Colors.white10, borderRadius: BorderRadius.circular(10)))),
+                const SizedBox(height: 35),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('MATCH PERFORMANCE', style: TextStyle(color: isEven ? goldColor.withValues(alpha: 0.7) : Colors.blueAccent.withValues(alpha: 0.7), fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1)),
-                          const Text('3rd JULY 2026', style: TextStyle(color: Colors.white12, fontSize: 9, fontWeight: FontWeight.bold)),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: headingColor.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(title, style: TextStyle(color: headingColor, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
+                          ),
+                          Text(date, style: const TextStyle(color: Colors.white24, fontSize: 11, fontWeight: FontWeight.bold)),
                         ],
                       ),
-                      const SizedBox(height: 15),
-                      Text(index % 2 == 0 ? 'Excellent work rate in the final third. Keep pressing the defenders.' : 'Focus on transition speed during counter-attacks.', 
-                        style: const TextStyle(color: Colors.white70, fontSize: 15, fontWeight: FontWeight.w500, height: 1.4)),
+                      const SizedBox(height: 25),
+                      const Divider(color: Colors.white10, height: 1),
                     ],
                   ),
-                );
-              }),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(30),
+                    child: Text(
+                      content,
+                      style: TextStyle(
+                        color: bodyColor, 
+                        fontSize: 19, 
+                        height: 1.8, 
+                        fontWeight: FontWeight.w400,
+                        letterSpacing: 0.3
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(30),
+                  child: ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: Icon(Icons.edit_note_rounded, color: headingColor, size: 22),
+                    label: Text('EDIT FEEDBACK', 
+                      style: TextStyle(color: headingColor, fontWeight: FontWeight.w900, fontSize: 13, letterSpacing: 1.5)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: headingColor.withValues(alpha: 0.1),
+                      minimumSize: const Size(double.infinity, 60),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        side: BorderSide(color: headingColor.withValues(alpha: 0.2)),
+                      ),
+                      elevation: 0,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 50),
           ],
         ),
       ),

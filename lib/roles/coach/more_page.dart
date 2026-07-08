@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../manager/manager_budget_page.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 
@@ -7,13 +8,12 @@ class MorePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(25, 20, 25, 10),
-              child: Column(
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(25, 20, 25, 10),
+            child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text('CLUB ADMINISTRATION',
@@ -47,23 +47,22 @@ class MorePage extends StatelessWidget {
                 const SizedBox(height: 35),
                 _buildSectionTitle('CLUB MANAGEMENT'),
                 const SizedBox(height: 15),
-                _buildMenuOption(Icons.people_alt_rounded, 'Staff Directory', 'Manage your backroom staff'),
-                _buildMenuOption(Icons.account_balance_wallet_rounded, 'Finances', 'Budget & Salary management'),
-                _buildMenuOption(Icons.stadium_rounded, 'Facilities', 'Stadium & Training ground'),
-                _buildMenuOption(Icons.history_edu_rounded, 'Club History', 'Honours & Heritage'),
+                _buildMenuOption(context, Icons.account_balance_wallet_rounded, 'Finances', 'Budget & Salary management', 
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ManagerBudgetPage()))),
+                _buildMenuOption(context, Icons.stadium_rounded, 'Facilities', 'Stadium & Training ground'),
+                _buildMenuOption(context, Icons.history_edu_rounded, 'Club History', 'Honours & Heritage'),
                 const SizedBox(height: 35),
                 _buildSectionTitle('SUPPORT & APP'),
                 const SizedBox(height: 15),
-                _buildMenuOption(Icons.help_outline_rounded, 'Help Center', 'FAQs & Documentation'),
-                _buildMenuOption(Icons.feedback_outlined, 'Send Feedback', 'Suggest new features'),
-                _buildMenuOption(Icons.info_outline_rounded, 'About App', 'Version 2.1.0 (Elite)'),
+                _buildMenuOption(context, Icons.help_outline_rounded, 'Help Center', 'FAQs & Documentation'),
+                _buildMenuOption(context, Icons.feedback_outlined, 'Send Feedback', 'Suggest new features'),
+                _buildMenuOption(context, Icons.info_outline_rounded, 'About App', 'Version 2.1.0 (Elite)'),
                 const SizedBox(height: 40),
               ]),
             ),
           ),
         ],
-      ),
-    );
+      );
   }
 
   Widget _buildSectionTitle(String t) => Text(t,
@@ -120,37 +119,40 @@ class MorePage extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuOption(IconData icon, String title, String subtitle) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF121212),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.02)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: const Color(0xFF1A1A1A),
-              borderRadius: BorderRadius.circular(12),
+  Widget _buildMenuOption(BuildContext context, IconData icon, String title, String subtitle, {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: const Color(0xFF121212),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.02)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1A1A1A),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: const Color(0xFFD4AF37).withValues(alpha: 0.7), size: 20),
             ),
-            child: Icon(icon, color: const Color(0xFFD4AF37).withValues(alpha: 0.7), size: 20),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14)),
-                Text(subtitle, style: const TextStyle(color: Colors.white38, fontSize: 11)),
-              ],
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14)),
+                  Text(subtitle, style: const TextStyle(color: Colors.white38, fontSize: 11)),
+                ],
+              ),
             ),
-          ),
-          const Icon(Icons.chevron_right_rounded, color: Colors.white10),
-        ],
+            const Icon(Icons.chevron_right_rounded, color: Colors.white10),
+          ],
+        ),
       ),
     );
   }

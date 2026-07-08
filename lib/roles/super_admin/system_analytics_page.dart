@@ -42,7 +42,7 @@ class SystemAnalyticsPage extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: 2,
-      childAspectRatio: 1.5,
+      childAspectRatio: 1.2,
       crossAxisSpacing: 15,
       mainAxisSpacing: 15,
       children: [

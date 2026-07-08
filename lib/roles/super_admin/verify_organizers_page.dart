@@ -60,7 +60,14 @@ class _VerifyOrganizersPageState extends State<VerifyOrganizersPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('ORGANIZER APPLICATION', style: TextStyle(color: goldColor, fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 2)),
+                  const Expanded(
+                    child: Text('ORGANIZER/HOST APPLICATION', 
+                      style: TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1.5),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     decoration: BoxDecoration(color: Colors.orange.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
@@ -116,7 +123,7 @@ class _VerifyOrganizersPageState extends State<VerifyOrganizersPage> {
                           _pendingOrganizers.remove(organizer);
                         });
                         Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Organizer ${organizer['name']} approved!')));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Organizer/Host ${organizer['name']} approved!')));
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.greenAccent,

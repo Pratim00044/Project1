@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 import 'dart:math' as math;
+import '../roles/super_admin/super_admin_home.dart';
 import '../roles/organization/organization_home.dart';
-import '../roles/staff/staff_home.dart';
 import '../roles/player/player_home.dart';
-import '../roles/captain/captain_home.dart';
 import '../roles/coach/coach_home.dart';
 import '../roles/manager/manager_home.dart';
 
@@ -28,6 +28,8 @@ class _SignupScreenState extends State<SignupScreen> {
   
   final _heightController = TextEditingController();
   final _weightController = TextEditingController();
+  final _dobController = TextEditingController();
+  final _parentEmailController = TextEditingController();
   String? _selectedFoot;
   String? _selectedPosition;
 
@@ -35,15 +37,15 @@ class _SignupScreenState extends State<SignupScreen> {
   bool _isClubCodeStep = true;
 
   final List<Map<String, dynamic>> _roles = [
-    {'name': 'ORGANIZER', 'icon': Icons.business_center_outlined},
-    {'name': 'COACH', 'icon': Icons.sports_outlined},
-    {'name': 'MANAGER', 'icon': Icons.manage_accounts_outlined},
-    {'name': 'CAPTAIN', 'icon': Icons.copyright_outlined},
-    {'name': 'PLAYER', 'icon': Icons.directions_run_outlined},
-    {'name': 'STAFF', 'icon': Icons.groups_outlined},
+    {'name': 'PLAYER', 'icon': Icons.directions_run_outlined, 'color': Colors.blueAccent},
+    {'name': 'ORGANIZER/HOST', 'icon': Icons.groups_outlined, 'color': Colors.greenAccent},
+    {'name': 'COACH', 'icon': Icons.sports_outlined, 'color': Colors.orangeAccent},
+    {'name': 'MANAGER', 'icon': Icons.manage_accounts_outlined, 'color': Colors.purpleAccent},
+    {'name': 'SUPER ADMIN', 'icon': Icons.admin_panel_settings_outlined, 'color': goldColor},
   ];
 
   late PageController _pageController;
+  late VideoPlayerController _videoController;
   int _currentIndex = 0;
   double _buttonScale = 1.0;
   double _linkScale = 1.0;
@@ -55,6 +57,13 @@ class _SignupScreenState extends State<SignupScreen> {
       viewportFraction: 0.25,
       initialPage: _currentIndex,
     );
+    _videoController = VideoPlayerController.asset('assets/Video/Banner.mp4')
+      ..initialize().then((_) {
+        setState(() {});
+        _videoController.setLooping(true);
+        _videoController.setVolume(0);
+        _videoController.play();
+      });
   }
 
   @override
@@ -67,13 +76,16 @@ class _SignupScreenState extends State<SignupScreen> {
     _confirmPasswordController.dispose();
     _heightController.dispose();
     _weightController.dispose();
+    _dobController.dispose();
+    _parentEmailController.dispose();
     _clubCodeController.dispose();
+    _videoController.dispose();
     super.dispose();
   }
 
   void _handleRegister() {
     String roleName = _roles[_currentIndex]['name'];
-    if (roleName != 'ORGANIZER' && _isClubCodeStep) {
+    if (roleName != 'ORGANIZER/HOST' && roleName != 'SUPER ADMIN' && _isClubCodeStep) {
       if (_clubCodeController.text.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Please enter a valid Club Code to continue.')),
@@ -85,7 +97,7 @@ class _SignupScreenState extends State<SignupScreen> {
     }
 
     if (_formKey.currentState!.validate()) {
-      if (roleName == 'PLAYER' || roleName == 'CAPTAIN') {
+      if (roleName == 'PLAYER') {
         if (_selectedFoot == null || _selectedPosition == null || _heightController.text.isEmpty || _weightController.text.isEmpty) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('All stats are mandatory for this role.')),
@@ -101,7 +113,7 @@ class _SignupScreenState extends State<SignupScreen> {
         return;
       }
 
-      if (_roles[_currentIndex]['name'] == 'ORGANIZER') {
+      if (_roles[_currentIndex]['name'] == 'ORGANIZER/HOST') {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Registration submitted. Awaiting Super Admin verification.')),
         );
@@ -109,17 +121,14 @@ class _SignupScreenState extends State<SignupScreen> {
       
       Widget homePage;
       switch (_roles[_currentIndex]['name']) {
-        case 'ORGANIZER':
-          homePage = const OrganizationHome();
+        case 'SUPER ADMIN':
+          homePage = const SuperAdminHome();
           break;
-        case 'STAFF':
-          homePage = const StaffHome();
+        case 'ORGANIZER/HOST':
+          homePage = const OrganizationHome();
           break;
         case 'PLAYER':
           homePage = const PlayerHome();
-          break;
-        case 'CAPTAIN':
-          homePage = const CaptainHome();
           break;
         case 'COACH':
           homePage = const CoachHome();
@@ -159,10 +168,22 @@ class _SignupScreenState extends State<SignupScreen> {
           return Stack(
             children: [
               Positioned.fill(
-                child: Image.asset(
-                  'assets/images/login_background.jpeg',
-                  fit: BoxFit.cover,
-                  colorBlendMode: BlendMode.darken,
+                child: _videoController.value.isInitialized
+                    ? FittedBox(
+                        fit: BoxFit.cover,
+                        child: SizedBox(
+                          width: _videoController.value.size.width,
+                          height: _videoController.value.size.height,
+                          child: VideoPlayer(_videoController),
+                        ),
+                      )
+                    : Image.asset(
+                        'assets/images/login_background.jpeg',
+                        fit: BoxFit.cover,
+                      ),
+              ),
+              Positioned.fill(
+                child: Container(
                   color: Colors.black.withValues(alpha: 0.6),
                 ),
               ),
@@ -209,7 +230,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      if (_roles[_currentIndex]['name'] != 'ORGANIZER' && _isClubCodeStep) ...[
+                                      if (_roles[_currentIndex]['name'] != 'ORGANIZER/HOST' && _roles[_currentIndex]['name'] != 'SUPER ADMIN' && _isClubCodeStep) ...[
                                         _buildLabel('Club Code', Icons.qr_code_scanner_rounded),
                                         const SizedBox(height: 10),
                                         _buildTextField(
@@ -224,7 +245,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                           ),
                                         ),
                                       ] else ...[
-                                        if (_roles[_currentIndex]['name'] != 'ORGANIZER') ...[
+                                        if (_roles[_currentIndex]['name'] != 'ORGANIZER/HOST' && _roles[_currentIndex]['name'] != 'SUPER ADMIN') ...[
                                           _buildLabel('Club Code', Icons.qr_code_scanner_rounded),
                                           const SizedBox(height: 10),
                                           _buildTextField(
@@ -274,10 +295,26 @@ class _SignupScreenState extends State<SignupScreen> {
                                           ),
                                         ),
 
-                                        if (_roles[_currentIndex]['name'] == 'PLAYER' || _roles[_currentIndex]['name'] == 'CAPTAIN') ...[
+                                        if (_roles[_currentIndex]['name'] == 'PLAYER') ...[
                                           const SizedBox(height: 32),
                                           const Divider(color: Colors.white10),
                                           const SizedBox(height: 16),
+                                          _buildLabel('Personal Details', Icons.cake_outlined),
+                                          const SizedBox(height: 16),
+                                          _buildTextField(
+                                            controller: _dobController,
+                                            hint: 'Date of Birth (DD/MM/YYYY)',
+                                            validator: (value) => value!.isEmpty ? 'Required' : null,
+                                          ),
+                                          const SizedBox(height: 24),
+                                          _buildLabel('Parent/Guardian Contact', Icons.family_restroom_outlined),
+                                          const SizedBox(height: 16),
+                                          _buildTextField(
+                                            controller: _parentEmailController,
+                                            hint: 'Parent Email',
+                                            validator: (value) => !value!.contains('@') ? 'Invalid email' : null,
+                                          ),
+                                          const SizedBox(height: 32),
                                           _buildLabel('Physical Stats', Icons.fitness_center),
                                           const SizedBox(height: 16),
                                           Row(
@@ -501,6 +538,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   double opacity = (1 - (diff.abs() * 0.6)).clamp(0.1, 1.0);
                   bool isSelected = index == _currentIndex;
 
+                  final roleColor = role['color'] as Color;
                   return Center(
                     child: Transform.translate(
                       offset: Offset(0, yOffset),
@@ -516,14 +554,14 @@ class _SignupScreenState extends State<SignupScreen> {
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: isSelected ? goldColor.withValues(alpha: 0.1) : Colors.transparent,
+                                  color: isSelected ? roleColor.withValues(alpha: 0.1) : Colors.transparent,
                                   border: Border.all(
-                                    color: isSelected ? goldColor : Colors.white.withValues(alpha: 0.1),
+                                    color: isSelected ? roleColor : Colors.white.withValues(alpha: 0.1),
                                     width: 2,
                                   ),
                                   boxShadow: isSelected ? [
                                     BoxShadow(
-                                      color: goldColor.withValues(alpha: 0.2),
+                                      color: roleColor.withValues(alpha: 0.2),
                                       blurRadius: 20,
                                       spreadRadius: 2,
                                     )
@@ -531,7 +569,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 ),
                                 child: Icon(
                                   role['icon'],
-                                  color: isSelected ? goldColor : Colors.white,
+                                  color: isSelected ? roleColor : Colors.white,
                                   size: 32,
                                 ),
                               ),
@@ -539,7 +577,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               Text(
                                 role['name'],
                                 style: TextStyle(
-                                  color: isSelected ? goldColor : Colors.white.withValues(alpha: 0.5),
+                                  color: isSelected ? roleColor : Colors.white.withValues(alpha: 0.5),
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: 1.2,
@@ -675,7 +713,7 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   Widget _buildRegisterButton() {
-    bool isStepOne = _roles[_currentIndex]['name'] != 'ORGANIZER' && _isClubCodeStep;
+    bool isStepOne = _roles[_currentIndex]['name'] != 'ORGANIZER/HOST' && _isClubCodeStep;
     
     return GestureDetector(
       onTapDown: (_) => setState(() => _buttonScale = 0.92),

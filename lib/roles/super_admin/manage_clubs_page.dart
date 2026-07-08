@@ -13,17 +13,18 @@ class ManageClubsPage extends StatefulWidget {
 
 class _ManageClubsPageState extends State<ManageClubsPage> {
   final List<Map<String, dynamic>> _clubs = [
-    {'name': 'CORE FC', 'logo': 'assets/logo.png', 'members': 45, 'status': 'Active', 'category': 'Professional'},
-    {'name': 'Dubai Lions', 'logo': 'assets/logo.png', 'members': 32, 'status': 'Active', 'category': 'Semi-Pro'},
-    {'name': 'Eagle FC', 'logo': 'assets/logo.png', 'members': 28, 'status': 'Suspended', 'category': 'Youth'},
-    {'name': 'United Football Club', 'logo': 'assets/logo.png', 'members': 50, 'status': 'Active', 'category': 'Professional'},
-    {'name': 'City Football', 'logo': 'assets/logo.png', 'members': 40, 'status': 'Active', 'category': 'Amateur'},
+    {'name': 'CORE FC', 'logo': 'assets/logo.png', 'theme': 'assets/images/Core FC Theme .jpeg', 'members': 45, 'status': 'Active', 'category': 'Professional'},
+    {'name': 'Dubai Lions', 'logo': 'assets/logo.png', 'theme': 'assets/images/login_background.jpeg', 'members': 32, 'status': 'Active', 'category': 'Semi-Pro'},
+    {'name': 'Eagle FC', 'logo': 'assets/logo.png', 'theme': 'assets/images/login_background.jpeg', 'members': 28, 'status': 'Suspended', 'category': 'Youth'},
+    {'name': 'United Football Club', 'logo': 'assets/logo.png', 'theme': 'assets/images/login_background.jpeg', 'members': 50, 'status': 'Active', 'category': 'Professional'},
+    {'name': 'City Football', 'logo': 'assets/logo.png', 'theme': 'assets/images/login_background.jpeg', 'members': 40, 'status': 'Active', 'category': 'Amateur'},
   ];
 
   void _editClub(Map<String, dynamic> club) {
     TextEditingController nameController = TextEditingController(text: club['name']);
     String selectedStatus = club['status'];
     String selectedCategory = club['category'];
+    String currentTheme = club['theme'];
     
     showDialog(
       context: context,
@@ -35,29 +36,66 @@ class _ManageClubsPageState extends State<ManageClubsPage> {
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Stack(
-                  children: [
-                    Container(
-                      height: 100,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1A1A1A),
-                        borderRadius: BorderRadius.circular(20),
-                        image: DecorationImage(image: AssetImage(club['logo']), fit: BoxFit.contain),
+                const Text('CLUB LOGO', style: TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10),
+                Center(
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: 80,
+                        width: 80,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1A1A1A),
+                          borderRadius: BorderRadius.circular(20),
+                          image: DecorationImage(image: AssetImage(club['logo']), fit: BoxFit.contain),
+                        ),
+                      ),
+                      Positioned(
+                        right: -5,
+                        bottom: -5,
+                        child: IconButton(
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Selecting new logo from gallery...')));
+                          },
+                          icon: const CircleAvatar(backgroundColor: goldColor, radius: 15, child: Icon(Icons.camera_alt, color: Colors.black, size: 15)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 25),
+                const Text('CLUB THEME IMAGE', style: TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10),
+                GestureDetector(
+                  onTap: () {
+                    setDialogState(() {
+                      currentTheme = currentTheme == 'assets/images/Core FC Theme .jpeg'
+                        ? 'assets/images/login_background.jpeg' 
+                        : 'assets/images/Core FC Theme .jpeg';
+                    });
+                  },
+                  child: Container(
+                    height: 120,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1A1A1A),
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(color: goldColor.withOpacity(0.3)),
+                      image: DecorationImage(image: AssetImage(currentTheme), fit: BoxFit.cover, opacity: 0.6),
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.cloud_upload_outlined, color: goldColor, size: 28),
+                          const SizedBox(height: 8),
+                          Text('REPLACE THEME', style: TextStyle(color: goldColor.withOpacity(0.8), fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                        ],
                       ),
                     ),
-                    Positioned(
-                      right: -5,
-                      bottom: -5,
-                      child: IconButton(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Selecting new logo from gallery...')));
-                        },
-                        icon: const CircleAvatar(backgroundColor: goldColor, radius: 15, child: Icon(Icons.camera_alt, color: Colors.black, size: 15)),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
                 const SizedBox(height: 25),
                 TextField(
@@ -90,9 +128,10 @@ class _ManageClubsPageState extends State<ManageClubsPage> {
                   club['name'] = nameController.text;
                   club['status'] = selectedStatus;
                   club['category'] = selectedCategory;
+                  club['theme'] = currentTheme;
                 });
                 Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Club identity updated successfully!')));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Club profile updated successfully!')));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: goldColor,
@@ -163,10 +202,17 @@ class _ManageClubsPageState extends State<ManageClubsPage> {
               ),
               title: Row(
                 children: [
-                  Text(club['name'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                  const SizedBox(width: 8),
-                  if (isSuspended)
+                  Expanded(
+                    child: Text(
+                      club['name'], 
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (isSuspended) ...[
+                    const SizedBox(width: 8),
                     const Icon(Icons.warning_amber_rounded, color: Colors.redAccent, size: 14),
+                  ],
                 ],
               ),
               subtitle: Column(

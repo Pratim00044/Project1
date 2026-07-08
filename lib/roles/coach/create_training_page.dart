@@ -11,6 +11,15 @@ class CreateTrainingPage extends StatefulWidget {
 
 class _CreateTrainingPageState extends State<CreateTrainingPage> {
   String _inviteType = 'PLAYER';
+  String _sessionType = 'ACADEMY SESSION';
+  String _selectedAgeGroup = 'Under 8s';
+  String _selectedLocation = 'Town Square - Una Pitch';
+  
+  dynamic _logoImage;
+  
+  final List<String> _ageGroups = ['Under 8s', 'Under 10s', 'Under 12s', 'Under 14s', 'Under 16s'];
+  final List<String> _locations = ['Town Square - Una Pitch', 'Dubai Sports City', 'Jumeirah', 'Al Barsha'];
+  
   final List<String> _selectedPlayers = [];
   final List<String> _selectedTeams = [];
   final TextEditingController _sessionNameController = TextEditingController();
@@ -22,7 +31,7 @@ class _CreateTrainingPageState extends State<CreateTrainingPage> {
   ];
 
   final List<String> _availableTeams = [
-    'CORE FC', 'Dubai FC', 'City Football', 'Dubai City Football Club', 
+    'UNDER 8s', 'UNDER 10s', 'City Football', 'Dubai City Football Club',
     'United Football Club', 'Eagle FC', 'AFC'
   ];
 
@@ -36,11 +45,15 @@ class _CreateTrainingPageState extends State<CreateTrainingPage> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 200,
+            expandedHeight: 220,
             pinned: true,
             backgroundColor: const Color(0xFF0D0D0D),
+            automaticallyImplyLeading: false,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: goldColor),
+              onPressed: () => Navigator.pop(context),
+            ),
             flexibleSpace: FlexibleSpaceBar(
-              title: const Text('NEW SESSION', style: TextStyle(color: goldColor, fontSize: 14, fontWeight: FontWeight.bold, letterSpacing: 2)),
               background: Stack(
                 fit: StackFit.expand,
                 children: [
@@ -49,11 +62,48 @@ class _CreateTrainingPageState extends State<CreateTrainingPage> {
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [Colors.transparent, Colors.black.withOpacity(0.8)],
+                        colors: [Colors.transparent, Colors.black.withOpacity(0.9)],
                       ),
                     ),
                   ),
-                  const Center(child: Icon(Icons.sports_soccer, color: goldColor, size: 80)),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 30),
+                      GestureDetector(
+                        onTap: _pickLogo,
+                        child: Stack(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(color: goldColor.withOpacity(0.5), width: 2),
+                                boxShadow: [BoxShadow(color: goldColor.withOpacity(0.1), blurRadius: 20)],
+                              ),
+                              child: CircleAvatar(
+                              radius: 45,
+                              backgroundColor: const Color(0xFF1A1A1A),
+                              backgroundImage: const AssetImage('assets/logo.png'),
+                            ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: const BoxDecoration(color: goldColor, shape: BoxShape.circle),
+                                child: const Icon(Icons.camera_alt, color: Colors.black, size: 14),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      const Text('NEW SESSION', 
+                        style: TextStyle(color: goldColor, fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: 2)),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -64,6 +114,10 @@ class _CreateTrainingPageState extends State<CreateTrainingPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  _buildSectionTitle('SESSION TYPE'),
+                  const SizedBox(height: 15),
+                  _buildDropdown('Type', _sessionType, ['ACADEMY SESSION', 'BESPOKE COACHING', 'FRIENDLY GAME', 'TRAINING MATCH'], (v) => setState(() => _sessionType = v!)),
+                  const SizedBox(height: 25),
                   _buildSectionTitle('BASIC INFO'),
                   const SizedBox(height: 15),
                   TextField(
@@ -77,6 +131,14 @@ class _CreateTrainingPageState extends State<CreateTrainingPage> {
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: BorderSide.none),
                       prefixIcon: const Icon(Icons.edit, color: goldColor, size: 18),
                     ),
+                  ),
+                  const SizedBox(height: 25),
+                  Row(
+                    children: [
+                      Expanded(child: _buildDropdown('Age Group', _selectedAgeGroup, _ageGroups, (v) => setState(() => _selectedAgeGroup = v!))),
+                      const SizedBox(width: 15),
+                      Expanded(child: _buildDropdown('Location', _selectedLocation, _locations, (v) => setState(() => _selectedLocation = v!))),
+                    ],
                   ),
                   const SizedBox(height: 25),
                   Row(
@@ -231,6 +293,15 @@ class _CreateTrainingPageState extends State<CreateTrainingPage> {
     );
   }
 
+  Future<void> _pickLogo() async {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Logo Upload feature - Open Gallery/Camera'),
+        backgroundColor: goldColor,
+      ),
+    );
+  }
+
   Future<void> _pickDate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -267,8 +338,37 @@ class _CreateTrainingPageState extends State<CreateTrainingPage> {
               children: [
                 Icon(icon, color: goldColor, size: 18),
                 const SizedBox(width: 12),
-                Text(value, style: const TextStyle(color: Colors.white, fontSize: 13)),
+                Expanded(child: Text(value, style: const TextStyle(color: Colors.white, fontSize: 13), overflow: TextOverflow.ellipsis)),
               ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDropdown(String label, String value, List<String> items, ValueChanged<String?> onChanged) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: const TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(color: const Color(0xFF121212), borderRadius: BorderRadius.circular(15)),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: value,
+              isExpanded: true,
+              dropdownColor: const Color(0xFF1A1A1A),
+              style: const TextStyle(color: Colors.white, fontSize: 13),
+              items: items.map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: onChanged,
             ),
           ),
         ),

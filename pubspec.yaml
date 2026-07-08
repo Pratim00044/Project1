@@ -34,6 +34,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  video_player: ^2.8.1
 
 dev_dependencies:
   flutter_test:
@@ -70,8 +71,18 @@ flutter:
   assets:
     - assets/images/login_background.jpeg
     - assets/images/sunil.png
+    - assets/images/Core FC Theme .jpeg
+    - assets/images/Forward.png
+    - assets/images/Attack.png
+    - assets/images/Age.png
+    - assets/images/league_green.png
+    - assets/images/league_red.png
+    - assets/images/league_blue.png
+    - assets/images/league_gold.png
+    - assets/images/match.png
     - assets/logo.png
     - assets/App Icon.png
+    - assets/Video/Banner.mp4
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

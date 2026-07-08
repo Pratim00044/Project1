@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'create_training_page.dart';
+import 'social_leagues.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 
@@ -26,24 +27,23 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('GAMES',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 2)),
-                _buildCreateButton(context),
-              ],
-            ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('GAMES',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 2)),
+              _buildCreateButton(context),
+            ],
           ),
+        ),
           TabBar(
               controller: _tab,
               indicatorColor: goldColor,
@@ -63,8 +63,7 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
             ),
           ),
         ],
-      ),
-    );
+      );
   }
 
   Widget _buildCreateButton(BuildContext context) {
@@ -130,24 +129,64 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
   }
 
   Widget _buildLeagueTab(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      double aspectRatio = constraints.maxWidth < 600 ? 1.5 : 2.0;
-      return GridView(
-        padding: const EdgeInsets.all(20),
-        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 300,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
-          childAspectRatio: aspectRatio,
+    return ListView(
+      padding: const EdgeInsets.all(20),
+      children: [
+        GestureDetector(
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SocialLeaguesPage())),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: const Color(0xFF2ECC71).withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: const Color(0xFF2ECC71).withValues(alpha: 0.2)),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: const BoxDecoration(color: Color(0xFF2ECC71), shape: BoxShape.circle),
+                  child: const Icon(Icons.public_rounded, color: Colors.black, size: 24),
+                ),
+                const SizedBox(width: 20),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('EXPLORE SOCIAL LEAGUES', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                      Text('Manage 5, 7, 8, 9 & 11 a-side games', style: TextStyle(color: Colors.white60, fontSize: 13)),
+                    ],
+                  ),
+                ),
+                const Icon(Icons.arrow_forward_ios_rounded, color: Color(0xFF2ECC71), size: 18),
+              ],
+            ),
+          ),
         ),
-        children: [
-          _buildLeagueBoxCard('Super Cup', 'Bhubaneswar', '16 Teams', 'IN PROGRESS', Icons.emoji_events),
-          _buildLeagueBoxCard('Santosh Trophy', 'Multiple', '32 Teams', 'REGISTRATION OPEN', Icons.emoji_events, isGold: true),
-          _buildLeagueBoxCard('I-League 2', 'Pan-India', '12 Teams', 'UPCOMING', Icons.emoji_events),
-          _buildLeagueBoxCard('Durand Cup', 'Kolkata', '24 Teams', 'REGISTRATION OPEN', Icons.emoji_events, isGold: true),
-        ],
-      );
-    });
+        const SizedBox(height: 30),
+        _buildSectionTitle('ACTIVE LEAGUES'),
+        const SizedBox(height: 15),
+        LayoutBuilder(builder: (context, constraints) {
+          double aspectRatio = constraints.maxWidth < 600 ? 1.5 : 2.0;
+          return GridView(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 300,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: aspectRatio,
+            ),
+            children: [
+              _buildLeagueBoxCard('Super Cup', 'Bhubaneswar', '16 Teams', 'IN PROGRESS', Icons.emoji_events),
+              _buildLeagueBoxCard('Santosh Trophy', 'Multiple', '32 Teams', 'REGISTRATION OPEN', Icons.emoji_events, isGold: true),
+              _buildLeagueBoxCard('I-League 2', 'Pan-India', '12 Teams', 'UPCOMING', Icons.emoji_events),
+              _buildLeagueBoxCard('Durand Cup', 'Kolkata', '24 Teams', 'REGISTRATION OPEN', Icons.emoji_events, isGold: true),
+            ],
+          );
+        }),
+      ],
+    );
   }
 
   Widget _buildTrainingTab(BuildContext context) {
@@ -290,6 +329,11 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
           color: const Color(0xFF121212),
           borderRadius: BorderRadius.circular(24),
           border: Border.all(color: Colors.redAccent.withOpacity(0.3)),
+          image: const DecorationImage(
+            image: AssetImage('assets/images/match.png'),
+            fit: BoxFit.cover,
+            opacity: 0.2,
+          ),
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,

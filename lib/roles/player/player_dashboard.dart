@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 import 'dashboard_sections/overview_section.dart';
 import 'dashboard_sections/news_section.dart';
 import 'dashboard_sections/session_section.dart';
@@ -20,6 +21,25 @@ class PlayerDashboard extends StatefulWidget {
 class _PlayerDashboardState extends State<PlayerDashboard> {
   String _activeTab = 'Overview';
   final List<String> _tabHistory = ['Overview'];
+  late VideoPlayerController _videoController;
+
+  @override
+  void initState() {
+    super.initState();
+    _videoController = VideoPlayerController.asset('assets/Video/Banner.mp4')
+      ..initialize().then((_) {
+        setState(() {});
+        _videoController.setLooping(true);
+        _videoController.setVolume(0);
+        _videoController.play();
+      });
+  }
+
+  @override
+  void dispose() {
+    _videoController.dispose();
+    super.dispose();
+  }
 
   void _changeTab(String label) {
     if (_activeTab != label) {
@@ -43,89 +63,62 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
           });
         }
       },
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      'assets/logo.png',
-                      height: 35,
-                      fit: BoxFit.contain,
-                    ),
-                    const SizedBox(width: 10),
-                    const Text(
-                      'STATIXA',
-                      style: TextStyle(
-                        color: Color(0xFFC0C0C0),
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.5,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+      child: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
+        slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
+              child: _buildUniqueHeroCard(),
             ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
-                child: _buildUniqueHeroCard(),
-              ),
-            ),
+          ),
 
-        SliverToBoxAdapter(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              bool isWide = constraints.maxWidth > 800;
-              if (isWide) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildTabLink('Overview'),
-                      _buildTabLink('News'),
-                      _buildTabLink('Session'),
-                      _buildTabLink('Ranking'),
-                      _buildTabLink('Stats'),
-                    ],
-                  ),
-                );
-              }
-              return SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
+      SliverToBoxAdapter(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            bool isWide = constraints.maxWidth > 800;
+            if (isWide) {
+              return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _buildTabLink('Overview'),
-                    const SizedBox(width: 35),
                     _buildTabLink('News'),
-                    const SizedBox(width: 35),
                     _buildTabLink('Session'),
-                    const SizedBox(width: 35),
                     _buildTabLink('Ranking'),
-                    const SizedBox(width: 35),
                     _buildTabLink('Stats'),
                   ],
                 ),
               );
-            },
-          ),
+            }
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Row(
+                children: [
+                  _buildTabLink('Overview'),
+                  const SizedBox(width: 35),
+                  _buildTabLink('News'),
+                  const SizedBox(width: 35),
+                  _buildTabLink('Session'),
+                  const SizedBox(width: 35),
+                  _buildTabLink('Ranking'),
+                  const SizedBox(width: 35),
+                  _buildTabLink('Stats'),
+                ],
+              ),
+            );
+          },
         ),
+      ),
 
-        SliverToBoxAdapter(
-          child: _buildActiveContent(),
-        ),
+      SliverToBoxAdapter(
+        child: _buildActiveContent(),
+      ),
 
-        const SliverToBoxAdapter(child: SizedBox(height: 50)),
-          ],
-        ),
+      const SliverToBoxAdapter(child: SizedBox(height: 50)),
+        ],
       ),
     );
   }
@@ -153,7 +146,7 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
   Widget _buildUniqueHeroCard() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(25),
+      height: 180,
       decoration: BoxDecoration(
         color: cardLightColor,
         borderRadius: BorderRadius.circular(40),
@@ -165,79 +158,114 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
           ),
         ],
       ),
-      child: Row(
-        children: [
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.black.withValues(alpha: 0.05), width: 4),
-              image: const DecorationImage(
-                image: AssetImage('assets/images/sunil.png'),
-                fit: BoxFit.cover,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(40),
+        child: Stack(
+          children: [
+            if (_videoController.value.isInitialized)
+              SizedBox.expand(
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: SizedBox(
+                    width: _videoController.value.size.width,
+                    height: _videoController.value.size.height,
+                    child: VideoPlayer(_videoController),
+                  ),
+                ),
+              )
+            else
+              Container(color: cardLightColor),
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    cardLightColor.withValues(alpha: 0.8),
+                    cardLightColor.withValues(alpha: 0.2),
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(width: 20),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  'Sunil',
-                  style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w300,
-                    letterSpacing: -0.5,
-                  ),
-                ),
-                const FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Chhetri',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 36,
-                      fontWeight: FontWeight.w900,
-                      height: 1.0,
-                      letterSpacing: -1,
+            Padding(
+              padding: const EdgeInsets.all(25),
+              child: Row(
+                children: [
+                  Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.black.withValues(alpha: 0.05), width: 4),
+                      image: const DecorationImage(
+                        image: AssetImage('assets/images/sunil.png'),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 12),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Row(
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Icon(Icons.shield, color: Colors.black45, size: 16),
-                        SizedBox(width: 8),
-                        Text(
-                          'CORE FC',
+                      children: [
+                        const Text(
+                          'Sunil',
                           style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w800,
+                            color: Colors.black54,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w300,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                        const FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Chhetri',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 36,
+                              fontWeight: FontWeight.w900,
+                              height: 1.0,
+                              letterSpacing: -1,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.08),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: const [
+                                Icon(Icons.shield, color: Colors.black45, size: 16),
+                                SizedBox(width: 8),
+                                Text(
+                                  'UNDER 8s',
+                                  style: TextStyle(
+                                    color: Colors.black87,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

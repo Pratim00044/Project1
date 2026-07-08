@@ -13,7 +13,7 @@ class PlayerGamesPage extends StatelessWidget {
       slivers: [
         const SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.fromLTRB(25, 20, 25, 15),
+              padding: EdgeInsets.fromLTRB(25, 30, 25, 15),
               child: Row(
                 children: [
                   Icon(Icons.history, color: goldColor, size: 14),
@@ -26,7 +26,7 @@ class PlayerGamesPage extends StatelessWidget {
 
           SliverToBoxAdapter(
             child: GestureDetector(
-              onTap: () => _showMatchDetails(context, 'CORE FC', 'EAST BENGAL', isLive: true),
+              onTap: () => _showMatchDetails(context, 'UNDER 8s', 'EAST BENGAL', isLive: true),
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 padding: const EdgeInsets.all(20),
@@ -34,6 +34,11 @@ class PlayerGamesPage extends StatelessWidget {
                   color: surfaceColor,
                   borderRadius: BorderRadius.circular(25),
                   border: Border.all(color: Colors.redAccent.withValues(alpha: 0.2)),
+                  image: const DecorationImage(
+                    image: AssetImage('assets/images/match.png'),
+                    fit: BoxFit.cover,
+                    opacity: 0.2,
+                  ),
                 ),
                 child: Column(
                   children: [
@@ -42,7 +47,7 @@ class PlayerGamesPage extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildMatchTeam('CORE FC', true),
+                        _buildMatchTeam('UNDER 8s', true),
                         const Column(
                           children: [
                             Text('2 - 1', style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w900)),
@@ -124,7 +129,7 @@ class PlayerGamesPage extends StatelessWidget {
                   bool isWin = game['result'] == 'WIN';
 
                   return GestureDetector(
-                    onTap: () => _showMatchDetails(context, 'CORE FC', game['opp']!, isLive: false, gameData: game),
+                    onTap: () => _showMatchDetails(context, 'UNDER 8s', game['opp']!, isLive: false, gameData: game),
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 12),
                       padding: const EdgeInsets.all(18),
@@ -184,7 +189,7 @@ class PlayerGamesPage extends StatelessWidget {
                 children: [
                   _buildTableHead(),
                   const Divider(color: Colors.white10),
-                  _buildTableRow('1', 'CORE FC', '12', '28', true),
+                  _buildTableRow('1', 'UNDER 8s', '12', '28', true),
                   _buildTableRow('2', 'MOHUN BAGAN', '12', '25', false),
                   _buildTableRow('3', 'MUMBAI CITY', '11', '22', false),
                   _buildTableRow('4', 'BENGALURU FC', '12', '20', false),
@@ -344,29 +349,41 @@ class _PlayerMatchDetailView extends StatefulWidget {
 
 class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with SingleTickerProviderStateMixin {
   late TabController _innerTab;
+  final Color teamAColor = const Color(0xFFFFD700);
+  final Color teamBColor = const Color(0xFF00E5FF);
 
-  final Map<String, List<String>> _teamLineups = {
-    'CORE FC': [
-      'Gurpreet Singh Sandhu', 'Subhasish Bose', 'Sandesh Jhingan', 'Anwar Ali', 'Pritam Kotal',
-      'Anirudh Thapa', 'Apuia Ralte', 'Sahal Abdul Samad', 'L. Chhangte', 'Manvir Singh', 'Sunil Chhetri'
+  final Map<String, List<Map<String, dynamic>>> _teamLineups = {
+    'UNDER 8s': [
+      {'name': 'G. Sandhu', 'no': '1', 'pos': 'GK'},
+      {'name': 'S. Bose', 'no': '3', 'pos': 'LB'},
+      {'name': 'S. Jhingan', 'no': '5', 'pos': 'CB'},
+      {'name': 'Anwar Ali', 'no': '4', 'pos': 'CB'},
+      {'name': 'P. Kotal', 'no': '2', 'pos': 'RB'},
+      {'name': 'A. Thapa', 'no': '7', 'pos': 'CM'},
+      {'name': 'Apuia Ralte', 'no': '8', 'pos': 'CM'},
+      {'name': 'S. Samad', 'no': '10', 'pos': 'AM'},
+      {'name': 'L. Chhangte', 'no': '17', 'pos': 'RW'},
+      {'name': 'Manvir Singh', 'no': '9', 'pos': 'LW'},
+      {'name': 'Sunil Chhetri', 'no': '11', 'pos': 'ST'},
     ],
     'EAST BENGAL': [
-      'Prabhsukhan Gill', 'Hijazi Maher', 'Anwar Ali', 'Mohammad Rakip', 'Mark Zothanpuia',
-      'Jeakson Singh', 'Madih Talal', 'Saul Crespo', 'Naorem Mahesh', 'Nandhakumar Sekar', 'Cleiton Silva'
-    ],
-    'MOHUN BAGAN': [
-      'Vishal Kaith', 'Subhasish Bose', 'Alberto Rodriguez', 'Tom Aldred', 'Asish Rai',
-      'Anirudh Thapa', 'Lalengmawia', 'Sahal Abdul Samad', 'Liston Colaco', 'Manvir Singh', 'Jason Cummings'
-    ],
-    'MUMBAI CITY': [
-      'Phurba Lachenpa', 'Mehtab Singh', 'Tiri', 'Akash Mishra', 'Rahul Bheke',
-      'Yoell van Nieff', 'Apuia Ralte', 'Lallianzuala Chhangte', 'Bipin Singh', 'Jorge Pereyra Diaz', 'Vikram Partap Singh'
+      {'name': 'P. Gill', 'no': '1', 'pos': 'GK'},
+      {'name': 'H. Maher', 'no': '4', 'pos': 'CB'},
+      {'name': 'Anwar Ali', 'no': '3', 'pos': 'CB'},
+      {'name': 'M. Rakip', 'no': '12', 'pos': 'RB'},
+      {'name': 'M. Zothanpuia', 'no': '5', 'pos': 'LB'},
+      {'name': 'J. Singh', 'no': '8', 'pos': 'CDM'},
+      {'name': 'M. Talal', 'no': '10', 'pos': 'CAM'},
+      {'name': 'S. Crespo', 'no': '21', 'pos': 'CM'},
+      {'name': 'N. Mahesh', 'no': '11', 'pos': 'LW'},
+      {'name': 'Nandhakumar', 'no': '22', 'pos': 'RW'},
+      {'name': 'Cleiton Silva', 'no': '9', 'pos': 'ST'},
     ],
   };
 
-  List<String> _getPlayers(String team) {
+  List<Map<String, dynamic>> _getPlayers(String team) {
     String key = team.toUpperCase();
-    return _teamLineups[key] ?? List.generate(11, (i) => 'Indian Player ${i + 1}');
+    return _teamLineups[key] ?? List.generate(11, (i) => {'name': 'Player ${i + 1}', 'no': '${i + 1}', 'pos': 'POS'});
   }
 
   @override
@@ -378,37 +395,38 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.85,
-      padding: const EdgeInsets.symmetric(vertical: 20),
+      height: MediaQuery.of(context).size.height * 0.95,
+      decoration: const BoxDecoration(
+        color: Color(0xFF020202),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(35)),
+      ),
       child: Column(
         children: [
+          const SizedBox(height: 12),
           Container(
-            width: 40, height: 4,
-            decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(2)),
+            width: 50, height: 5,
+            decoration: BoxDecoration(color: Colors.white10, borderRadius: BorderRadius.circular(10)),
           ),
+          const SizedBox(height: 20),
+          _buildScoreHeader(),
           const SizedBox(height: 20),
           TabBar(
             controller: _innerTab,
-            indicatorColor: goldColor,
-            labelColor: goldColor,
+            indicator: UnderlineTabIndicator(
+              borderSide: BorderSide(width: 3.0, color: teamAColor),
+              insets: const EdgeInsets.symmetric(horizontal: 40.0),
+            ),
+            labelColor: Colors.white,
             unselectedLabelColor: Colors.white24,
-            labelStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1),
+            labelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 1.5),
+            dividerColor: Colors.transparent,
             tabs: const [Tab(text: 'LINEUPS'), Tab(text: 'FORMATION'), Tab(text: 'HISTORY')],
           ),
           Expanded(
             child: TabBarView(
               controller: _innerTab,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Row(
-                    children: [
-                      _buildLineupColumn(widget.teamA, goldColor, _getPlayers(widget.teamA)),
-                      const VerticalDivider(color: Colors.white10, width: 2),
-                      _buildLineupColumn(widget.teamB, Colors.white60, _getPlayers(widget.teamB)),
-                    ],
-                  ),
-                ),
+                _buildLineupView(),
                 _buildFormationView(),
                 _buildMatchHistoryView(),
               ],
@@ -419,26 +437,155 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
     );
   }
 
+  Widget _buildScoreHeader() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _buildTeamInfo(widget.teamA, teamAColor, true),
+          Column(
+            children: [
+              Text(widget.isLive ? 'LIVE' : 'FINISHED', style: TextStyle(color: widget.isLive ? Colors.redAccent : Colors.white38, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
+              const SizedBox(height: 5),
+              const Text('2 - 1', style: TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.w900)),
+            ],
+          ),
+          _buildTeamInfo(widget.teamB, teamBColor, false),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTeamInfo(String name, Color color, bool isHome) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(15),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.1),
+            shape: BoxShape.circle,
+            border: Border.all(color: color.withValues(alpha: 0.2), width: 2),
+          ),
+          child: Icon(Icons.shield, color: color, size: 30),
+        ),
+        const SizedBox(height: 10),
+        Text(name, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900)),
+      ],
+    );
+  }
+
+  Widget _buildLineupView() {
+    var playersA = _getPlayers(widget.teamA);
+    var playersB = _getPlayers(widget.teamB);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+      child: Row(
+        children: [
+          _buildLineupColumn(widget.teamA, teamAColor, playersA, true),
+          const SizedBox(width: 10),
+          _buildLineupColumn(widget.teamB, teamBColor, playersB, false),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLineupColumn(String team, Color color, List<Map<String, dynamic>> players, bool isHome) {
+    return Expanded(
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: color.withValues(alpha: 0.2)),
+            ),
+            child: Text(team, 
+              style: TextStyle(color: color, fontWeight: FontWeight.w900, fontSize: 10, letterSpacing: 1),
+              textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis),
+          ),
+          const SizedBox(height: 15),
+          Expanded(
+            child: ListView.builder(
+              itemCount: players.length,
+              itemBuilder: (context, index) {
+                final player = players[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TeammateProfile(
+                          playerName: player['name'],
+                          playerPosition: player['pos'],
+                          playerNumber: player['no'],
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF111111),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: color.withValues(alpha: 0.05)),
+                      gradient: LinearGradient(
+                        begin: isHome ? Alignment.centerLeft : Alignment.centerRight,
+                        end: isHome ? Alignment.centerRight : Alignment.centerLeft,
+                        colors: [color.withValues(alpha: 0.05), Colors.transparent],
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: isHome ? MainAxisAlignment.start : MainAxisAlignment.end,
+                      children: [
+                        if (isHome) _playerNoCircle(player['no'], color),
+                        if (isHome) const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: isHome ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+                            children: [
+                              Text(player['name'], 
+                                style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                                maxLines: 1, overflow: TextOverflow.ellipsis),
+                              Text(player['pos'], style: TextStyle(color: color.withValues(alpha: 0.5), fontSize: 8, fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        ),
+                        if (!isHome) const SizedBox(width: 10),
+                        if (!isHome) _playerNoCircle(player['no'], color),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _playerNoCircle(String no, Color color) {
+    return Container(
+      width: 22, height: 22,
+      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(6)),
+      child: Center(child: Text(no, style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w900))),
+    );
+  }
+
   Widget _buildMatchHistoryView() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(30),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(widget.isLive ? 'LIVE INCIDENTS' : 'MATCH EVENTS', style: const TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1)),
-          const SizedBox(height: 30),
-          if (widget.isLive) ...[
-            _buildEventItem('78\'', 'Substitution: Sahal OUT, Thapa IN', Icons.swap_vert, Colors.blue),
-            _buildEventItem('62\'', 'GOAL! Manvir Singh', Icons.sports_soccer, goldColor, sub: 'Assist: Chhangte'),
-            _buildEventItem('45\'', 'GOAL! Sunil Chhetri', Icons.sports_soccer, goldColor, sub: 'Penalty Kick'),
-            _buildEventItem('30\'', 'GOAL! Cleiton Silva', Icons.sports_soccer, Colors.white60, sub: 'Header'),
-            _buildEventItem('15\'', 'Yellow Card: Sandesh Jhingan', Icons.rectangle, Colors.yellow),
-          ] else ...[
-            if (widget.gameData != null && widget.gameData!['goals'] != null)
-              _buildEventItem('Final', widget.gameData!['goals']!, Icons.sports_soccer, goldColor)
-            else
-              const Text('No event data available', style: TextStyle(color: Colors.white24)),
-          ],
+          _buildEventItem('78\'', 'Substitution: Sahal OUT, Thapa IN', Icons.swap_vert, teamAColor),
+          _buildEventItem('62\'', 'GOAL! Manvir Singh', Icons.sports_soccer, teamAColor, sub: 'Assist: Chhangte'),
+          _buildEventItem('45\'', 'GOAL! Sunil Chhetri', Icons.sports_soccer, teamAColor, sub: 'Penalty Kick'),
+          _buildEventItem('30\'', 'GOAL! Cleiton Silva', Icons.sports_soccer, teamBColor, sub: 'Header'),
+          _buildEventItem('15\'', 'Yellow Card: Sandesh Jhingan', Icons.rectangle, teamAColor),
         ],
       ),
     );
@@ -446,20 +593,26 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
 
   Widget _buildEventItem(String time, String event, IconData icon, Color color, {String? sub}) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 25),
+      padding: const EdgeInsets.only(bottom: 30),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(time, style: const TextStyle(color: Colors.white24, fontSize: 12, fontWeight: FontWeight.bold)),
+          SizedBox(
+            width: 40,
+            child: Text(time, style: const TextStyle(color: Colors.white24, fontSize: 13, fontWeight: FontWeight.w900)),
+          ),
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(color: color.withValues(alpha: 0.1), shape: BoxShape.circle),
+            child: Icon(icon, color: color, size: 16),
+          ),
           const SizedBox(width: 20),
-          Icon(icon, color: color, size: 16),
-          const SizedBox(width: 15),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(event, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
-                if (sub != null) Text(sub, style: const TextStyle(color: Colors.white38, fontSize: 11)),
+                Text(event, style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold)),
+                if (sub != null) Text(sub, style: const TextStyle(color: Colors.white38, fontSize: 12)),
               ],
             ),
           ),
@@ -469,114 +622,151 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
   }
 
   Widget _buildFormationView() {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildFormationHeader(widget.teamA, '4-3-3', goldColor),
-              const Text('VS', style: TextStyle(color: Colors.white10, fontWeight: FontWeight.bold)),
-              _buildFormationHeader(widget.teamB, '4-4-2', Colors.white60),
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(15, 20, 15, 30),
+        child: Container(
+          height: 1000,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.3),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
+              )
             ],
           ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.green.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.green.withValues(alpha: 0.3)),
-              ),
-              child: Stack(
-                children: [
-                  Center(child: Container(width: double.infinity, height: 1, color: Colors.white10)),
-                  Center(child: Container(width: 80, height: 80, decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: Colors.white10)))),
-                  
-                  _playerIcon(0.5, 0.05, goldColor),
-                  _playerIcon(0.2, 0.15, goldColor), _playerIcon(0.4, 0.15, goldColor), _playerIcon(0.6, 0.15, goldColor), _playerIcon(0.8, 0.15, goldColor),
-                  _playerIcon(0.3, 0.3, goldColor), _playerIcon(0.5, 0.3, goldColor), _playerIcon(0.7, 0.3, goldColor),
-                  _playerIcon(0.2, 0.42, goldColor), _playerIcon(0.5, 0.42, goldColor), _playerIcon(0.8, 0.42, goldColor),
-
-                  _playerIcon(0.5, 0.95, Colors.white60),
-                  _playerIcon(0.2, 0.85, Colors.white60), _playerIcon(0.4, 0.85, Colors.white60), _playerIcon(0.6, 0.85, Colors.white60), _playerIcon(0.8, 0.85, Colors.white60),
-                  _playerIcon(0.15, 0.7, Colors.white60), _playerIcon(0.4, 0.7, Colors.white60), _playerIcon(0.6, 0.7, Colors.white60), _playerIcon(0.85, 0.7, Colors.white60),
-                  _playerIcon(0.35, 0.58, Colors.white60), _playerIcon(0.65, 0.58, Colors.white60),
-                ],
-              ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(30),
+            child: Stack(
+              children: [
+                CustomPaint(
+                  size: const Size(double.infinity, 1000),
+                  painter: GoogleStylePitchPainter(),
+                ),
+                _buildFormationPlayers(),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _buildFormationHeader(String team, String formation, Color color) {
-    return Column(
+  Widget _buildFormationPlayers() {
+    return Stack(
       children: [
-        Text(team, style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
-        Text(formation, style: const TextStyle(color: Colors.white38, fontSize: 12, letterSpacing: 1)),
+        _formationPlayer(0.5, 0.05, '1', 'G. Sandhu', teamAColor, isTop: true),
+        
+        _formationPlayer(0.1, 0.16, '3', 'S. Bose', teamAColor, isTop: true),
+        _formationPlayer(0.37, 0.16, '5', 'S. Jhingan', teamAColor, isTop: true),
+        _formationPlayer(0.63, 0.16, '4', 'Anwar', teamAColor, isTop: true),
+        _formationPlayer(0.9, 0.16, '2', 'P. Kotal', teamAColor, isTop: true),
+        
+        _formationPlayer(0.25, 0.28, '7', 'Thapa', teamAColor, isTop: true),
+        _formationPlayer(0.5, 0.28, '8', 'Apuia', teamAColor, isTop: true),
+        _formationPlayer(0.75, 0.28, '10', 'Samad', teamAColor, isTop: true),
+        
+        _formationPlayer(0.15, 0.40, '9', 'Manvir', teamAColor, isTop: true),
+        _formationPlayer(0.5, 0.40, '11', 'Chhetri', teamAColor, isTop: true),
+        _formationPlayer(0.85, 0.40, '17', 'Chhangte', teamAColor, isTop: true),
+
+        _formationPlayer(0.5, 0.95, '1', 'P. Gill', teamBColor, isTop: false),
+        
+        _formationPlayer(0.1, 0.84, '5', 'Zothan', teamBColor, isTop: false),
+        _formationPlayer(0.37, 0.84, '4', 'Maher', teamBColor, isTop: false),
+        _formationPlayer(0.63, 0.84, '3', 'Anwar', teamBColor, isTop: false),
+        _formationPlayer(0.9, 0.84, '12', 'Rakip', teamBColor, isTop: false),
+        
+        _formationPlayer(0.1, 0.72, '11', 'Mahesh', teamBColor, isTop: false),
+        _formationPlayer(0.37, 0.72, '8', 'Jeakson', teamBColor, isTop: false),
+        _formationPlayer(0.63, 0.72, '21', 'Crespo', teamBColor, isTop: false),
+        _formationPlayer(0.9, 0.72, '22', 'Nandha', teamBColor, isTop: false),
+        
+        _formationPlayer(0.3, 0.60, '10', 'Talal', teamBColor, isTop: false),
+        _formationPlayer(0.7, 0.60, '9', 'Cleiton', teamBColor, isTop: false),
       ],
     );
   }
 
-  Widget _playerIcon(double x, double y, Color color) {
+  Widget _formationPlayer(double x, double y, String no, String name, Color color, {required bool isTop}) {
     return Align(
       alignment: FractionalOffset(x, y),
-      child: Container(
-        width: 20, height: 20,
-        decoration: BoxDecoration(color: color, shape: BoxShape.circle, boxShadow: [BoxShadow(color: color.withValues(alpha: 0.3), blurRadius: 4)]),
-        child: const Center(child: Icon(Icons.person, size: 12, color: Colors.black)),
-      ),
-    );
-  }
-
-  Widget _buildLineupColumn(String team, Color color, List<String> players) {
-    return Expanded(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(team,
-              style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 14),
-              textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis),
-          const SizedBox(height: 20),
-          Expanded(
-            child: ListView.builder(
-              itemCount: players.length,
-              itemBuilder: (context, index) => GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TeammateProfile(
-                        playerName: players[index],
-                        playerPosition: 'Player',
-                        playerNumber: (index + 1).toString(),
-                      ),
-                    ),
-                  );
-                },
-                child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 6),
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF121212),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      Text('${index + 1}', style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.bold)),
-                      const SizedBox(width: 12),
-                      Expanded(child: Text(players[index],
-                        style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500), maxLines: 1, overflow: TextOverflow.ellipsis)),
-                    ],
-                  ),
-                ),
+          Container(
+            width: 45,
+            height: 45,
+            decoration: BoxDecoration(
+              color: const Color(0xFF1A1A1A),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: color.withValues(alpha: 0.5), width: 1.5),
+              image: const DecorationImage(
+                image: AssetImage('assets/images/sunil.png'),
+                fit: BoxFit.cover,
               ),
             ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            "$no ${name.toUpperCase()}",
+            style: const TextStyle(
+              color: Colors.white, 
+              fontSize: 9, 
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.5,
+              shadows: [Shadow(color: Colors.black, blurRadius: 4)],
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 1,
           ),
         ],
       ),
     );
   }
+}
+
+class GoogleStylePitchPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint linePaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.4)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.5;
+
+    final Paint pitchPaint = Paint()..color = const Color(0xFF58B36E);
+
+    canvas.drawRRect(
+        RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, size.width, size.height), const Radius.circular(30)),
+        pitchPaint);
+
+    final Paint grassPaint = Paint()..color = Colors.black.withValues(alpha: 0.05);
+    int stripes = 12;
+    for (int i = 0; i < stripes; i++) {
+      if (i % 2 == 0) {
+        canvas.drawRect(Rect.fromLTWH(0, (size.height / stripes) * i, size.width, size.height / stripes), grassPaint);
+      }
+    }
+
+    canvas.drawRect(Rect.fromLTWH(10, 10, size.width - 20, size.height - 20), linePaint);
+    canvas.drawLine(Offset(10, size.height / 2), Offset(size.width - 10, size.height / 2), linePaint);
+    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 50, linePaint);
+    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 3, linePaint..style = PaintingStyle.fill);
+    linePaint.style = PaintingStyle.stroke;
+
+    double boxWidth = size.width * 0.65;
+    double boxHeight = size.height * 0.14;
+    
+    canvas.drawRect(Rect.fromLTWH((size.width - boxWidth) / 2, 10, boxWidth, boxHeight), linePaint);
+    canvas.drawRect(Rect.fromLTWH(size.width * 0.35, 10, size.width * 0.3, boxHeight * 0.3), linePaint);
+
+    canvas.drawRect(Rect.fromLTWH((size.width - boxWidth) / 2, size.height - boxHeight - 10, boxWidth, boxHeight), linePaint);
+    canvas.drawRect(Rect.fromLTWH(size.width * 0.35, size.height - (boxHeight * 0.3) - 10, size.width * 0.3, boxHeight * 0.3), linePaint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
