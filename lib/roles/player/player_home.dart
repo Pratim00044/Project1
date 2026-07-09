@@ -6,6 +6,7 @@ import 'player_profile.dart';
 import 'professional_pathway.dart';
 import 'profile_details/security_detail.dart';
 import 'profile_details/help_center_detail.dart';
+import 'drawer_pages.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
@@ -140,6 +141,14 @@ class PlayerHomeState extends State<PlayerHome> {
                   _buildDrawerItem(Icons.verified_user_outlined, 'Privacy & Security', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SecurityDetail()))),
                   _buildDrawerItem(Icons.language_rounded, 'Language', () {}),
                   
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(20, 25, 20, 10),
+                    child: Text('OTHER', style: TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
+                  ),
+                  _buildDrawerItem(Icons.newspaper_rounded, 'Latest News', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NewsPage()))),
+                  _buildDrawerItem(Icons.fitness_center_rounded, 'Academy Sessions', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SessionsPage()))),
+                  _buildDrawerItem(Icons.emoji_events_rounded, 'Global Rankings', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const RankingsPage()))),
+
                   const Padding(
                     padding: EdgeInsets.fromLTRB(20, 25, 20, 10),
                     child: Text('SUPPORT', style: TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),

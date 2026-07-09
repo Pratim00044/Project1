@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
+import 'package:file_picker/file_picker.dart' as fp;
 import 'dart:math' as math;
-import '../roles/super_admin/super_admin_home.dart';
 import '../roles/organization/organization_home.dart';
 import '../roles/player/player_home.dart';
 import '../roles/coach/coach_home.dart';
@@ -36,12 +37,31 @@ class _SignupScreenState extends State<SignupScreen> {
   bool _obscurePassword = true;
   bool _isClubCodeStep = true;
 
+  String? _idProofName;
+  String? _photoName;
+
+  Future<void> _pickFile(bool isIdProof) async {
+    fp.FilePickerResult? result = await fp.FilePicker.platform.pickFiles(
+      type: fp.FileType.custom,
+      allowedExtensions: ['jpg', 'pdf', 'doc', 'png', 'jpeg'],
+    );
+
+    if (result != null) {
+      setState(() {
+        if (isIdProof) {
+          _idProofName = result.files.single.name;
+        } else {
+          _photoName = result.files.single.name;
+        }
+      });
+    }
+  }
+
   final List<Map<String, dynamic>> _roles = [
     {'name': 'PLAYER', 'icon': Icons.directions_run_outlined, 'color': Colors.blueAccent},
-    {'name': 'ORGANIZER/HOST', 'icon': Icons.groups_outlined, 'color': Colors.greenAccent},
+    {'name': 'ORGANIZER/HOST', 'icon': Icons.groups_outlined, 'color': Colors.blueAccent},
     {'name': 'COACH', 'icon': Icons.sports_outlined, 'color': Colors.orangeAccent},
     {'name': 'MANAGER', 'icon': Icons.manage_accounts_outlined, 'color': Colors.purpleAccent},
-    {'name': 'SUPER ADMIN', 'icon': Icons.admin_panel_settings_outlined, 'color': goldColor},
   ];
 
   late PageController _pageController;
@@ -83,9 +103,39 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now().subtract(const Duration(days: 365 * 18)),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.dark(
+              primary: goldColor,
+              onPrimary: Colors.black,
+              surface: Color(0xFF1A1A1A),
+              onSurface: Colors.white,
+            ),
+            dialogTheme: const DialogThemeData(
+              backgroundColor: Color(0xFF080808),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      setState(() {
+        _dobController.text = "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
+      });
+    }
+  }
+
   void _handleRegister() {
     String roleName = _roles[_currentIndex]['name'];
-    if (roleName != 'ORGANIZER/HOST' && roleName != 'SUPER ADMIN' && _isClubCodeStep) {
+    if (roleName != 'ORGANIZER/HOST' && _isClubCodeStep) {
       if (_clubCodeController.text.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Please enter a valid Club Code to continue.')),
@@ -121,9 +171,6 @@ class _SignupScreenState extends State<SignupScreen> {
       
       Widget homePage;
       switch (_roles[_currentIndex]['name']) {
-        case 'SUPER ADMIN':
-          homePage = const SuperAdminHome();
-          break;
         case 'ORGANIZER/HOST':
           homePage = const OrganizationHome();
           break;
@@ -168,23 +215,13 @@ class _SignupScreenState extends State<SignupScreen> {
           return Stack(
             children: [
               Positioned.fill(
-                child: _videoController.value.isInitialized
-                    ? FittedBox(
-                        fit: BoxFit.cover,
-                        child: SizedBox(
-                          width: _videoController.value.size.width,
-                          height: _videoController.value.size.height,
-                          child: VideoPlayer(_videoController),
-                        ),
-                      )
-                    : Image.asset(
-                        'assets/images/login_background.jpeg',
-                        fit: BoxFit.cover,
-                      ),
-              ),
-              Positioned.fill(
-                child: Container(
-                  color: Colors.black.withValues(alpha: 0.6),
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: SizedBox(
+                    width: _videoController.value.size.width > 0 ? _videoController.value.size.width : 1920,
+                    height: _videoController.value.size.height > 0 ? _videoController.value.size.height : 1080,
+                    child: VideoPlayer(_videoController),
+                  ),
                 ),
               ),
               
@@ -211,6 +248,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                   child: Center(
                     child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -230,7 +268,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      if (_roles[_currentIndex]['name'] != 'ORGANIZER/HOST' && _roles[_currentIndex]['name'] != 'SUPER ADMIN' && _isClubCodeStep) ...[
+                                      if (_roles[_currentIndex]['name'] != 'ORGANIZER/HOST' && _isClubCodeStep) ...[
                                         _buildLabel('Club Code', Icons.qr_code_scanner_rounded),
                                         const SizedBox(height: 10),
                                         _buildTextField(
@@ -245,13 +283,13 @@ class _SignupScreenState extends State<SignupScreen> {
                                           ),
                                         ),
                                       ] else ...[
-                                        if (_roles[_currentIndex]['name'] != 'ORGANIZER/HOST' && _roles[_currentIndex]['name'] != 'SUPER ADMIN') ...[
+                                        if (_roles[_currentIndex]['name'] != 'ORGANIZER/HOST') ...[
                                           _buildLabel('Club Code', Icons.qr_code_scanner_rounded),
                                           const SizedBox(height: 10),
                                           _buildTextField(
                                             controller: _clubCodeController,
                                             hint: 'Enter your club invitation code',
-                                            enabled: false,
+                                            readOnly: true,
                                           ),
                                           const SizedBox(height: 24),
                                         ],
@@ -260,7 +298,15 @@ class _SignupScreenState extends State<SignupScreen> {
                                         _buildTextField(
                                           controller: _nameController,
                                           hint: 'Enter full name',
-                                          validator: (value) => value!.isEmpty ? 'Required' : null,
+                                          keyboardType: TextInputType.name,
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')),
+                                          ],
+                                          validator: (value) {
+                                            if (value == null || value.isEmpty) return 'Required';
+                                            if (value.trim().split(' ').length < 2) return 'Enter full name';
+                                            return null;
+                                          },
                                         ),
                                         const SizedBox(height: 24),
                                         _buildLabel('Email', Icons.email),
@@ -268,15 +314,29 @@ class _SignupScreenState extends State<SignupScreen> {
                                         _buildTextField(
                                           controller: _emailController,
                                           hint: 'Enter email',
-                                          validator: (value) => !value!.contains('@') ? 'Invalid email' : null,
+                                          keyboardType: TextInputType.emailAddress,
+                                          validator: (value) {
+                                            if (value == null || value.isEmpty) return 'Required';
+                                            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) return 'Invalid email';
+                                            return null;
+                                          },
                                         ),
                                         const SizedBox(height: 24),
                                         _buildLabel('Mobile Number', Icons.phone),
                                         const SizedBox(height: 10),
                                         _buildTextField(
                                           controller: _mobileController,
-                                          hint: 'Enter mobile number',
-                                          validator: (value) => value!.length < 10 ? 'Invalid mobile' : null,
+                                          hint: 'Enter 10-digit mobile number',
+                                          keyboardType: TextInputType.phone,
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.digitsOnly,
+                                            LengthLimitingTextInputFormatter(10),
+                                          ],
+                                          validator: (value) {
+                                            if (value == null || value.isEmpty) return 'Required';
+                                            if (value.length != 10) return 'Must be 10 digits';
+                                            return null;
+                                          },
                                         ),
 
                                         const SizedBox(height: 32),
@@ -284,9 +344,17 @@ class _SignupScreenState extends State<SignupScreen> {
                                         const SizedBox(height: 16),
                                         _buildLabel('Identity Verification', Icons.verified_user_outlined),
                                         const SizedBox(height: 16),
-                                        _buildUploadPlaceholder('Upload ID Proof Document'),
+                                        _buildUploadPlaceholder(
+                                          _idProofName ?? 'Upload ID Proof Document',
+                                          onTap: () => _pickFile(true),
+                                          isSelected: _idProofName != null,
+                                        ),
                                         const SizedBox(height: 16),
-                                        _buildUploadPlaceholder('Upload Recent Photo'),
+                                        _buildUploadPlaceholder(
+                                          _photoName ?? 'Upload Recent Photo',
+                                          onTap: () => _pickFile(false),
+                                          isSelected: _photoName != null,
+                                        ),
                                         const Padding(
                                           padding: EdgeInsets.only(top: 12.0),
                                           child: Text(
@@ -304,6 +372,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                           _buildTextField(
                                             controller: _dobController,
                                             hint: 'Date of Birth (DD/MM/YYYY)',
+                                            readOnly: true,
+                                            onTap: () => _selectDate(context),
                                             validator: (value) => value!.isEmpty ? 'Required' : null,
                                           ),
                                           const SizedBox(height: 24),
@@ -312,7 +382,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                           _buildTextField(
                                             controller: _parentEmailController,
                                             hint: 'Parent Email',
-                                            validator: (value) => !value!.contains('@') ? 'Invalid email' : null,
+                                            keyboardType: TextInputType.emailAddress,
+                                            validator: (value) {
+                                              if (value == null || value.isEmpty) return 'Required';
+                                              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) return 'Invalid email';
+                                              return null;
+                                            },
                                           ),
                                           const SizedBox(height: 32),
                                           _buildLabel('Physical Stats', Icons.fitness_center),
@@ -323,6 +398,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 child: _buildTextField(
                                                   controller: _heightController,
                                                   hint: 'Height (cm)',
+                                                  keyboardType: TextInputType.number,
+                                                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                                   validator: (value) => value!.isEmpty ? 'Required' : null,
                                                 ),
                                               ),
@@ -331,6 +408,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 child: _buildTextField(
                                                   controller: _weightController,
                                                   hint: 'Weight (kg)',
+                                                  keyboardType: TextInputType.number,
+                                                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                                   validator: (value) => value!.isEmpty ? 'Required' : null,
                                                 ),
                                               ),
@@ -623,10 +702,14 @@ class _SignupScreenState extends State<SignupScreen> {
     VoidCallback? togglePassword,
     String? Function(String?)? validator,
     bool enabled = true,
+    bool readOnly = false,
+    VoidCallback? onTap,
+    TextInputType? keyboardType,
+    List<TextInputFormatter>? inputFormatters,
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: enabled ? Colors.white.withValues(alpha: 0.07) : Colors.white.withValues(alpha: 0.02),
+        color: const Color(0xFF1A1A1A), 
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
@@ -635,7 +718,15 @@ class _SignupScreenState extends State<SignupScreen> {
         obscureText: obscureText,
         validator: validator,
         enabled: enabled,
-        style: TextStyle(color: enabled ? Colors.white : Colors.white24, fontSize: 14),
+        readOnly: readOnly,
+        onTap: onTap,
+        keyboardType: keyboardType,
+        inputFormatters: inputFormatters,
+        style: TextStyle(
+          color: (enabled || readOnly) ? Colors.white : Colors.white24, 
+          fontSize: 14,
+          fontWeight: readOnly ? FontWeight.w600 : FontWeight.normal,
+        ),
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.3)),
@@ -665,7 +756,7 @@ class _SignupScreenState extends State<SignupScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.07),
+        color: const Color(0xFF1A1A1A),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
@@ -689,31 +780,46 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  Widget _buildUploadPlaceholder(String label) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1), style: BorderStyle.solid),
-      ),
-      child: Column(
-        children: [
-          const Icon(Icons.cloud_upload_outlined, color: Colors.white24, size: 30),
-          const SizedBox(height: 10),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.white38, fontSize: 12),
+  Widget _buildUploadPlaceholder(String label, {required VoidCallback onTap, bool isSelected = false}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+        decoration: BoxDecoration(
+          color: isSelected ? goldColor.withValues(alpha: 0.1) : const Color(0xFF1A1A1A),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? goldColor : Colors.white.withValues(alpha: 0.1), 
+            style: BorderStyle.solid
           ),
-        ],
+        ),
+        child: Column(
+          children: [
+            Icon(
+              isSelected ? Icons.check_circle_outline : Icons.cloud_upload_outlined, 
+              color: isSelected ? goldColor : Colors.white24, 
+              size: 30
+            ),
+            const SizedBox(height: 10),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: isSelected ? Colors.white : Colors.white38, 
+                fontSize: 12,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildRegisterButton() {
     bool isStepOne = _roles[_currentIndex]['name'] != 'ORGANIZER/HOST' && _isClubCodeStep;
+    final roleColor = _roles[_currentIndex]['color'] as Color;
     
     return GestureDetector(
       onTapDown: (_) => setState(() => _buttonScale = 0.92),
@@ -729,14 +835,14 @@ class _SignupScreenState extends State<SignupScreen> {
           height: 60,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [goldColor, goldColor.withValues(alpha: 0.7)],
+              colors: [roleColor, roleColor.withValues(alpha: 0.7)],
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: goldColor.withValues(alpha: 0.4),
+                color: roleColor.withValues(alpha: 0.4),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
               ),

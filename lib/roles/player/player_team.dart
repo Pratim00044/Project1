@@ -15,30 +15,58 @@ class MyTeamsPage extends StatelessWidget {
         SliverToBoxAdapter(
             child: Container(
               margin: const EdgeInsets.all(20),
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: surfaceColor,
-                borderRadius: BorderRadius.circular(25),
-                border: Border.all(color: goldColor.withValues(alpha: 0.1)),
+                gradient: LinearGradient(
+                  colors: [goldColor.withValues(alpha: 0.15), const Color(0xFF0D0D0D)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(color: goldColor.withValues(alpha: 0.2)),
+                boxShadow: [
+                  BoxShadow(
+                    color: goldColor.withValues(alpha: 0.05),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  )
+                ],
               ),
               child: Row(
                 children: [
                   Container(
-                    height: 60,
-                    width: 60,
+                    height: 65,
+                    width: 65,
                     decoration: BoxDecoration(
                       color: Colors.black,
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(color: goldColor.withValues(alpha: 0.2)),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: goldColor.withValues(alpha: 0.3), width: 2),
+                      boxShadow: [
+                        BoxShadow(color: goldColor.withValues(alpha: 0.1), blurRadius: 10)
+                      ],
                     ),
-                    child: const Icon(Icons.shield, color: goldColor, size: 30),
+                    child: const Icon(Icons.shield, color: goldColor, size: 35),
                   ),
-                  const SizedBox(width: 15),
+                  const SizedBox(width: 20),
                   const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('UNDER 8s', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                      Text('India | Pro League', style: TextStyle(color: Colors.white38, fontSize: 11)),
+                      Text('CORE FC', 
+                        style: TextStyle(
+                          color: goldColor, 
+                          fontSize: 22, 
+                          fontWeight: FontWeight.w900, 
+                          letterSpacing: 2
+                        )
+                      ),
+                      const SizedBox(height: 4),
+                      Text('India | Pro League', 
+                        style: TextStyle(
+                          color: Colors.white38, 
+                          fontSize: 12, 
+                          fontWeight: FontWeight.w600
+                        )
+                      ),
                     ],
                   ),
                 ],
@@ -49,7 +77,7 @@ class MyTeamsPage extends StatelessWidget {
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-              child: Text('TEAMMATES', style: TextStyle(color: Colors.white24, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
+              child: Text('TEAMMATES', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 3)),
             ),
           ),
 
@@ -93,26 +121,94 @@ class MyTeamsPage extends StatelessWidget {
                     },
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 12),
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(18),
                       decoration: BoxDecoration(
-                        color: surfaceColor,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: isMe ? goldColor.withValues(alpha: 0.3) : Colors.white.withValues(alpha: 0.03)),
+                        gradient: LinearGradient(
+                          colors: [
+                            const Color(0xFF1E1E1E),
+                            isMe ? goldColor.withValues(alpha: 0.15) : const Color(0xFF121212),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(25),
+                        border: Border.all(
+                          color: isMe ? goldColor.withValues(alpha: 0.5) : Colors.white.withValues(alpha: 0.08),
+                          width: 1.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.5),
+                            blurRadius: 15,
+                            offset: const Offset(0, 8),
+                          )
+                        ],
                       ),
                       child: Row(
                         children: [
-                          CircleAvatar(
-                            radius: 20,
-                            backgroundColor: Colors.white10,
-                            child: Text(member['no']!, style: const TextStyle(color: goldColor, fontSize: 12, fontWeight: FontWeight.bold)),
+                          Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: isMe ? goldColor : Colors.white24, 
+                                width: 2.5
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: isMe ? goldColor.withValues(alpha: 0.2) : Colors.black.withValues(alpha: 0.2),
+                                  blurRadius: 8
+                                )
+                              ],
+                            ),
+                            child: const CircleAvatar(
+                              radius: 24,
+                              backgroundImage: AssetImage('assets/images/sunil.png'),
+                            ),
                           ),
-                          const SizedBox(width: 15),
+                          const SizedBox(width: 18),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(member['name']!, style: TextStyle(color: isMe ? goldColor : Colors.white, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
-                                Text(member['pos']!, style: const TextStyle(color: Colors.white38, fontSize: 11)),
+                                Text(
+                                  member['name']!.toUpperCase(), 
+                                  style: TextStyle(
+                                    color: isMe ? goldColor : const Color(0xFFFFFFFF), 
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 15,
+                                    letterSpacing: 0.8,
+                                  ), 
+                                  overflow: TextOverflow.ellipsis
+                                ),
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withValues(alpha: 0.05),
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      child: Text(
+                                        member['pos']!, 
+                                        style: TextStyle(
+                                          color: isMe ? goldColor.withValues(alpha: 0.8) : Colors.white38, 
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w900
+                                        )
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      "#${member['no']!}", 
+                                      style: TextStyle(
+                                        color: goldColor.withValues(alpha: 0.5), 
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold
+                                      )
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),

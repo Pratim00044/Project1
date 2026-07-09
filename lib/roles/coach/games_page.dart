@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'create_training_page.dart';
 import 'social_leagues.dart';
+import 'create_game_page.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 
@@ -69,15 +70,15 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
   Widget _buildCreateButton(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [goldColor, goldColor.withOpacity(0.7)]),
+        gradient: LinearGradient(colors: [goldColor, goldColor.withValues(alpha: 0.7)]),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-              color: goldColor.withOpacity(0.3), blurRadius: 8, offset: const Offset(0, 4))
+              color: goldColor.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 4))
         ],
       ),
       child: ElevatedButton.icon(
-        onPressed: () => _showCreateGameForm(context),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateGamePage())),
         icon: const Icon(Icons.add, size: 18, color: Colors.black),
         label: const Text('CREATE',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
@@ -540,15 +541,6 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
     );
   }
 
-  void _showCreateGameForm(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: const Color(0xFF080808),
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
-      builder: (context) => const _CreateGameForm(),
-    );
-  }
 }
 
 class _MatchDetailView extends StatefulWidget {
@@ -734,12 +726,6 @@ class _MatchDetailViewState extends State<_MatchDetailView> with SingleTickerPro
   }
 }
 
-class _CreateGameForm extends StatefulWidget {
-  const _CreateGameForm();
-
-  @override
-  State<_CreateGameForm> createState() => _CreateGameFormState();
-}
 
 class _TrainingDetailView extends StatefulWidget {
   final String title;
@@ -873,313 +859,3 @@ class _TrainingDetailViewState extends State<_TrainingDetailView> {
   }
 }
 
-class _CreateGameFormState extends State<_CreateGameForm> {
-  String? _selectedTeam = 'CORE FC';
-  String? _selectedOpponent;
-  int _playerLimit = 11;
-  DateTime? _selectedDate;
-  TimeOfDay? _selectedTime;
-  final List<String> _invitedPlayers = [];
-  final List<String> _mySquadPlayers = [
-    'Sunil Chhetri', 'Gurpreet Singh', 'Sandesh Jhingan', 'Ashique K', 
-    'Sahal Abdul', 'Anirudh Thapa', 'Pritam Kotal', 'Subhasish Bose',
-    'L. Chhangte', 'Apuia Ralte', 'Naorem Mahesh'
-  ];
-  final List<String> _allSearchablePlayers = ['Liston Colaco', 'Manvir Singh', 'Vishal Kaith', 'Hugo Boumous'];
-  final TextEditingController _inviteIdController = TextEditingController();
-
-  Future<void> _pickDate() async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2101),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.dark(
-              primary: Color(0xFFD4AF37),
-              onPrimary: Colors.black,
-              surface: Color(0xFF1A1A1A),
-              onSurface: Colors.white,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-    if (picked != null && picked != _selectedDate) {
-      setState(() {
-        _selectedDate = picked;
-      });
-    }
-  }
-
-  Future<void> _pickTime() async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.dark(
-              primary: Color(0xFFD4AF37),
-              onPrimary: Colors.black,
-              surface: Color(0xFF1A1A1A),
-              onSurface: Colors.white,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-    if (picked != null && picked != _selectedTime) {
-      setState(() {
-        _selectedTime = picked;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xFF0D0D0D),
-        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-      ),
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, left: 24, right: 24, top: 24),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.white10, borderRadius: BorderRadius.circular(2)))),
-            const SizedBox(height: 20),
-            const Text('ORGANIZE NEW MATCH',
-                style: TextStyle(color: goldColor, fontSize: 24, fontWeight: FontWeight.w900, letterSpacing: 1)),
-            const SizedBox(height: 25),
-            
-            _buildBeautifulDropdown('YOUR TEAM', ['CORE FC', 'Bengal Warriors', 'Goa Giants'], _selectedTeam, (v) => setState(() => _selectedTeam = v)),
-            const SizedBox(height: 16),
-            _buildBeautifulDropdown('SELECT OPPONENT', ['Mohun Bagan', 'East Bengal', 'Mumbai City'], _selectedOpponent, (v) => setState(() => _selectedOpponent = v)),
-            const SizedBox(height: 16),
-            
-            Row(
-              children: [
-                Expanded(
-                  child: _buildDateTimePicker(
-                    'DATE', 
-                    _selectedDate == null ? 'Select Date' : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}', 
-                    Icons.calendar_today, 
-                    _pickDate
-                  )
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _buildDateTimePicker(
-                    'TIME', 
-                    _selectedTime == null ? 'Select Time' : _selectedTime!.format(context), 
-                    Icons.access_time, 
-                    _pickTime
-                  )
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-
-            Row(
-              children: [
-                Expanded(child: _buildBeautifulDropdown('SQUAD LIMIT (11-25)', 
-                  List.generate(15, (index) => (index + 11).toString()), 
-                  _playerLimit.toString(), (v) => setState(() => _playerLimit = int.parse(v!)))),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(color: const Color(0xFF1A1A1A), borderRadius: BorderRadius.circular(15)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('SELECTED', style: TextStyle(color: Colors.white38, fontSize: 10)),
-                        Text('${_invitedPlayers.length}/$_playerLimit', style: const TextStyle(color: goldColor, fontSize: 18, fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            
-            const SizedBox(height: 25),
-            const Text('SELECT FROM YOUR SQUAD', style: TextStyle(color: Colors.white60, fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1)),
-            const SizedBox(height: 10),
-            Container(
-              height: 200,
-              decoration: BoxDecoration(color: const Color(0xFF121212), borderRadius: BorderRadius.circular(15)),
-              child: ListView.builder(
-                padding: const EdgeInsets.all(8),
-                itemCount: _mySquadPlayers.length,
-                itemBuilder: (context, index) {
-                  final p = _mySquadPlayers[index];
-                  final isSelected = _invitedPlayers.contains(p);
-                  return CheckboxListTile(
-                    title: Text(p, style: const TextStyle(color: Colors.white, fontSize: 13)),
-                    value: isSelected,
-                    activeColor: goldColor,
-                    checkColor: Colors.black,
-                    dense: true,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        if (value == true && _invitedPlayers.length < _playerLimit) {
-                          _invitedPlayers.add(p);
-                        } else if (value == false) {
-                          _invitedPlayers.remove(p);
-                        }
-                      });
-                    },
-                  );
-                },
-              ),
-            ),
-
-            const SizedBox(height: 25),
-            const Text('SEARCH EXTRA PLAYERS', style: TextStyle(color: Colors.white60, fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1)),
-            const SizedBox(height: 10),
-            Autocomplete<String>(
-              optionsBuilder: (TextEditingValue textEditingValue) {
-                if (textEditingValue.text == '' || _invitedPlayers.length >= _playerLimit) return const Iterable<String>.empty();
-                return _allSearchablePlayers.where((String option) => option.toLowerCase().contains(textEditingValue.text.toLowerCase()));
-              },
-              onSelected: (String selection) {
-                if (!_invitedPlayers.contains(selection)) setState(() => _invitedPlayers.add(selection));
-              },
-              fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) {
-                return TextField(
-                  controller: controller, focusNode: focusNode,
-                  enabled: _invitedPlayers.length < _playerLimit,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    hintText: 'Search player name...',
-                    hintStyle: const TextStyle(color: Colors.white24),
-                    prefixIcon: const Icon(Icons.search, color: goldColor),
-                    filled: true, fillColor: const Color(0xFF1A1A1A),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: BorderSide.none),
-                  ),
-                );
-              },
-            ),
-
-            const SizedBox(height: 25),
-            const Text('INVITE BY USER ID', style: TextStyle(color: Colors.white60, fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1)),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _inviteIdController,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: 'Enter User ID...',
-                      hintStyle: const TextStyle(color: Colors.white24),
-                      filled: true, fillColor: const Color(0xFF1A1A1A),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: BorderSide.none),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_inviteIdController.text.isNotEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Invite sent to ${_inviteIdController.text}')));
-                      _inviteIdController.clear();
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(backgroundColor: goldColor, padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16)),
-                  child: const Text('INVITE', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: _invitedPlayers.map((p) => Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(color: goldColor.withOpacity(0.1), borderRadius: BorderRadius.circular(10), border: Border.all(color: goldColor.withOpacity(0.3))),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(p, style: const TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.bold)),
-                    const SizedBox(width: 6),
-                    GestureDetector(onTap: () => setState(() => _invitedPlayers.remove(p)), child: const Icon(Icons.close, size: 14, color: goldColor)),
-                  ],
-                ),
-              )).toList(),
-            ),
-            const SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                backgroundColor: goldColor,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-                elevation: 10, shadowColor: goldColor.withOpacity(0.3),
-              ),
-              child: const Text('SCHEDULE MATCH', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16)),
-            ),
-            const SizedBox(height: 40),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDateTimePicker(String label, String value, IconData icon, VoidCallback onTap) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: const TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 8),
-        InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(15),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(color: const Color(0xFF1A1A1A), borderRadius: BorderRadius.circular(15)),
-            child: Row(
-              children: [
-                Icon(icon, color: goldColor, size: 16),
-                const SizedBox(width: 10),
-                Text(value, style: const TextStyle(color: Colors.white, fontSize: 14)),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildBeautifulDropdown(String label, List<String> items, String? val, Function(String?)? onChanged) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: const TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 8),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          decoration: BoxDecoration(color: const Color(0xFF1A1A1A), borderRadius: BorderRadius.circular(15)),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              value: val,
-              isExpanded: true,
-              dropdownColor: const Color(0xFF1A1A1A),
-              style: const TextStyle(color: Colors.white, fontSize: 14),
-              items: items.map((t) => DropdownMenuItem(value: t, child: Text(t))).toList(),
-              onChanged: onChanged,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}

@@ -108,34 +108,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       ),
                     ),
                   ),
-                  const SizedBox(height: 40),
-
-                  AnimatedBuilder(
-                    animation: _controller,
-                    builder: (context, child) {
-                      return Opacity(
-                        opacity: _textFade.value,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 12.0),
-                          child: Text(
-                            'STATIXA',
-                            style: TextStyle(
-                              fontSize: 48,
-                              fontWeight: FontWeight.w900,
-                              color: goldColor,
-                              letterSpacing: _textLetterSpacing.value,
-                              shadows: [
-                                Shadow(
-                                  color: goldColor.withValues(alpha: 0.5),
-                                  blurRadius: 20 * _textFade.value,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
                 ],
               ),
             ),

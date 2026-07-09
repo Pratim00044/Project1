@@ -26,7 +26,7 @@ class PlayerGamesPage extends StatelessWidget {
 
           SliverToBoxAdapter(
             child: GestureDetector(
-              onTap: () => _showMatchDetails(context, 'UNDER 8s', 'EAST BENGAL', isLive: true),
+              onTap: () => _showMatchDetails(context, 'CORE FC', 'DUBAI CITY FC', isLive: true),
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 padding: const EdgeInsets.all(20),
@@ -42,19 +42,19 @@ class PlayerGamesPage extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    const Text('ISL - WEEK 12', style: TextStyle(color: Colors.white24, fontSize: 9, fontWeight: FontWeight.bold)),
+                    const Text('PREMIER LEAGUE', style: TextStyle(color: Colors.white24, fontSize: 9, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildMatchTeam('UNDER 8s', true),
+                        _buildMatchTeam('CORE FC', true),
                         const Column(
                           children: [
                             Text('2 - 1', style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w900)),
                             Text('78\'', style: TextStyle(color: Colors.redAccent, fontSize: 10, fontWeight: FontWeight.bold)),
                           ],
                         ),
-                        _buildMatchTeam('EAST BENGAL', false),
+                        _buildMatchTeam('DUBAI CITY FC', false),
                       ],
                     ),
                     const SizedBox(height: 20),
@@ -67,7 +67,7 @@ class PlayerGamesPage extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 4),
-                    const Text('East Bengal: Cleiton Silva (30\')', style: TextStyle(color: Colors.white38, fontSize: 10)),
+                    const Text('Dubai City FC: Cleiton Silva (30\')', style: TextStyle(color: Colors.white38, fontSize: 10)),
                   ],
                 ),
               ),
@@ -77,7 +77,7 @@ class PlayerGamesPage extends StatelessWidget {
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.fromLTRB(25, 40, 25, 15),
-              child: Text('UPCOMING GAMES', style: TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
+              child: Text('UPCOMING GAMES', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
             ),
           ),
 
@@ -95,7 +95,7 @@ class PlayerGamesPage extends StatelessWidget {
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.fromLTRB(25, 40, 25, 15),
-              child: Text('DISCOVER MATCHES', style: TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
+              child: Text('DISCOVER MATCHES', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
             ),
           ),
 
@@ -111,7 +111,7 @@ class PlayerGamesPage extends StatelessWidget {
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.fromLTRB(25, 40, 25, 15),
-              child: Text('PAST MATCHES', style: TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
+              child: Text('PAST MATCHES', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
             ),
           ),
 
@@ -121,15 +121,15 @@ class PlayerGamesPage extends StatelessWidget {
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   final games = [
-                    {'opp': 'Mohun Bagan', 'score': '3 - 0', 'date': 'JAN 28', 'result': 'WIN', 'goals': 'Chhetri (12\', 40\'), Thapa (88\')'},
-                    {'opp': 'Mumbai City', 'score': '1 - 1', 'date': 'JAN 21', 'result': 'DRAW', 'goals': 'Chhangte (55\')'},
-                    {'opp': 'Bengaluru FC', 'score': '2 - 0', 'date': 'JAN 14', 'result': 'WIN', 'goals': 'Chhetri (45+2\'), Apuia (70\')'},
+                    {'opp': 'United Football Club', 'score': '3 - 0', 'date': 'JAN 28', 'result': 'WIN', 'goals': 'Chhetri (12\', 40\'), Thapa (88\')'},
+                    {'opp': 'Eagle FC', 'score': '1 - 1', 'date': 'JAN 21', 'result': 'DRAW', 'goals': 'Chhangte (55\')'},
+                    {'opp': 'Emirates Club', 'score': '2 - 0', 'date': 'JAN 14', 'result': 'WIN', 'goals': 'Chhetri (45+2\'), Apuia (70\')'},
                   ];
                   final game = games[index];
                   bool isWin = game['result'] == 'WIN';
 
                   return GestureDetector(
-                    onTap: () => _showMatchDetails(context, 'UNDER 8s', game['opp']!, isLive: false, gameData: game),
+                    onTap: () => _showMatchDetails(context, 'CORE FC', game['opp']!, isLive: false, gameData: game),
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 12),
                       padding: const EdgeInsets.all(18),
@@ -172,7 +172,7 @@ class PlayerGamesPage extends StatelessWidget {
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.fromLTRB(25, 40, 25, 15),
-              child: Text('LEAGUE STANDINGS', style: TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
+              child: Text('LEAGUE STANDINGS', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
             ),
           ),
 
@@ -189,11 +189,11 @@ class PlayerGamesPage extends StatelessWidget {
                 children: [
                   _buildTableHead(),
                   const Divider(color: Colors.white10),
-                  _buildTableRow('1', 'UNDER 8s', '12', '28', true),
-                  _buildTableRow('2', 'MOHUN BAGAN', '12', '25', false),
-                  _buildTableRow('3', 'MUMBAI CITY', '11', '22', false),
-                  _buildTableRow('4', 'BENGALURU FC', '12', '20', false),
-                  _buildTableRow('5', 'EAST BENGAL', '12', '18', false),
+                  _buildTableRow('1', 'CORE FC', '12', '28', true),
+                  _buildTableRow('2', 'GULF UNITED FC', '12', '25', false),
+                  _buildTableRow('3', 'UNITED FC', '11', '22', false),
+                  _buildTableRow('4', 'EMIRATES CLUB', '12', '20', false),
+                  _buildTableRow('5', 'EAGLE FC', '12', '18', false),
                 ],
               ),
             ),
@@ -353,7 +353,7 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
   final Color teamBColor = const Color(0xFF00E5FF);
 
   final Map<String, List<Map<String, dynamic>>> _teamLineups = {
-    'UNDER 8s': [
+    'CORE FC': [
       {'name': 'G. Sandhu', 'no': '1', 'pos': 'GK'},
       {'name': 'S. Bose', 'no': '3', 'pos': 'LB'},
       {'name': 'S. Jhingan', 'no': '5', 'pos': 'CB'},
@@ -366,7 +366,7 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
       {'name': 'Manvir Singh', 'no': '9', 'pos': 'LW'},
       {'name': 'Sunil Chhetri', 'no': '11', 'pos': 'ST'},
     ],
-    'EAST BENGAL': [
+    'DUBAI CITY FC': [
       {'name': 'P. Gill', 'no': '1', 'pos': 'GK'},
       {'name': 'H. Maher', 'no': '4', 'pos': 'CB'},
       {'name': 'Anwar Ali', 'no': '3', 'pos': 'CB'},

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:math' as math;
 
@@ -27,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final List<Map<String, dynamic>> _roles = [
     {'name': 'PLAYER', 'icon': Icons.directions_run_outlined, 'color': Colors.blueAccent},
-    {'name': 'ORGANIZER/HOST', 'icon': Icons.groups_outlined, 'color': Colors.greenAccent},
+    {'name': 'ORGANIZER/HOST', 'icon': Icons.groups_outlined, 'color': Colors.blueAccent},
     {'name': 'COACH', 'icon': Icons.sports_outlined, 'color': Colors.orangeAccent},
     {'name': 'MANAGER', 'icon': Icons.manage_accounts_outlined, 'color': Colors.purpleAccent},
     {'name': 'SUPER ADMIN', 'icon': Icons.admin_panel_settings_outlined, 'color': goldColor},
@@ -117,44 +118,15 @@ class _LoginScreenState extends State<LoginScreen> {
           return Stack(
             children: [
               Positioned.fill(
-                child: _videoController.value.isInitialized
-                    ? FittedBox(
-                        fit: BoxFit.cover,
-                        child: SizedBox(
-                          width: _videoController.value.size.width,
-                          height: _videoController.value.size.height,
-                          child: VideoPlayer(_videoController),
-                        ),
-                      )
-                    : Image.asset(
-                        'assets/images/login_background.jpeg',
-                        fit: BoxFit.cover,
-                      ),
-              ),
-              Positioned.fill(
-                child: Container(
-                  color: Colors.black.withValues(alpha: 0.6),
-                ),
-              ),
-              
-              Positioned(
-                top: -100,
-                right: -100,
-                child: Container(
-                  width: 300,
-                  height: 300,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        goldColor.withValues(alpha: 0.15),
-                        Colors.transparent,
-                      ],
-                    ),
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: SizedBox(
+                    width: _videoController.value.size.width > 0 ? _videoController.value.size.width : 1920,
+                    height: _videoController.value.size.height > 0 ? _videoController.value.size.height : 1080,
+                    child: VideoPlayer(_videoController),
                   ),
                 ),
               ),
-
               if (isDesktop)
                 Positioned.fill(
                   child: Container(
@@ -176,6 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                   child: Center(
                     child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -200,6 +173,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   _buildTextField(
                                     controller: _emailController,
                                     hint: 'Enter your email',
+                                    keyboardType: TextInputType.emailAddress,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) return 'Required';
+                                      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) return 'Invalid email';
+                                      return null;
+                                    },
                                   ),
                                   const SizedBox(height: 24),
                                   _buildLabel('Password', Icons.lock),
@@ -209,6 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     hint: 'Enter your password',
                                     isPassword: true,
                                     obscureText: _obscurePassword,
+                                    validator: (value) => value!.isEmpty ? 'Required' : null,
                                     togglePassword: () {
                                       setState(() {
                                         _obscurePassword = !_obscurePassword;
@@ -490,16 +470,22 @@ class _LoginScreenState extends State<LoginScreen> {
     bool isPassword = false,
     bool obscureText = false,
     VoidCallback? togglePassword,
+    String? Function(String?)? validator,
+    TextInputType? keyboardType,
+    List<TextInputFormatter>? inputFormatters,
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.07),
+        color: const Color(0xFF1A1A1A),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: TextFormField(
         controller: controller,
         obscureText: obscureText,
+        validator: validator,
+        keyboardType: keyboardType,
+        inputFormatters: inputFormatters,
         style: const TextStyle(color: Colors.white, fontSize: 14),
         decoration: InputDecoration(
           hintText: hint,
@@ -522,6 +508,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildLoginButton() {
+    final roleColor = _roles[_currentIndex]['color'] as Color;
     return GestureDetector(
       onTapDown: (_) => setState(() => _buttonScale = 0.92),
       onTapUp: (_) => setState(() => _buttonScale = 1.0),
@@ -536,14 +523,14 @@ class _LoginScreenState extends State<LoginScreen> {
           height: 60,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [goldColor, goldColor.withValues(alpha: 0.7)],
+              colors: [roleColor, roleColor.withValues(alpha: 0.7)],
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: goldColor.withValues(alpha: 0.4),
+                color: roleColor.withValues(alpha: 0.4),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
               ),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'custom_painters.dart';
 import 'profile_details/attendance_detail.dart';
-
 import 'professional_pathway.dart';
+
+import 'package:file_picker/file_picker.dart' as fp;
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
@@ -32,7 +33,7 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 6, vsync: this);
+    _tabController = TabController(length: 7, vsync: this);
   }
 
   @override
@@ -105,9 +106,7 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
                           _buildHeaderPill(displaySub),
                           const SizedBox(width: 10),
                           GestureDetector(
-                            onTap: () {
-
-                            },
+                            onTap: () {},
                             child: Container(
                               padding: const EdgeInsets.all(5),
                               decoration: BoxDecoration(
@@ -121,7 +120,7 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
                         ],
                       ),
                       const SizedBox(height: 10),
-                      const Text('UNDER 8s', style: TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
+                      const Text('CORE FC', style: TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
                       const SizedBox(height: 15),
                     ],
                   ),
@@ -141,11 +140,13 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
                     tabAlignment: isMobile ? TabAlignment.start : TabAlignment.fill,
                     indicatorColor: goldColor,
                     labelColor: goldColor,
-                    unselectedLabelColor: Colors.white38,
+                    unselectedLabelColor: Colors.white,
                     indicatorSize: TabBarIndicatorSize.label,
                     labelStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 0.5),
+                    unselectedLabelStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.5),
                     tabs: const [
                       Tab(text: 'PROFILE'),
+                      Tab(text: 'VIDEOS'),
                       Tab(text: 'PATHWAY'),
                       Tab(text: 'MATCHES'),
                       Tab(text: 'STATS'),
@@ -163,11 +164,101 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
         controller: _tabController,
         children: [
           _buildProfileTab(),
+          _buildVideosTab(),
           const ProfessionalPathwayPage(),
           _buildMatchesTab(),
           _buildStatsTab(),
           _buildAttendanceTab(),
           _buildFeedbackTab(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildVideosTab() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('HIGHLIGHT VIDEOS', 
+                style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
+              ElevatedButton.icon(
+                onPressed: () async {
+                  fp.FilePickerResult? result = await fp.FilePicker.platform.pickFiles(
+                    type: fp.FileType.video,
+                  );
+                  if (result != null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Uploading ${result.files.single.name}...'))
+                    );
+                  }
+                },
+                icon: const Icon(Icons.cloud_upload_outlined, size: 16, color: Colors.black),
+                label: const Text('UPLOAD NEW', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 11)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: goldColor,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 15,
+              mainAxisSpacing: 15,
+              childAspectRatio: 1.2,
+            ),
+            itemCount: 4,
+            itemBuilder: (context, index) {
+              return Container(
+                decoration: BoxDecoration(
+                  color: surfaceColor,
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                  image: const DecorationImage(
+                    image: AssetImage('assets/images/match.png'),
+                    fit: BoxFit.cover,
+                    opacity: 0.5,
+                  ),
+                ),
+                child: Stack(
+                  children: [
+                    Center(
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.5),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.play_arrow, color: Colors.white, size: 30),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 10,
+                      left: 10,
+                      right: 10,
+                      child: Text(
+                        index == 0 ? 'Top Goals 2024' : 'Skill Highlight ${index + 1}',
+                        style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 50),
         ],
       ),
     );
@@ -199,76 +290,101 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
     double getVal(String key) => (double.tryParse(stats[key]?.toString() ?? '0') ?? 0) / 100;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const Padding(
+            padding: EdgeInsets.only(left: 8, bottom: 15),
+            child: Text('PERSONAL DETAILS', 
+              style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
+          ),
+          GridView.count(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisCount: 3,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            childAspectRatio: 0.9,
+            children: [
+              _buildModernTile('170 cm', 'Height', Icons.height_rounded, Colors.blueAccent),
+              _buildModernTile('12 Years', 'Age', Icons.calendar_month_rounded, Colors.orangeAccent),
+              _buildModernTile('IND', 'Country', Icons.public_rounded, Colors.greenAccent, emoji: '🇮🇳'),
+              _buildModernTile('11', 'Shirt #', Icons.format_list_numbered_rounded, goldColor),
+              _buildModernTile('Right', 'Foot', Icons.directions_run_rounded, Colors.purpleAccent),
+              _buildModernTile('#14', 'Rank', Icons.stars_rounded, goldColor, isGold: true),
+            ],
+          ),
+          
+          const SizedBox(height: 25),
+          const Padding(
+            padding: EdgeInsets.only(left: 8, bottom: 15),
+            child: Text('CONTACT & LOGISTICS', 
+              style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
+          ),
+          _buildInfoTileWide('parent@email.com', 'Parent/Guardian Email', Icons.family_restroom_rounded, Colors.lightBlueAccent),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(child: _buildInfoTileWide('TOWN SQUARE', 'Location', Icons.location_on_rounded, Colors.redAccent)),
+              const SizedBox(width: 10),
+              Expanded(child: _buildInfoTileWide('6-7 PM', 'Session Time', Icons.access_time_filled_rounded, Colors.orangeAccent)),
+            ],
+          ),
+          const SizedBox(height: 10),
+          _buildInfoTileWide('TUESDAYS & THURSDAYS', 'Assigned Training Days', Icons.calendar_today_rounded, goldColor),
+
+          const SizedBox(height: 25),
+          const Padding(
+            padding: EdgeInsets.only(left: 8, bottom: 15),
+            child: Text('FINANCIAL STATUS', 
+              style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
+          ),
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: surfaceColor,
-              borderRadius: BorderRadius.circular(20),
+              gradient: const LinearGradient(
+                colors: [Color(0xFF1A1A1A), Color(0xFF0D0D0D)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(25),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
             ),
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(child: _buildFotMobInfo('170 cm', 'Height')),
-                    Expanded(child: _buildFotMobInfo('12 years', '24 Jun 2012')),
-                    Expanded(child: _buildFotMobInfo('IND', 'India', emoji: '🇮🇳')),
-                  ],
-                ),
-                const SizedBox(height: 25),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(child: _buildFotMobInfo('parent@email.com', 'Parent Email')),
-                    Expanded(child: _buildFotMobInfo('TOWN SQUARE', 'Location')),
-                  ],
-                ),
-                const SizedBox(height: 25),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(child: _buildFotMobInfo('TUES & THURS', 'Assigned Days')),
-                    Expanded(child: _buildFotMobInfo('6-7 PM', 'Session Time')),
-                  ],
-                ),
-                const SizedBox(height: 25),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(child: _buildFotMobInfo('11', 'Shirt')),
-                    Expanded(child: _buildFotMobInfo('Right', 'Preferred foot')),
-                    Expanded(child: _buildFotMobInfo('#14', 'Global Rank', isGold: true)),
-                  ],
-                ),
-                const SizedBox(height: 25),
-                const Divider(color: Colors.white10),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _buildWalletStat('525 AED', 'Total Wallet'),
+                    Container(width: 1, height: 40, color: Colors.white10),
                     _buildWalletStat('65 AED', 'Remaining', isWarning: true),
                   ],
                 ),
-                const SizedBox(height: 20),
-                Center(
-                  child: _buildFotMobInfo('₹1.4B', 'Estimated Market Value'),
-                ),
+                const SizedBox(height: 25),
+                const Divider(color: Colors.white10, height: 1),
+                const SizedBox(height: 25),
+                _buildModernTileValue('₹1.4B', 'Estimated Market Value', Icons.trending_up_rounded, Colors.greenAccent),
               ],
             ),
           ),
           
-          const SizedBox(height: 15),
-          
+          const SizedBox(height: 25),
+          const Padding(
+            padding: EdgeInsets.only(left: 8, bottom: 15),
+            child: Text('CURRENT SEASON PERFORMANCE', 
+              style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
+          ),
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: surfaceColor,
-              borderRadius: BorderRadius.circular(20),
+              gradient: LinearGradient(
+                colors: [goldColor.withValues(alpha: 0.05), const Color(0xFF1A1A1A)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              borderRadius: BorderRadius.circular(25),
+              border: Border.all(color: goldColor.withValues(alpha: 0.1)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -277,7 +393,7 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
                   children: [
                     const Icon(Icons.shield, color: goldColor, size: 16),
                     const SizedBox(width: 8),
-                    const Text('Current Stat 2026', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
+                    const Text('Stats 2026', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -288,9 +404,13 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
                     _buildStatCol('12', 'Goals'),
                     _buildStatCol('7', 'Assists'),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      decoration: BoxDecoration(color: const Color(0xFF2ECC71), borderRadius: BorderRadius.circular(8)),
-                      child: const Text('8.47', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 13)),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF2ECC71), 
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [BoxShadow(color: const Color(0xFF2ECC71).withValues(alpha: 0.2), blurRadius: 10)],
+                      ),
+                      child: const Text('8.47', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 15)),
                     ),
                   ],
                 ),
@@ -298,14 +418,19 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
             ),
           ),
 
-          const SizedBox(height: 15),
-
+          const SizedBox(height: 25),
+          const Padding(
+            padding: EdgeInsets.only(left: 8, bottom: 15),
+            child: Text('PLAYER SKILL RADAR', 
+              style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
+          ),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(25),
+            padding: const EdgeInsets.all(30),
             decoration: BoxDecoration(
               color: surfaceColor,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -313,35 +438,35 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Player traits', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                    const Icon(Icons.help_outline, color: Colors.white24, size: 16),
+                    const Text('Skill Traits', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                    const Icon(Icons.analytics_rounded, color: goldColor, size: 20),
                   ],
                 ),
-                const Text('Stats compared to other forwards', style: TextStyle(color: Colors.white38, fontSize: 11)),
+                const Text('Comparing stats to regional averages', style: TextStyle(color: Colors.white38, fontSize: 11)),
                 const SizedBox(height: 40),
                 Center(
                   child: SizedBox(
                     width: 240,
                     height: 240,
                     child: CustomPaint(
-                    painter: RadarChartPainter(
-                      stats: [
-                        getVal('shooting'),
-                        getVal('passing'),
-                        getVal('dribbling'),
-                        getVal('defending'),
-                        getVal('physical'),
-                        getVal('saving'),
-                      ],
-                      labels: [
-                        'Shooting\n${(getVal('shooting') * 100).toInt()}%',
-                        'Passing\n${(getVal('passing') * 100).toInt()}%',
-                        'Dribbling\n${(getVal('dribbling') * 100).toInt()}%',
-                        'Defending\n${(getVal('defending') * 100).toInt()}%',
-                        'Physical\n${(getVal('physical') * 100).toInt()}%',
-                        'Saving\n${(getVal('saving') * 100).toInt()}%',
-                      ],
-                    ),
+                      painter: RadarChartPainter(
+                        stats: [
+                          getVal('shooting'),
+                          getVal('passing'),
+                          getVal('dribbling'),
+                          getVal('defending'),
+                          getVal('physical'),
+                          getVal('saving'),
+                        ],
+                        labels: [
+                          'Shooting\n${(getVal('shooting') * 100).toInt()}%',
+                          'Passing\n${(getVal('passing') * 100).toInt()}%',
+                          'Dribbling\n${(getVal('dribbling') * 100).toInt()}%',
+                          'Defending\n${(getVal('defending') * 100).toInt()}%',
+                          'Physical\n${(getVal('physical') * 100).toInt()}%',
+                          'Saving\n${(getVal('saving') * 100).toInt()}%',
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -349,49 +474,47 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
             ),
           ),
 
-          const SizedBox(height: 15),
-
+          const SizedBox(height: 25),
+          const Padding(
+            padding: EdgeInsets.only(left: 8, bottom: 15),
+            child: Text('POSITION', 
+              style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
+          ),
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(25),
             decoration: BoxDecoration(
               color: surfaceColor,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
             ),
-            child: Column(
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Position', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 25),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Primary', style: TextStyle(color: Color(0xFFE91E63), fontSize: 12, fontWeight: FontWeight.bold)),
-                          Text(widget.playerPosition ?? 'Striker', style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                          const SizedBox(height: 25),
-                          const Text('Others', style: TextStyle(color: Colors.white38, fontSize: 12, fontWeight: FontWeight.bold)),
-                          const SizedBox(height: 8),
-                          const Text('Attacking Midfielder', style: TextStyle(color: Colors.white, fontSize: 14)),
-                          const Text('Right Winger', style: TextStyle(color: Colors.white, fontSize: 14)),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: 140,
-                      height: 180,
-                      child: CustomPaint(
-                        painter: SoccerFieldPainter(positions: [
-                          {'pos': 'ST', 'x': 0.5, 'y': 0.15, 'primary': true},
-                          {'pos': 'AM', 'x': 0.5, 'y': 0.45, 'primary': false},
-                          {'pos': 'RW', 'x': 0.8, 'y': 0.4, 'primary': false},
-                        ]),
-                      ),
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Primary', style: TextStyle(color: Color(0xFFE91E63), fontSize: 12, fontWeight: FontWeight.bold)),
+                      Text(widget.playerPosition ?? 'Striker', style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 25),
+                      const Text('Others', style: TextStyle(color: Colors.white38, fontSize: 12, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 8),
+                      const Text('Attacking Midfielder', style: TextStyle(color: Colors.white, fontSize: 14)),
+                      const Text('Right Winger', style: TextStyle(color: Colors.white, fontSize: 14)),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: 140,
+                  height: 180,
+                  child: CustomPaint(
+                    painter: SoccerFieldPainter(positions: [
+                      {'pos': 'ST', 'x': 0.5, 'y': 0.15, 'primary': true},
+                      {'pos': 'AM', 'x': 0.5, 'y': 0.45, 'primary': false},
+                      {'pos': 'RW', 'x': 0.8, 'y': 0.4, 'primary': false},
+                    ]),
+                  ),
                 ),
               ],
             ),
@@ -400,6 +523,82 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
           const SizedBox(height: 50),
         ],
       ),
+    );
+  }
+
+  Widget _buildModernTile(String val, String label, IconData icon, Color color, {String? emoji, bool isGold = false}) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1A1A1A),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: color.withValues(alpha: 0.1)),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: color.withValues(alpha: 0.5), size: 18),
+          const SizedBox(height: 8),
+          FittedBox(
+            child: Row(
+              children: [
+                if (emoji != null) Padding(padding: const EdgeInsets.only(right: 4), child: Text(emoji, style: const TextStyle(fontSize: 12))),
+                Text(val, style: TextStyle(color: isGold ? goldColor : Colors.white, fontWeight: FontWeight.w900, fontSize: 14)),
+              ],
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(label, style: const TextStyle(color: Colors.white38, fontSize: 9, fontWeight: FontWeight.bold)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoTileWide(String val, String label, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1A1A1A),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(color: color.withValues(alpha: 0.1), shape: BoxShape.circle),
+            child: Icon(icon, color: color, size: 18),
+          ),
+          const SizedBox(width: 15),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, style: const TextStyle(color: Colors.white38, fontSize: 9, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 2),
+                Text(val, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13), overflow: TextOverflow.ellipsis),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildModernTileValue(String val, String label, IconData icon, Color color) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(icon, color: color, size: 20),
+        const SizedBox(width: 12),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(val, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 22)),
+            Text(label, style: const TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
+          ],
+        ),
+      ],
     );
   }
 
@@ -413,31 +612,6 @@ class _PlayerProfileState extends State<PlayerProfile> with SingleTickerProvider
             padding: EdgeInsets.only(top: 4),
             child: Text('LOW BALANCE!', style: TextStyle(color: Colors.redAccent, fontSize: 8, fontWeight: FontWeight.bold)),
           ),
-      ],
-    );
-  }
-
-  Widget _buildFotMobInfo(String val, String label, {String? emoji, String? flagAsset, bool isGold = false}) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (flagAsset != null)
-              Padding(
-                padding: const EdgeInsets.only(right: 6),
-                child: Image.asset(flagAsset, width: 20, height: 14, fit: BoxFit.cover),
-              )
-            else if (emoji != null)
-              Padding(
-                padding: const EdgeInsets.only(right: 6),
-                child: Text(emoji, style: const TextStyle(fontSize: 14)),
-              ),
-            Text(val, style: TextStyle(color: isGold ? goldColor : Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
-          ],
-        ),
-        const SizedBox(height: 4),
-        Text(label, style: const TextStyle(color: Colors.white38, fontSize: 11)),
       ],
     );
   }
