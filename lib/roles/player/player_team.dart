@@ -10,6 +10,15 @@ class MyTeamsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<List<Color>> tileColors = [
+      [const Color(0xFF007CFE), const Color(0xFF004A99)],
+      [const Color(0xFF38EF7D), const Color(0xFF11998E)],
+      [const Color(0xFFEE0979), const Color(0xFFF12711)],
+      [const Color(0xFFFFB75E), const Color(0xFFED8F03)],
+      [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)],
+      [const Color(0xFF00D2FF), const Color(0xFF3A7BD5)],
+    ];
+
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
@@ -17,20 +26,18 @@ class MyTeamsPage extends StatelessWidget {
               margin: const EdgeInsets.all(20),
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [goldColor.withValues(alpha: 0.15), const Color(0xFF0D0D0D)],
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF1A1A1A), Color(0xFF000000)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
+                image: const DecorationImage(
+                  image: AssetImage('assets/images/img2.jpeg'),
+                  fit: BoxFit.cover,
+                  opacity: 0.15,
+                ),
                 borderRadius: BorderRadius.circular(30),
-                border: Border.all(color: goldColor.withValues(alpha: 0.2)),
-                boxShadow: [
-                  BoxShadow(
-                    color: goldColor.withValues(alpha: 0.05),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  )
-                ],
+                border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
               ),
               child: Row(
                 children: [
@@ -40,10 +47,7 @@ class MyTeamsPage extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: goldColor.withValues(alpha: 0.3), width: 2),
-                      boxShadow: [
-                        BoxShadow(color: goldColor.withValues(alpha: 0.1), blurRadius: 10)
-                      ],
+                      border: Border.all(color: goldColor, width: 2),
                     ),
                     child: const Icon(Icons.shield, color: goldColor, size: 35),
                   ),
@@ -53,18 +57,18 @@ class MyTeamsPage extends StatelessWidget {
                     children: [
                       Text('CORE FC', 
                         style: TextStyle(
-                          color: goldColor, 
+                          color: Colors.white, 
                           fontSize: 22, 
                           fontWeight: FontWeight.w900, 
                           letterSpacing: 2
                         )
                       ),
                       const SizedBox(height: 4),
-                      Text('India | Pro League', 
+                      Text('Dubai | Pro League',
                         style: TextStyle(
-                          color: Colors.white38, 
+                          color: goldColor, 
                           fontSize: 12, 
-                          fontWeight: FontWeight.w600
+                          fontWeight: FontWeight.w700
                         )
                       ),
                     ],
@@ -82,21 +86,22 @@ class MyTeamsPage extends StatelessWidget {
           ),
 
           SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   final teammates = [
-                    {'name': 'Gurpreet Singh Sandhu', 'pos': 'Goalkeeper', 'no': '1', 'shooting': '15', 'passing': '82', 'dribbling': '45', 'defending': '90', 'physical': '95', 'saving': '98', 'speed': '65', 'stamina': '88'},
-                    {'name': 'Sandesh Jhingan', 'pos': 'Defender', 'no': '5', 'shooting': '40', 'passing': '75', 'dribbling': '55', 'defending': '95', 'physical': '98', 'saving': '10', 'speed': '72', 'stamina': '92'},
-                    {'name': 'Sunil Chhetri', 'pos': 'Forward', 'no': '11', 'shooting': '98', 'passing': '88', 'dribbling': '92', 'defending': '45', 'physical': '85', 'saving': '10', 'speed': '88', 'stamina': '94'},
-                    {'name': 'Lallianzuala Chhangte', 'pos': 'Winger', 'no': '17', 'shooting': '85', 'passing': '80', 'dribbling': '96', 'defending': '40', 'physical': '78', 'saving': '10', 'speed': '95', 'stamina': '90'},
-                    {'name': 'Sahal Abdul Samad', 'pos': 'Midfielder', 'no': '10', 'shooting': '82', 'passing': '95', 'dribbling': '94', 'defending': '65', 'physical': '75', 'saving': '10', 'speed': '82', 'stamina': '88'},
-                    {'name': 'Anirudh Thapa', 'pos': 'Midfielder', 'no': '7', 'shooting': '78', 'passing': '92', 'dribbling': '85', 'defending': '75', 'physical': '82', 'saving': '10', 'speed': '80', 'stamina': '95'},
-                    {'name': 'Subhasish Bose', 'pos': 'Defender', 'no': '3', 'shooting': '45', 'passing': '78', 'dribbling': '65', 'defending': '88', 'physical': '90', 'saving': '10', 'speed': '78', 'stamina': '92'},
+                    {'name': 'E. Martinez', 'pos': 'Goalkeeper', 'no': '1', 'shooting': '15', 'passing': '82', 'dribbling': '45', 'defending': '90', 'physical': '95', 'saving': '98', 'speed': '65', 'stamina': '88'},
+                    {'name': 'Ruben Dias', 'pos': 'Defender', 'no': '5', 'shooting': '40', 'passing': '75', 'dribbling': '55', 'defending': '95', 'physical': '98', 'saving': '10', 'speed': '72', 'stamina': '92'},
+                    {'name': 'Lionel Messi', 'pos': 'Forward', 'no': '10', 'shooting': '98', 'passing': '88', 'dribbling': '92', 'defending': '45', 'physical': '85', 'saving': '10', 'speed': '88', 'stamina': '94'},
+                    {'name': 'K. Mbappe', 'pos': 'Winger', 'no': '7', 'shooting': '85', 'passing': '80', 'dribbling': '96', 'defending': '40', 'physical': '78', 'saving': '10', 'speed': '95', 'stamina': '90'},
+                    {'name': 'J. Bellingham', 'pos': 'Midfielder', 'no': '10', 'shooting': '82', 'passing': '95', 'dribbling': '94', 'defending': '65', 'physical': '75', 'saving': '10', 'speed': '82', 'stamina': '88'},
+                    {'name': 'Kevin De Bruyne', 'pos': 'Midfielder', 'no': '17', 'shooting': '78', 'passing': '92', 'dribbling': '85', 'defending': '75', 'physical': '82', 'saving': '10', 'speed': '80', 'stamina': '95'},
+                    {'name': 'T. Hernandez', 'pos': 'Defender', 'no': '3', 'shooting': '45', 'passing': '78', 'dribbling': '65', 'defending': '88', 'physical': '90', 'saving': '10', 'speed': '78', 'stamina': '92'},
                   ];
                   final member = teammates[index];
-                  bool isMe = member['name'] == 'Sunil Chhetri';
+                  bool isMe = member['name'] == 'Lionel Messi';
+                  final colors = tileColors[index % tileColors.length];
 
                   return GestureDetector(
                     onTap: () {
@@ -120,27 +125,28 @@ class MyTeamsPage extends StatelessWidget {
                       }
                     },
                     child: Container(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      padding: const EdgeInsets.all(18),
+                      margin: const EdgeInsets.only(bottom: 15),
+                      padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            const Color(0xFF1E1E1E),
-                            isMe ? goldColor.withValues(alpha: 0.15) : const Color(0xFF121212),
+                            colors[0].withValues(alpha: 0.8),
+                            colors[1].withValues(alpha: 0.8),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
                         borderRadius: BorderRadius.circular(25),
-                        border: Border.all(
-                          color: isMe ? goldColor.withValues(alpha: 0.5) : Colors.white.withValues(alpha: 0.08),
-                          width: 1.5,
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/img${(index % 4) + 1}.jpeg'),
+                          fit: BoxFit.cover,
+                          opacity: 0.4,
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.5),
-                            blurRadius: 15,
-                            offset: const Offset(0, 8),
+                            color: colors[0].withValues(alpha: 0.1),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
                           )
                         ],
                       ),
@@ -150,18 +156,12 @@ class MyTeamsPage extends StatelessWidget {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: isMe ? goldColor : Colors.white24, 
+                                color: Colors.white.withValues(alpha: 0.5), 
                                 width: 2.5
                               ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: isMe ? goldColor.withValues(alpha: 0.2) : Colors.black.withValues(alpha: 0.2),
-                                  blurRadius: 8
-                                )
-                              ],
                             ),
                             child: const CircleAvatar(
-                              radius: 24,
+                              radius: 26,
                               backgroundImage: AssetImage('assets/images/sunil.png'),
                             ),
                           ),
@@ -172,11 +172,11 @@ class MyTeamsPage extends StatelessWidget {
                               children: [
                                 Text(
                                   member['name']!.toUpperCase(), 
-                                  style: TextStyle(
-                                    color: isMe ? goldColor : const Color(0xFFFFFFFF), 
+                                  style: const TextStyle(
+                                    color: Colors.white, 
                                     fontWeight: FontWeight.w900,
-                                    fontSize: 15,
-                                    letterSpacing: 0.8,
+                                    fontSize: 16,
+                                    letterSpacing: 0.5,
                                   ), 
                                   overflow: TextOverflow.ellipsis
                                 ),
@@ -186,25 +186,25 @@ class MyTeamsPage extends StatelessWidget {
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                                       decoration: BoxDecoration(
-                                        color: Colors.white.withValues(alpha: 0.05),
+                                        color: Colors.white.withValues(alpha: 0.2),
                                         borderRadius: BorderRadius.circular(6),
                                       ),
                                       child: Text(
-                                        member['pos']!, 
-                                        style: TextStyle(
-                                          color: isMe ? goldColor.withValues(alpha: 0.8) : Colors.white38, 
-                                          fontSize: 10,
+                                        member['pos']!.toUpperCase(), 
+                                        style: const TextStyle(
+                                          color: Colors.white, 
+                                          fontSize: 9,
                                           fontWeight: FontWeight.w900
                                         )
                                       ),
                                     ),
-                                    const SizedBox(width: 8),
+                                    const SizedBox(width: 10),
                                     Text(
                                       "#${member['no']!}", 
-                                      style: TextStyle(
-                                        color: goldColor.withValues(alpha: 0.5), 
+                                      style: const TextStyle(
+                                        color: Colors.white70, 
                                         fontSize: 12,
-                                        fontWeight: FontWeight.bold
+                                        fontWeight: FontWeight.w900
                                       )
                                     ),
                                   ],
@@ -214,12 +214,12 @@ class MyTeamsPage extends StatelessWidget {
                           ),
                           if (isMe)
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(color: goldColor.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(5)),
-                              child: const Text('ME', style: TextStyle(color: goldColor, fontSize: 9, fontWeight: FontWeight.bold)),
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
+                              child: Text('ME', style: TextStyle(color: colors[0], fontSize: 10, fontWeight: FontWeight.w900)),
                             )
                           else
-                            const Icon(Icons.analytics_outlined, color: Colors.white10, size: 20),
+                            const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white38, size: 14),
                         ],
                       ),
                     ),
@@ -232,89 +232,5 @@ class MyTeamsPage extends StatelessWidget {
           const SliverToBoxAdapter(child: SizedBox(height: 50)),
         ],
       );
-  }
-
-  void _showPlayerStats(BuildContext context, Map<String, String> player) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: const Color(0xFF080808),
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
-      builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.7,
-        maxChildSize: 0.9,
-        minChildSize: 0.5,
-        expand: false,
-        builder: (context, scrollController) => SingleChildScrollView(
-          controller: scrollController,
-          padding: const EdgeInsets.all(30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.white10, borderRadius: BorderRadius.circular(2)))),
-              const SizedBox(height: 25),
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundColor: goldColor.withValues(alpha: 0.1),
-                    child: Text(player['no']!, style: const TextStyle(color: goldColor, fontSize: 24, fontWeight: FontWeight.bold)),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(player['name']!, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-                        Text(player['pos']!, style: const TextStyle(color: goldColor, fontSize: 12, fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 35),
-              const Text('PLAYER STATUS', style: TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
-              const SizedBox(height: 25),
-              _buildStatBar('SHOOTING', double.parse(player['shooting']!) / 100, Colors.orange),
-              _buildStatBar('PASSING', double.parse(player['passing']!) / 100, Colors.blue),
-              _buildStatBar('DRIBBLING', double.parse(player['dribbling']!) / 100, Colors.purple),
-              _buildStatBar('DEFENDING', double.parse(player['defending']!) / 100, Colors.teal),
-              _buildStatBar('PHYSICAL', double.parse(player['physical']!) / 100, Colors.red),
-              _buildStatBar('SAVING', double.parse(player['saving']!) / 100, Colors.greenAccent),
-              _buildStatBar('SPEED', double.parse(player['speed']!) / 100, Colors.yellowAccent),
-              _buildStatBar('STAMINA', double.parse(player['stamina']!) / 100, Colors.lightBlueAccent),
-              const SizedBox(height: 20),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStatBar(String label, double val, Color color) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 22),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(label, style: const TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1)),
-              Text('${(val * 100).toInt()}%', style: TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.w900)),
-            ],
-          ),
-          const SizedBox(height: 10),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: LinearProgressIndicator(
-              value: val,
-              backgroundColor: Colors.white.withValues(alpha: 0.05),
-              valueColor: AlwaysStoppedAnimation<Color>(color),
-              minHeight: 6,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

@@ -3,6 +3,7 @@ import 'manager_dashboard.dart';
 import 'manager_teams_page.dart';
 import 'manager_budget_page.dart';
 import 'manager_settings_page.dart';
+import 'manager_notifications_page.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
@@ -140,6 +141,13 @@ class _ManagerHomeState extends State<ManagerHome> {
                             letterSpacing: 2)),
                   ),
                   _buildDrawerItem(Icons.business_center_outlined, 'Club Profile', () {}),
+                  _buildDrawerItem(Icons.notifications_active_outlined, 'Notifications', () {
+                    Navigator.pop(context); // Close drawer
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ManagerNotificationsPage()));
+                  }),
                   _buildDrawerItem(Icons.people_outline, 'Staff Directory', () {}),
                   _buildDrawerItem(Icons.assignment_turned_in_outlined, 'Approvals', () {}),
                   _buildDrawerItem(Icons.analytics_outlined, 'Annual Reports', () {}),
@@ -197,17 +205,28 @@ class _ManagerHomeState extends State<ManagerHome> {
 
   Widget _buildHeader(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+      padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
       child: Row(
         children: [
-          Image.asset('assets/logo.png', height: 35, fit: BoxFit.contain),
-          const SizedBox(width: 10),
-          const Text('STATIXA',
-              style: TextStyle(
-                  color: Color(0xFFC0C0C0),
-                  fontSize: 20,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.5)),
+          Image.asset('assets/logo.png', height: 65, fit: BoxFit.contain),
+          const SizedBox(width: 20),
+          const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('CORE FC',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.0)),
+              Text('MANAGER DASHBOARD',
+                  style: TextStyle(
+                      color: goldColor,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.5)),
+            ],
+          ),
           const Spacer(),
           Builder(
             builder: (context) => IconButton(

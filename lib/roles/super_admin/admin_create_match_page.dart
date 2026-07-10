@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 const Color goldColor = Color(0xFFD4AF37);
 const Color surfaceColor = Color(0xFF121212);
 
-class CreateGamePage extends StatefulWidget {
-  const CreateGamePage({super.key});
+class AdminCreateMatchPage extends StatefulWidget {
+  const AdminCreateMatchPage({super.key});
 
   @override
-  State<CreateGamePage> createState() => _CreateGamePageState();
+  State<AdminCreateMatchPage> createState() => _AdminCreateMatchPageState();
 }
 
-class _CreateGamePageState extends State<CreateGamePage> {
+class _AdminCreateMatchPageState extends State<AdminCreateMatchPage> {
   String _selectedMatchType = 'LEAGUE';
   String _selectedCategory = 'MEN';
   String _selectedSquadLimit = '11';
@@ -103,22 +103,22 @@ class _CreateGamePageState extends State<CreateGamePage> {
         backgroundColor: Colors.black,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: goldColor),
+          icon: const Icon(Icons.arrow_back_ios_new, color: goldColor, size: 20),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
           'CREATE NEW MATCH',
           style: TextStyle(
-            color: goldColor,
+            color: Colors.white,
             fontWeight: FontWeight.w900,
-            fontSize: 18,
-            letterSpacing: 1,
+            fontSize: 16,
+            letterSpacing: 2,
           ),
         ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(25),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -228,7 +228,7 @@ class _CreateGamePageState extends State<CreateGamePage> {
             gradient: isSelected ? const LinearGradient(colors: [goldColor, Color(0xFFB8860B)]) : null,
             color: isSelected ? null : surfaceColor,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: isSelected ? Colors.transparent : Colors.white.withOpacity(0.05)),
+            border: Border.all(color: isSelected ? Colors.transparent : Colors.white.withValues(alpha: 0.05)),
           ),
           child: Center(
             child: Text(
@@ -260,13 +260,13 @@ class _CreateGamePageState extends State<CreateGamePage> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [surfaceColor, const Color(0xFF1A1A1A)],
+            gradient: const LinearGradient(
+              colors: [surfaceColor, Color(0xFF1A1A1A)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: Colors.white.withOpacity(0.05)),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
@@ -301,58 +301,17 @@ class _CreateGamePageState extends State<CreateGamePage> {
     );
   }
 
-  Widget _buildDropdownField(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 5, bottom: 8),
-          child: Text(
-            label,
-            style: const TextStyle(color: Colors.white24, fontSize: 9, fontWeight: FontWeight.bold, letterSpacing: 0.5),
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [surfaceColor, const Color(0xFF1A1A1A)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: Colors.white.withOpacity(0.05)),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                value,
-                style: TextStyle(
-                  color: value.contains('Select') ? Colors.white24 : Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const Icon(Icons.keyboard_arrow_down, color: goldColor, size: 20),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildVenueDropdown() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [surfaceColor, const Color(0xFF1A1A1A)],
+        gradient: const LinearGradient(
+          colors: [surfaceColor, Color(0xFF1A1A1A)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
@@ -377,34 +336,6 @@ class _CreateGamePageState extends State<CreateGamePage> {
     );
   }
 
-  Widget _buildMatchTypeChip(String type) {
-    bool isSelected = _selectedMatchType == type;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => setState(() => _selectedMatchType = type),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 15),
-          decoration: BoxDecoration(
-            color: isSelected ? goldColor.withOpacity(0.1) : surfaceColor,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: isSelected ? goldColor : Colors.white.withOpacity(0.05), width: 1.5),
-          ),
-          child: Center(
-            child: Text(
-              type,
-              style: TextStyle(
-                color: isSelected ? goldColor : Colors.white38,
-                fontSize: 10,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildDateTimeBox(String label, String value, IconData icon) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -419,13 +350,13 @@ class _CreateGamePageState extends State<CreateGamePage> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 18),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [surfaceColor, const Color(0xFF1A1A1A)],
+            gradient: const LinearGradient(
+              colors: [surfaceColor, Color(0xFF1A1A1A)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.white.withOpacity(0.05)),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
           ),
           child: Row(
             children: [
@@ -456,13 +387,13 @@ class _CreateGamePageState extends State<CreateGamePage> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [surfaceColor, const Color(0xFF1A1A1A)],
+            gradient: const LinearGradient(
+              colors: [surfaceColor, Color(0xFF1A1A1A)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: Colors.white.withOpacity(0.05)),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
@@ -528,14 +459,14 @@ class _CreateGamePageState extends State<CreateGamePage> {
       decoration: BoxDecoration(
         color: surfaceColor,
         borderRadius: BorderRadius.circular(25),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),
         child: ListView.separated(
           shrinkWrap: true,
           itemCount: _players.length,
-          separatorBuilder: (context, index) => Divider(color: Colors.white.withOpacity(0.05), height: 1),
+          separatorBuilder: (context, index) => Divider(color: Colors.white.withValues(alpha: 0.05), height: 1),
           itemBuilder: (context, index) {
             final player = _players[index];
             return ListTile(
@@ -580,13 +511,13 @@ class _CreateGamePageState extends State<CreateGamePage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [surfaceColor, const Color(0xFF1A1A1A)],
+        gradient: const LinearGradient(
+          colors: [surfaceColor, Color(0xFF1A1A1A)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: const TextField(
         style: TextStyle(color: Colors.white, fontSize: 14),
@@ -608,13 +539,13 @@ class _CreateGamePageState extends State<CreateGamePage> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [surfaceColor, const Color(0xFF1A1A1A)],
+              gradient: const LinearGradient(
+                colors: [surfaceColor, Color(0xFF1A1A1A)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(15),
-              border: Border.all(color: Colors.white.withOpacity(0.05)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
             ),
             child: const TextField(
               style: TextStyle(color: Colors.white, fontSize: 14),
@@ -635,7 +566,7 @@ class _CreateGamePageState extends State<CreateGamePage> {
             color: goldColor,
             borderRadius: BorderRadius.circular(15),
             boxShadow: [
-              BoxShadow(color: goldColor.withOpacity(0.2), blurRadius: 10, offset: const Offset(0, 4))
+              BoxShadow(color: goldColor.withValues(alpha: 0.2), blurRadius: 10, offset: const Offset(0, 4))
             ],
           ),
           child: const Text(
@@ -652,7 +583,7 @@ class _CreateGamePageState extends State<CreateGamePage> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
-          BoxShadow(color: goldColor.withOpacity(0.3), blurRadius: 20, offset: const Offset(0, 10))
+          BoxShadow(color: goldColor.withValues(alpha: 0.3), blurRadius: 20, offset: const Offset(0, 10))
         ],
       ),
       child: ElevatedButton(

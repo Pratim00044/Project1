@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:video_player/video_player.dart';
 import 'package:file_picker/file_picker.dart' as fp;
 import 'dart:math' as math;
 import '../roles/organization/organization_home.dart';
@@ -33,6 +32,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final _parentEmailController = TextEditingController();
   String? _selectedFoot;
   String? _selectedPosition;
+  String? _selectedPlayerType;
 
   bool _obscurePassword = true;
   bool _isClubCodeStep = true;
@@ -59,13 +59,9 @@ class _SignupScreenState extends State<SignupScreen> {
 
   final List<Map<String, dynamic>> _roles = [
     {'name': 'PLAYER', 'icon': Icons.directions_run_outlined, 'color': Colors.blueAccent},
-    {'name': 'ORGANIZER/HOST', 'icon': Icons.groups_outlined, 'color': Colors.blueAccent},
-    {'name': 'COACH', 'icon': Icons.sports_outlined, 'color': Colors.orangeAccent},
-    {'name': 'MANAGER', 'icon': Icons.manage_accounts_outlined, 'color': Colors.purpleAccent},
   ];
 
   late PageController _pageController;
-  late VideoPlayerController _videoController;
   int _currentIndex = 0;
   double _buttonScale = 1.0;
   double _linkScale = 1.0;
@@ -74,16 +70,9 @@ class _SignupScreenState extends State<SignupScreen> {
   void initState() {
     super.initState();
     _pageController = PageController(
-      viewportFraction: 0.25,
+      viewportFraction: 0.35,
       initialPage: _currentIndex,
     );
-    _videoController = VideoPlayerController.asset('assets/Video/Banner.mp4')
-      ..initialize().then((_) {
-        setState(() {});
-        _videoController.setLooping(true);
-        _videoController.setVolume(0);
-        _videoController.play();
-      });
   }
 
   @override
@@ -99,7 +88,6 @@ class _SignupScreenState extends State<SignupScreen> {
     _dobController.dispose();
     _parentEmailController.dispose();
     _clubCodeController.dispose();
-    _videoController.dispose();
     super.dispose();
   }
 
@@ -115,11 +103,11 @@ class _SignupScreenState extends State<SignupScreen> {
             colorScheme: const ColorScheme.dark(
               primary: goldColor,
               onPrimary: Colors.black,
-              surface: Color(0xFF1A1A1A),
+              surface: const Color(0xFF1A1A1A),
               onSurface: Colors.white,
             ),
             dialogTheme: const DialogThemeData(
-              backgroundColor: Color(0xFF080808),
+              backgroundColor: const Color(0xFF080808),
             ),
           ),
           child: child!,
@@ -134,9 +122,8 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   void _handleRegister() {
-    String roleName = _roles[_currentIndex]['name'];
-    if (roleName != 'ORGANIZER/HOST' && _isClubCodeStep) {
-      if (_clubCodeController.text.isEmpty) {
+    if (_isClubCodeStep) {
+      if (_clubCodeController.text.trim().isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Please enter a valid Club Code to continue.')),
         );
@@ -147,13 +134,11 @@ class _SignupScreenState extends State<SignupScreen> {
     }
 
     if (_formKey.currentState!.validate()) {
-      if (roleName == 'PLAYER') {
-        if (_selectedFoot == null || _selectedPosition == null || _heightController.text.isEmpty || _weightController.text.isEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('All stats are mandatory for this role.')),
-          );
-          return;
-        }
+      if (_selectedFoot == null || _selectedPosition == null || _heightController.text.trim().isEmpty || _weightController.text.trim().isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('All physical stats and field preferences are mandatory.')),
+        );
+        return;
       }
 
       if (_passwordController.text != _confirmPasswordController.text) {
@@ -163,30 +148,7 @@ class _SignupScreenState extends State<SignupScreen> {
         return;
       }
 
-      if (_roles[_currentIndex]['name'] == 'ORGANIZER/HOST') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Registration submitted. Awaiting Super Admin verification.')),
-        );
-      }
-      
-      Widget homePage;
-      switch (_roles[_currentIndex]['name']) {
-        case 'ORGANIZER/HOST':
-          homePage = const OrganizationHome();
-          break;
-        case 'PLAYER':
-          homePage = const PlayerHome();
-          break;
-        case 'COACH':
-          homePage = const CoachHome();
-          break;
-        case 'MANAGER':
-          homePage = const ManagerHome();
-          break;
-        default:
-          homePage = const CoachHome();
-          break;
-      }
+      Widget homePage = const PlayerHome();
 
       Navigator.pushReplacement(
         context,
@@ -201,45 +163,20 @@ class _SignupScreenState extends State<SignupScreen> {
       backgroundColor: darkBg,
       body: LayoutBuilder(
         builder: (context, constraints) {
-          bool isDesktop = constraints.maxWidth > 900;
-          double formWidth = isDesktop ? 450 : constraints.maxWidth;
-          
-          double currentFraction = isDesktop ? 0.2 : 0.35; 
-          if (_pageController.viewportFraction != currentFraction) {
-            _pageController = PageController(
-              viewportFraction: currentFraction,
-              initialPage: _currentIndex,
-            );
-          }
+          double formWidth = constraints.maxWidth;
           
           return Stack(
             children: [
               Positioned.fill(
-                child: FittedBox(
+                child: Image.asset(
+                  'assets/images/img.png',
                   fit: BoxFit.cover,
-                  child: SizedBox(
-                    width: _videoController.value.size.width > 0 ? _videoController.value.size.width : 1920,
-                    height: _videoController.value.size.height > 0 ? _videoController.value.size.height : 1080,
-                    child: VideoPlayer(_videoController),
-                  ),
                 ),
               ),
               
-              Positioned(
-                top: -100,
-                right: -100,
+              Positioned.fill(
                 child: Container(
-                  width: 300,
-                  height: 300,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        goldColor.withValues(alpha: 0.15),
-                        Colors.transparent,
-                      ],
-                    ),
-                  ),
+                  color: Colors.black.withValues(alpha: 0.6),
                 ),
               ),
 
@@ -252,13 +189,17 @@ class _SignupScreenState extends State<SignupScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(height: 40),
-                          _buildLogo(),
-                          
                           const SizedBox(height: 20),
-                          _buildInteractiveCurvedSelector(isDesktop),
+                          Image.asset(
+                            'assets/logo.png',
+                            width: 150,
+                            height: 150,
+                            fit: BoxFit.contain,
+                          ),
+                          const SizedBox(height: 10),
+                          _buildInteractiveCurvedSelector(false),
                           
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 10),
                           
                           Container(
                             width: formWidth,
@@ -268,31 +209,30 @@ class _SignupScreenState extends State<SignupScreen> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      if (_roles[_currentIndex]['name'] != 'ORGANIZER/HOST' && _isClubCodeStep) ...[
+                                      if (_isClubCodeStep) ...[
                                         _buildLabel('Club Code', Icons.qr_code_scanner_rounded),
                                         const SizedBox(height: 10),
                                         _buildTextField(
                                           controller: _clubCodeController,
                                           hint: 'Enter your club invitation code',
+                                          validator: (value) => value!.trim().isEmpty ? 'Required' : null,
                                         ),
                                         const Padding(
                                           padding: EdgeInsets.only(top: 12.0),
                                           child: Text(
-                                            '* Obtain this code from your club organizer.',
+                                            '* Obtain this code from your club organiser.',
                                             style: TextStyle(color: goldColor, fontSize: 10, fontStyle: FontStyle.italic),
                                           ),
                                         ),
                                       ] else ...[
-                                        if (_roles[_currentIndex]['name'] != 'ORGANIZER/HOST') ...[
-                                          _buildLabel('Club Code', Icons.qr_code_scanner_rounded),
-                                          const SizedBox(height: 10),
-                                          _buildTextField(
-                                            controller: _clubCodeController,
-                                            hint: 'Enter your club invitation code',
-                                            readOnly: true,
-                                          ),
-                                          const SizedBox(height: 24),
-                                        ],
+                                        _buildLabel('Club Code', Icons.qr_code_scanner_rounded),
+                                        const SizedBox(height: 10),
+                                        _buildTextField(
+                                          controller: _clubCodeController,
+                                          hint: 'Enter your club invitation code',
+                                          readOnly: true,
+                                        ),
+                                        const SizedBox(height: 24),
                                         _buildLabel('Full Name', Icons.person),
                                         const SizedBox(height: 10),
                                         _buildTextField(
@@ -303,7 +243,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                             FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')),
                                           ],
                                           validator: (value) {
-                                            if (value == null || value.isEmpty) return 'Required';
+                                            if (value == null || value.trim().isEmpty) return 'Required';
                                             if (value.trim().split(' ').length < 2) return 'Enter full name';
                                             return null;
                                           },
@@ -316,7 +256,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                           hint: 'Enter email',
                                           keyboardType: TextInputType.emailAddress,
                                           validator: (value) {
-                                            if (value == null || value.isEmpty) return 'Required';
+                                            if (value == null || value.trim().isEmpty) return 'Required';
                                             if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) return 'Invalid email';
                                             return null;
                                           },
@@ -333,7 +273,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                             LengthLimitingTextInputFormatter(10),
                                           ],
                                           validator: (value) {
-                                            if (value == null || value.isEmpty) return 'Required';
+                                            if (value == null || value.trim().isEmpty) return 'Required';
                                             if (value.length != 10) return 'Must be 10 digits';
                                             return null;
                                           },
@@ -363,83 +303,90 @@ class _SignupScreenState extends State<SignupScreen> {
                                           ),
                                         ),
 
-                                        if (_roles[_currentIndex]['name'] == 'PLAYER') ...[
-                                          const SizedBox(height: 32),
-                                          const Divider(color: Colors.white10),
-                                          const SizedBox(height: 16),
-                                          _buildLabel('Personal Details', Icons.cake_outlined),
-                                          const SizedBox(height: 16),
-                                          _buildTextField(
-                                            controller: _dobController,
-                                            hint: 'Date of Birth (DD/MM/YYYY)',
-                                            readOnly: true,
-                                            onTap: () => _selectDate(context),
-                                            validator: (value) => value!.isEmpty ? 'Required' : null,
-                                          ),
-                                          const SizedBox(height: 24),
-                                          _buildLabel('Parent/Guardian Contact', Icons.family_restroom_outlined),
-                                          const SizedBox(height: 16),
-                                          _buildTextField(
-                                            controller: _parentEmailController,
-                                            hint: 'Parent Email',
-                                            keyboardType: TextInputType.emailAddress,
-                                            validator: (value) {
-                                              if (value == null || value.isEmpty) return 'Required';
-                                              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) return 'Invalid email';
-                                              return null;
-                                            },
-                                          ),
-                                          const SizedBox(height: 32),
-                                          _buildLabel('Physical Stats', Icons.fitness_center),
-                                          const SizedBox(height: 16),
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: _buildTextField(
-                                                  controller: _heightController,
-                                                  hint: 'Height (cm)',
-                                                  keyboardType: TextInputType.number,
-                                                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                                  validator: (value) => value!.isEmpty ? 'Required' : null,
-                                                ),
+                                        const SizedBox(height: 32),
+                                        _buildLabel('Player Category', Icons.category_outlined),
+                                        const SizedBox(height: 16),
+                                        _buildDropdown(
+                                          hint: 'Select Player Type',
+                                          value: _selectedPlayerType,
+                                          items: ['Academy Player', 'Social Player', 'Club Player'],
+                                          onChanged: (val) => setState(() => _selectedPlayerType = val),
+                                        ),
+                                        const SizedBox(height: 32),
+                                        const Divider(color: Colors.white10),
+                                        const SizedBox(height: 16),
+                                        _buildLabel('Personal Details', Icons.cake_outlined),
+                                        const SizedBox(height: 16),
+                                        _buildTextField(
+                                          controller: _dobController,
+                                          hint: 'Date of Birth (DD/MM/YYYY)',
+                                          readOnly: true,
+                                          onTap: () => _selectDate(context),
+                                          validator: (value) => value!.trim().isEmpty ? 'Required' : null,
+                                        ),
+                                        const SizedBox(height: 24),
+                                        _buildLabel('Parent/Guardian Contact', Icons.family_restroom_outlined),
+                                        const SizedBox(height: 16),
+                                        _buildTextField(
+                                          controller: _parentEmailController,
+                                          hint: 'Parent Email',
+                                          keyboardType: TextInputType.emailAddress,
+                                          validator: (value) {
+                                            if (value == null || value.trim().isEmpty) return 'Required';
+                                            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) return 'Invalid email';
+                                            return null;
+                                          },
+                                        ),
+                                        const SizedBox(height: 32),
+                                        _buildLabel('Physical Stats', Icons.fitness_center),
+                                        const SizedBox(height: 16),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: _buildTextField(
+                                                controller: _heightController,
+                                                hint: 'Height (cm)',
+                                                keyboardType: TextInputType.number,
+                                                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                                validator: (value) => value!.trim().isEmpty ? 'Required' : null,
                                               ),
-                                              const SizedBox(width: 16),
-                                              Expanded(
-                                                child: _buildTextField(
-                                                  controller: _weightController,
-                                                  hint: 'Weight (kg)',
-                                                  keyboardType: TextInputType.number,
-                                                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                                  validator: (value) => value!.isEmpty ? 'Required' : null,
-                                                ),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            Expanded(
+                                              child: _buildTextField(
+                                                controller: _weightController,
+                                                hint: 'Weight (kg)',
+                                                keyboardType: TextInputType.number,
+                                                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                                validator: (value) => value!.trim().isEmpty ? 'Required' : null,
                                               ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 24),
-                                          _buildLabel('Field Preferences', Icons.settings_input_component),
-                                          const SizedBox(height: 16),
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: _buildDropdown(
-                                                  hint: 'Strong Foot',
-                                                  value: _selectedFoot,
-                                                  items: ['Right', 'Left', 'Both'],
-                                                  onChanged: (val) => setState(() => _selectedFoot = val),
-                                                ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 24),
+                                        _buildLabel('Field Preferences', Icons.settings_input_component),
+                                        const SizedBox(height: 16),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: _buildDropdown(
+                                                hint: 'Strong Foot',
+                                                value: _selectedFoot,
+                                                items: ['Right', 'Left', 'Both'],
+                                                onChanged: (val) => setState(() => _selectedFoot = val),
                                               ),
-                                              const SizedBox(width: 16),
-                                              Expanded(
-                                                child: _buildDropdown(
-                                                  hint: 'Position',
-                                                  value: _selectedPosition,
-                                                  items: ['Forward', 'Midfielder', 'Defender', 'Goalkeeper'],
-                                                  onChanged: (val) => setState(() => _selectedPosition = val),
-                                                ),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            Expanded(
+                                              child: _buildDropdown(
+                                                hint: 'Position',
+                                                value: _selectedPosition,
+                                                items: ['Forward', 'Midfielder', 'Defender', 'Goalkeeper'],
+                                                onChanged: (val) => setState(() => _selectedPosition = val),
                                               ),
-                                            ],
-                                          ),
-                                        ],
+                                            ),
+                                          ],
+                                        ),
 
                                         const SizedBox(height: 24),
                                         _buildLabel('Password', Icons.lock),
@@ -449,7 +396,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                           hint: 'Create password',
                                           isPassword: true,
                                           obscureText: _obscurePassword,
-                                          validator: (value) => value!.length < 6 ? 'Too short' : null,
+                                          validator: (value) {
+                                            if (value == null || value.trim().isEmpty) return 'Password is required';
+                                            if (value.length < 6) return 'Too short';
+                                            return null;
+                                          },
                                           togglePassword: () {
                                             setState(() {
                                               _obscurePassword = !_obscurePassword;
@@ -464,7 +415,10 @@ class _SignupScreenState extends State<SignupScreen> {
                                           hint: 'Confirm password',
                                           isPassword: true,
                                           obscureText: _obscurePassword,
-                                          validator: (value) => value!.isEmpty ? 'Required' : null,
+                                          validator: (value) {
+                                            if (value == null || value.trim().isEmpty) return 'Confirm password is required';
+                                            return null;
+                                          },
                                         ),
                                       ],
                                       
@@ -507,7 +461,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 ),
                           ),
                           const SizedBox(height: 40),
-                          _buildFooter(isDesktop),
+                          _buildFooter(false),
                           const SizedBox(height: 20),
                         ],
                       ),
@@ -519,38 +473,6 @@ class _SignupScreenState extends State<SignupScreen> {
           );
         },
       ),
-    );
-  }
-
-  Widget _buildLogo() {
-    return Column(
-      children: [
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              width: 160,
-              height: 160,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: goldColor.withValues(alpha: 0.2),
-                    blurRadius: 40,
-                    spreadRadius: 8,
-                  ),
-                ],
-              ),
-            ),
-            Image.asset(
-              'assets/logo.png',
-              width: 200,
-              height: 200,
-              fit: BoxFit.contain,
-            ),
-          ],
-        ),
-      ],
     );
   }
 
@@ -633,22 +555,30 @@ class _SignupScreenState extends State<SignupScreen> {
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: isSelected ? roleColor.withValues(alpha: 0.1) : Colors.transparent,
+                                  color: isSelected 
+                                      ? roleColor.withValues(alpha: 0.2) 
+                                      : Colors.black.withValues(alpha: 0.4),
                                   border: Border.all(
-                                    color: isSelected ? roleColor : Colors.white.withValues(alpha: 0.1),
-                                    width: 2,
+                                    color: isSelected ? roleColor : Colors.white.withValues(alpha: 0.3),
+                                    width: isSelected ? 3 : 1.5,
                                   ),
                                   boxShadow: isSelected ? [
                                     BoxShadow(
-                                      color: roleColor.withValues(alpha: 0.2),
-                                      blurRadius: 20,
-                                      spreadRadius: 2,
+                                      color: roleColor.withValues(alpha: 0.5),
+                                      blurRadius: 25,
+                                      spreadRadius: 4,
                                     )
-                                  ] : null,
+                                  ] : [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(alpha: 0.3),
+                                      blurRadius: 10,
+                                      spreadRadius: 1,
+                                    )
+                                  ],
                                 ),
                                 child: Icon(
                                   role['icon'],
-                                  color: isSelected ? roleColor : Colors.white,
+                                  color: isSelected ? roleColor : Colors.white.withValues(alpha: 0.7),
                                   size: 32,
                                 ),
                               ),
@@ -656,10 +586,17 @@ class _SignupScreenState extends State<SignupScreen> {
                               Text(
                                 role['name'],
                                 style: TextStyle(
-                                  color: isSelected ? roleColor : Colors.white.withValues(alpha: 0.5),
+                                  color: isSelected ? roleColor : Colors.white.withValues(alpha: 0.7),
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: 1.2,
+                                  shadows: [
+                                    Shadow(
+                                      color: Colors.black,
+                                      offset: const Offset(1, 1),
+                                      blurRadius: 3,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -818,7 +755,7 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   Widget _buildRegisterButton() {
-    bool isStepOne = _roles[_currentIndex]['name'] != 'ORGANIZER/HOST' && _isClubCodeStep;
+    bool isStepOne = _roles[_currentIndex]['name'] != 'ORGANISER/HOST' && _isClubCodeStep;
     final roleColor = _roles[_currentIndex]['color'] as Color;
     
     return GestureDetector(

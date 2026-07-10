@@ -2,6 +2,16 @@ import 'package:flutter/material.dart';
 import 'player_detail_page.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
+const List<Color> cardColors = [
+  Color(0xFF1E3A8A),
+  Color(0xFF3730A3),
+  Color(0xFF5B21B6),
+  Color(0xFF7C3AED),
+  Color(0xFF9D174D),
+  Color(0xFF991B1B),
+  Color(0xFF92400E),
+  Color(0xFF065F46),
+];
 
 class SquadPage extends StatefulWidget {
   const SquadPage({super.key});
@@ -18,8 +28,8 @@ class _SquadPageState extends State<SquadPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ListView(
+      physics: const BouncingScrollPhysics(),
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(25, 25, 25, 10),
@@ -84,26 +94,29 @@ class _SquadPageState extends State<SquadPage> {
             ),
           ),
 
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+            child: Column(
               children: [
                 _buildSquadCategory('GOALKEEPERS'),
-                _buildPlayerCard(context, 'Gurpreet Singh', 'GK', '1', 'assets/images/sunil.png'),
-                _buildPlayerCard(context, 'Amrinder Singh', 'GK', '23', 'assets/images/sunil.png'),
+                _buildPlayerCard(context, 'ALISSON BECKER', 'GK', '1', cardColors[0]),
+                _buildPlayerCard(context, 'THIBAUT COURTOIS', 'GK', '23', cardColors[1]),
                 const SizedBox(height: 25),
                 _buildSquadCategory('DEFENSE'),
-                _buildPlayerCard(context, 'Sandesh Jhingan', 'CB', '5', 'assets/images/sunil.png'),
-                _buildPlayerCard(context, 'Pritam Kotal', 'RB', '2', 'assets/images/sunil.png'),
-                _buildPlayerCard(context, 'Subhasish Bose', 'LB', '3', 'assets/images/sunil.png'),
+                _buildPlayerCard(context, 'RUBEN DIAS', 'CB', '3', cardColors[2]),
+                _buildPlayerCard(context, 'KYLE WALKER', 'RB', '2', cardColors[3]),
+                _buildPlayerCard(context, 'THEO HERNANDEZ', 'LB', '19', cardColors[4]),
+                _buildPlayerCard(context, 'VIRGIL VAN DIJK', 'CB', '04', cardColors[5]),
                 const SizedBox(height: 25),
                 _buildSquadCategory('MIDFIELD'),
-                _buildPlayerCard(context, 'Sahal Abdul Samad', 'CAM', '10', 'assets/images/sunil.png'),
-                _buildPlayerCard(context, 'Anirudh Thapa', 'CM', '7', 'assets/images/sunil.png'),
+                _buildPlayerCard(context, 'KEVIN DE BRUYNE', 'CAM', '17', cardColors[6]),
+                _buildPlayerCard(context, 'JUDE BELLINGHAM', 'CM', '05', cardColors[7]),
+                _buildPlayerCard(context, 'LUKA MODRIC', 'CM', '10', cardColors[0]),
                 const SizedBox(height: 25),
                 _buildSquadCategory('ATTACK'),
-                _buildPlayerCard(context, 'Sunil Chhetri', 'ST', '11', 'assets/images/sunil.png'),
-                _buildPlayerCard(context, 'L. Chhangte', 'RW', '17', 'assets/images/sunil.png'),
+                _buildPlayerCard(context, 'ERLING HAALAND', 'ST', '09', cardColors[1]),
+                _buildPlayerCard(context, 'KYLIAN MBAPPE', 'ST', '07', cardColors[2]),
+                _buildPlayerCard(context, 'CRISTIANO RONALDO', 'ST', '07', cardColors[3]),
                 const SizedBox(height: 50),
               ],
             ),
@@ -204,7 +217,7 @@ class _SquadPageState extends State<SquadPage> {
     );
   }
 
-  Widget _buildPlayerCard(BuildContext context, String name, String position, String number, String imagePath) {
+  Widget _buildPlayerCard(BuildContext context, String name, String position, String number, Color color) {
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
@@ -220,9 +233,9 @@ class _SquadPageState extends State<SquadPage> {
         margin: const EdgeInsets.only(bottom: 15),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: const Color(0xFF121212),
+          color: color.withOpacity(0.1),
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.white.withOpacity(0.03)),
+          border: Border.all(color: color.withOpacity(0.2)),
         ),
         child: Row(
           children: [
@@ -230,10 +243,13 @@ class _SquadPageState extends State<SquadPage> {
               height: 60,
               width: 60,
               decoration: BoxDecoration(
-                  color: const Color(0xFF1A1A1A),
+                  color: color,
                   borderRadius: BorderRadius.circular(18),
-                  image: DecorationImage(image: AssetImage(imagePath), fit: BoxFit.cover),
-                  border: Border.all(color: goldColor.withOpacity(0.1))),
+                  image: const DecorationImage(
+                    image: AssetImage('assets/images/sunil.png'),
+                    fit: BoxFit.cover,
+                  ),
+                  border: Border.all(color: Colors.white.withOpacity(0.1))),
             ),
             const SizedBox(width: 15),
             Expanded(

@@ -49,7 +49,7 @@ class _NewsSectionState extends State<NewsSection> {
   List<Widget> _buildNewsList() {
     return [
       _buildNewsCard('MATCH PREVIEW: CORE FC VS DUBAI CITY', 'Jan 30, 2024 • 5 min read', 'assets/images/league_green.png'),
-      _buildNewsCard('CHHETRI HITS 90 GOAL MARK', 'Jan 28, 2024 • 3 min read', 'assets/images/league_gold.png'),
+      _buildNewsCard('MESSI HITS 90 GOAL MARK', 'Jan 28, 2024 • 3 min read', 'assets/images/league_gold.png'),
       _buildNewsCard('NEW TRAINING FACILITY OPENED', 'Jan 25, 2024 • 4 min read', 'assets/images/league_blue.png'),
     ];
   }

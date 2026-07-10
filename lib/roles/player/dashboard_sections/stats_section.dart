@@ -13,22 +13,18 @@ class StatsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+        const Padding(
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
           child: Row(
             children: [
-              const Expanded(
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerLeft,
-                  child: Text('PERFORMANCE ANALYTICS',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 1.5)),
-                ),
-              ),
+              Icon(Icons.query_stats_rounded, color: goldColor, size: 20),
+              SizedBox(width: 10),
+              Text('PERFORMANCE ANALYTICS',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.5)),
             ],
           ),
         ),
@@ -39,11 +35,7 @@ class StatsSection extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 24),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.white.withValues(alpha: 0.1), Colors.transparent],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              color: const Color(0xFF121212),
               borderRadius: BorderRadius.circular(30),
               border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
             ),
@@ -73,10 +65,10 @@ class StatsSection extends StatelessWidget {
             crossAxisSpacing: 12,
             childAspectRatio: 2.5,
             children: [
-              _buildSecondaryCard('WIN RATE', '68%', Icons.trending_up, Colors.purpleAccent),
-              _buildSecondaryCard('YELLOW', '12', Icons.style, Colors.yellowAccent),
-              _buildSecondaryCard('RED CARDS', '2', Icons.style, Colors.redAccent),
-              _buildSecondaryCard('RATING', '8.4', Icons.star, Colors.orangeAccent),
+              _buildSecondaryColoredCard('WIN RATE', '68%', Icons.trending_up, [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)]),
+              _buildSecondaryColoredCard('YELLOW', '12', Icons.style, [const Color(0xFFFFB75E), const Color(0xFFED8F03)]),
+              _buildSecondaryColoredCard('RED CARDS', '2', Icons.style, [const Color(0xFFEE0979), const Color(0xFFF12711)]),
+              _buildSecondaryColoredCard('RATING', '8.4', Icons.star, [const Color(0xFF38EF7D), const Color(0xFF11998E)]),
             ],
           ),
         ),
@@ -84,10 +76,10 @@ class StatsSection extends StatelessWidget {
         const SizedBox(height: 35),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Text('Players Status',
+          child: Text('PLAYER STATUS',
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.5)),
         ),
@@ -135,21 +127,32 @@ class StatsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildSecondaryCard(String label, String value, IconData icon, Color color) {
+  Widget _buildSecondaryColoredCard(String label, String value, IconData icon, List<Color> colors) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: surfaceColor,
+        gradient: LinearGradient(
+          colors: [
+            colors[0].withValues(alpha: 0.8),
+            colors[1].withValues(alpha: 0.8),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+        image: const DecorationImage(
+          image: AssetImage('assets/images/img4.jpeg'),
+          fit: BoxFit.cover,
+          opacity: 0.3,
+        ),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1), shape: BoxShape.circle),
-            child: Icon(icon, color: color, size: 14),
+                color: Colors.white.withValues(alpha: 0.2), shape: BoxShape.circle),
+            child: Icon(icon, color: Colors.white, size: 14),
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -167,7 +170,7 @@ class StatsSection extends StatelessWidget {
                 FittedBox(
                   child: Text(label,
                       style: const TextStyle(
-                          color: Colors.white38,
+                          color: Colors.white70,
                           fontSize: 7,
                           fontWeight: FontWeight.bold)),
                 ),
@@ -190,12 +193,12 @@ class StatsSection extends StatelessWidget {
               Text(label,
                   style: const TextStyle(
                       color: Colors.white70,
-                      fontSize: 11,
+                      fontSize: 10,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 1)),
               Text('${(progress * 100).toInt()}%',
                   style: TextStyle(
-                      color: color, fontSize: 11, fontWeight: FontWeight.w900)),
+                      color: color, fontSize: 10, fontWeight: FontWeight.w900)),
             ],
           ),
           const SizedBox(height: 8),

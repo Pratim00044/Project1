@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:video_player/video_player.dart';
 import 'dart:math' as math;
 
 import '../roles/super_admin/super_admin_home.dart';
@@ -28,14 +27,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final List<Map<String, dynamic>> _roles = [
     {'name': 'PLAYER', 'icon': Icons.directions_run_outlined, 'color': Colors.blueAccent},
-    {'name': 'ORGANIZER/HOST', 'icon': Icons.groups_outlined, 'color': Colors.blueAccent},
+    {'name': 'ORGANISER/HOST', 'icon': Icons.groups_outlined, 'color': Colors.blueAccent},
     {'name': 'COACH', 'icon': Icons.sports_outlined, 'color': Colors.orangeAccent},
     {'name': 'MANAGER', 'icon': Icons.manage_accounts_outlined, 'color': Colors.purpleAccent},
     {'name': 'SUPER ADMIN', 'icon': Icons.admin_panel_settings_outlined, 'color': goldColor},
   ];
 
   late PageController _pageController;
-  late VideoPlayerController _videoController;
   int _currentIndex = 0;
   double _buttonScale = 1.0;
   double _linkScale = 1.0;
@@ -44,16 +42,9 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     _pageController = PageController(
-      viewportFraction: 0.25,
+      viewportFraction: 0.35,
       initialPage: _currentIndex,
     );
-    _videoController = VideoPlayerController.asset('assets/Video/Banner.mp4')
-      ..initialize().then((_) {
-        setState(() {});
-        _videoController.setLooping(true);
-        _videoController.setVolume(0);
-        _videoController.play();
-      });
   }
 
   @override
@@ -61,41 +52,36 @@ class _LoginScreenState extends State<LoginScreen> {
     _pageController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    _videoController.dispose();
     super.dispose();
   }
 
   void _handleLogin() {
-    final bool isOrganizer = _roles[_currentIndex]['name'] == 'ORGANIZER/HOST';
-    
-    if (isOrganizer || _formKey.currentState!.validate()) {
-      Widget homePage;
-      switch (_roles[_currentIndex]['name']) {
-        case 'SUPER ADMIN':
-          homePage = const SuperAdminHome();
-          break;
-        case 'ORGANIZER/HOST':
-          homePage = const OrganizationHome();
-          break;
-        case 'PLAYER':
-          homePage = const PlayerHome();
-          break;
-        case 'COACH':
-          homePage = const CoachHome();
-          break;
-        case 'MANAGER':
-          homePage = const ManagerHome();
-          break;
-        default:
-          homePage = const CoachHome();
-          break;
-      }
-      
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => homePage),
-      );
+    Widget homePage;
+    switch (_roles[_currentIndex]['name']) {
+      case 'SUPER ADMIN':
+        homePage = const SuperAdminHome();
+        break;
+      case 'ORGANISER/HOST':
+        homePage = const OrganizationHome();
+        break;
+      case 'PLAYER':
+        homePage = const PlayerHome();
+        break;
+      case 'COACH':
+        homePage = const CoachHome();
+        break;
+      case 'MANAGER':
+        homePage = const ManagerHome();
+        break;
+      default:
+        homePage = const CoachHome();
+        break;
     }
+    
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => homePage),
+    );
   }
 
   @override
@@ -104,44 +90,21 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: darkBg,
       body: LayoutBuilder(
         builder: (context, constraints) {
-          bool isDesktop = constraints.maxWidth > 900;
-          double formWidth = isDesktop ? 450 : constraints.maxWidth;
-          
-          double currentFraction = isDesktop ? 0.2 : 0.35; 
-          if (_pageController.viewportFraction != currentFraction) {
-            _pageController = PageController(
-              viewportFraction: currentFraction,
-              initialPage: _currentIndex,
-            );
-          }
+          double formWidth = constraints.maxWidth;
           
           return Stack(
             children: [
               Positioned.fill(
-                child: FittedBox(
+                child: Image.asset(
+                  'assets/images/img.png',
                   fit: BoxFit.cover,
-                  child: SizedBox(
-                    width: _videoController.value.size.width > 0 ? _videoController.value.size.width : 1920,
-                    height: _videoController.value.size.height > 0 ? _videoController.value.size.height : 1080,
-                    child: VideoPlayer(_videoController),
-                  ),
                 ),
               ),
-              if (isDesktop)
-                Positioned.fill(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        colors: [
-                          Colors.black.withValues(alpha: 0.2),
-                          Colors.black.withValues(alpha: 0.9),
-                        ],
-                      ),
-                    ),
-                  ),
+              Positioned.fill(
+                child: Container(
+                  color: Colors.black.withValues(alpha: 0.6),
                 ),
+              ),
 
               SafeArea(
                 child: ScrollConfiguration(
@@ -152,11 +115,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(height: 40),
-                          _buildLogo(),
-                          
                           const SizedBox(height: 20),
-                          _buildInteractiveCurvedSelector(isDesktop),
+                          Image.asset(
+                            'assets/logo.png',
+                            width: 150,
+                            height: 150,
+                            fit: BoxFit.contain,
+                          ),
+                          const SizedBox(height: 10),
+                          _buildInteractiveCurvedSelector(false),
                           
                           const SizedBox(height: 20),
                           
@@ -174,11 +141,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                     controller: _emailController,
                                     hint: 'Enter your email',
                                     keyboardType: TextInputType.emailAddress,
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) return 'Required';
-                                      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) return 'Invalid email';
-                                      return null;
-                                    },
                                   ),
                                   const SizedBox(height: 24),
                                   _buildLabel('Password', Icons.lock),
@@ -188,7 +150,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                     hint: 'Enter your password',
                                     isPassword: true,
                                     obscureText: _obscurePassword,
-                                    validator: (value) => value!.isEmpty ? 'Required' : null,
                                     togglePassword: () {
                                       setState(() {
                                         _obscurePassword = !_obscurePassword;
@@ -239,47 +200,50 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                     ],
                                   ),
+
+                                  if (_roles[_currentIndex]['name'] == 'PLAYER') ...[
+                                    const SizedBox(height: 20),
+                                    Center(
+                                      child: Wrap(
+                                        alignment: WrapAlignment.center,
+                                        crossAxisAlignment: WrapCrossAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Don't have an account? ",
+                                            style: TextStyle(color: Colors.white.withValues(alpha: 0.6), fontSize: 13),
+                                          ),
+                                          GestureDetector(
+                                            onTapDown: (_) => setState(() => _linkScale = 0.90),
+                                            onTapUp: (_) => setState(() => _linkScale = 1.0),
+                                            onTapCancel: () => setState(() => _linkScale = 1.0),
+                                            onTap: () => Navigator.pushNamed(context, '/signup'),
+                                            child: AnimatedScale(
+                                              scale: _linkScale,
+                                              duration: const Duration(milliseconds: 100),
+                                              child: const Text(
+                                                'REGISTER',
+                                                style: TextStyle(
+                                                  color: goldColor,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 13,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                   
                                   const SizedBox(height: 30),
                                   _buildLoginButton(),
                                   const SizedBox(height: 30),
-                                  
-                                  Center(
-                                    child: Wrap(
-                                      alignment: WrapAlignment.center,
-                                      crossAxisAlignment: WrapCrossAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Don't have an account? ",
-                                          style: TextStyle(color: Colors.white.withValues(alpha: 0.6), fontSize: 14),
-                                        ),
-                                        GestureDetector(
-                                          onTapDown: (_) => setState(() => _linkScale = 0.90),
-                                          onTapUp: (_) => setState(() => _linkScale = 1.0),
-                                          onTapCancel: () => setState(() => _linkScale = 1.0),
-                                          onTap: () => Navigator.pushNamed(context, '/signup'),
-                                          child: AnimatedScale(
-                                            scale: _linkScale,
-                                            duration: const Duration(milliseconds: 100),
-                                            child: const Text(
-                                              'REGISTER',
-                                              style: TextStyle(
-                                                color: goldColor,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),
                           ),
                           const SizedBox(height: 40),
-                          _buildFooter(isDesktop),
+                          _buildFooter(false),
                           const SizedBox(height: 20),
                         ],
                       ),
@@ -291,38 +255,6 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         },
       ),
-    );
-  }
-
-  Widget _buildLogo() {
-    return Column(
-      children: [
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              width: 160,
-              height: 160,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: goldColor.withValues(alpha: 0.2),
-                    blurRadius: 40,
-                    spreadRadius: 8,
-                  ),
-                ],
-              ),
-            ),
-            Image.asset(
-              'assets/logo.png',
-              width: 200,
-              height: 200,
-              fit: BoxFit.contain,
-            ),
-          ],
-        ),
-      ],
     );
   }
 
@@ -403,22 +335,30 @@ class _LoginScreenState extends State<LoginScreen> {
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: isSelected ? roleColor.withValues(alpha: 0.1) : Colors.transparent,
+                                  color: isSelected 
+                                      ? roleColor.withValues(alpha: 0.2) 
+                                      : Colors.black.withValues(alpha: 0.4),
                                   border: Border.all(
-                                    color: isSelected ? roleColor : Colors.white.withValues(alpha: 0.1),
-                                    width: 2,
+                                    color: isSelected ? roleColor : Colors.white.withValues(alpha: 0.3),
+                                    width: isSelected ? 3 : 1.5,
                                   ),
                                   boxShadow: isSelected ? [
                                     BoxShadow(
-                                      color: roleColor.withValues(alpha: 0.2),
-                                      blurRadius: 20,
-                                      spreadRadius: 2,
+                                      color: roleColor.withValues(alpha: 0.5),
+                                      blurRadius: 25,
+                                      spreadRadius: 4,
                                     )
-                                  ] : null,
+                                  ] : [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(alpha: 0.3),
+                                      blurRadius: 10,
+                                      spreadRadius: 1,
+                                    )
+                                  ],
                                 ),
                                 child: Icon(
                                   role['icon'],
-                                  color: isSelected ? roleColor : Colors.white,
+                                  color: isSelected ? roleColor : Colors.white.withValues(alpha: 0.7),
                                   size: 32,
                                 ),
                               ),
@@ -426,10 +366,17 @@ class _LoginScreenState extends State<LoginScreen> {
                               Text(
                                 role['name'],
                                 style: TextStyle(
-                                  color: isSelected ? roleColor : Colors.white.withValues(alpha: 0.5),
+                                  color: isSelected ? roleColor : Colors.white.withValues(alpha: 0.7),
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: 1.2,
+                                  shadows: [
+                                    Shadow(
+                                      color: Colors.black,
+                                      offset: const Offset(1, 1),
+                                      blurRadius: 3,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],

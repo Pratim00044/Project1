@@ -15,7 +15,7 @@ class _StatsTrackerPageState extends State<StatsTrackerPage> {
     {'name': 'Ryan Cooper', 'gp': 12, 'goals': 15, 'assists': 4, 'yellow': 2, 'red': 0},
     {'name': 'Ahmed Rashid', 'gp': 10, 'goals': 8, 'assists': 12, 'yellow': 1, 'red': 0},
     {'name': 'Carlos Silva', 'gp': 11, 'goals': 1, 'assists': 2, 'yellow': 4, 'red': 1},
-    {'name': 'Sunil Chhetri', 'gp': 9, 'goals': 14, 'assists': 3, 'yellow': 0, 'red': 0},
+    {'name': 'Cristiano Ronaldo', 'gp': 9, 'goals': 14, 'assists': 3, 'yellow': 0, 'red': 0},
   ];
 
   @override

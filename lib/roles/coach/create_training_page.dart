@@ -26,8 +26,8 @@ class _CreateTrainingPageState extends State<CreateTrainingPage> {
 
   final List<String> _myPlayers = [
     'Gurpreet Singh Sandhu', 'Amrinder Singh', 'Sandesh Jhingan', 
-    'Pritam Kotal', 'Subhasish Bose', 'Sahal Abdul Samad', 
-    'Anirudh Thapa', 'Brandon Fernandes', 'Sunil Chhetri', 'L. Chhangte'
+    'Kyle Walker', 'Andrew Robertson', 'Kevin De Bruyne',
+    'Luka Modrić', 'Bruno Fernandes', 'Cristiano Ronaldo', 'Kylian Mbappé'
   ];
 
   final List<String> _availableTeams = [

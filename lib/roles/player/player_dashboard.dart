@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 import 'dashboard_sections/overview_section.dart';
 import 'dashboard_sections/stats_section.dart';
 
@@ -18,23 +17,14 @@ class PlayerDashboard extends StatefulWidget {
 class _PlayerDashboardState extends State<PlayerDashboard> {
   String _activeTab = 'Overview';
   final List<String> _tabHistory = ['Overview'];
-  late VideoPlayerController _videoController;
 
   @override
   void initState() {
     super.initState();
-    _videoController = VideoPlayerController.asset('assets/Video/Banner.mp4')
-      ..initialize().then((_) {
-        setState(() {});
-        _videoController.setLooping(true);
-        _videoController.setVolume(0);
-        _videoController.play();
-      });
   }
 
   @override
   void dispose() {
-    _videoController.dispose();
     super.dispose();
   }
 
@@ -49,52 +39,22 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: _activeTab == 'Overview' && _tabHistory.length <= 1,
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop) return;
-        if (_tabHistory.length > 1) {
-          setState(() {
-            _tabHistory.removeLast();
-            _activeTab = _tabHistory.last;
-          });
-        }
-      },
-      child: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
-              child: _buildUniqueHeroCard(),
-            ),
+    return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
+      slivers: [
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
+            child: _buildUniqueHeroCard(),
           ),
-
-      SliverToBoxAdapter(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildTabLink('Overview'),
-                  const SizedBox(width: 35),
-                  _buildTabLink('Stats'),
-                ],
-              ),
-            );
-          },
         ),
-      ),
 
-      SliverToBoxAdapter(
-        child: _buildActiveContent(),
-      ),
+        const SliverToBoxAdapter(
+          child: OverviewSection(),
+        ),
 
-      const SliverToBoxAdapter(child: SizedBox(height: 50)),
-        ],
-      ),
+        const SliverToBoxAdapter(child: SizedBox(height: 50)),
+      ],
     );
   }
 
@@ -117,124 +77,119 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
       width: double.infinity,
       height: 180,
       decoration: BoxDecoration(
-        color: cardLightColor,
-        borderRadius: BorderRadius.circular(40),
+        gradient: LinearGradient(
+          colors: [
+            const Color(0xFFFFB75E).withValues(alpha: 0.8),
+            const Color(0xFFED8F03).withValues(alpha: 0.8),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(30),
+        image: const DecorationImage(
+          image: AssetImage('assets/images/img2.jpeg'),
+          fit: BoxFit.cover,
+          opacity: 0.4,
+        ),
         boxShadow: [
           BoxShadow(
-            color: cardLightColor.withValues(alpha: 0.2),
-            blurRadius: 40,
-            offset: const Offset(0, 15),
+            color: const Color(0xFFED8F03).withValues(alpha: 0.3),
+            blurRadius: 30,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(40),
-        child: Stack(
-          children: [
-            if (_videoController.value.isInitialized)
-              SizedBox.expand(
-                child: FittedBox(
-                  fit: BoxFit.cover,
-                  child: SizedBox(
-                    width: _videoController.value.size.width,
-                    height: _videoController.value.size.height,
-                    child: VideoPlayer(_videoController),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(25),
+            child: Row(
+              children: [
+                Container(
+                  width: 95,
+                  height: 95,
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withValues(alpha: 0.4),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.6), width: 2.5),
                   ),
-                ),
-              )
-            else
-              Container(color: cardLightColor),
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [
-                    cardLightColor.withValues(alpha: 0.8),
-                    cardLightColor.withValues(alpha: 0.2),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(25),
-              child: Row(
-                children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
+                  child: Container(
+                    decoration: const BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.black.withValues(alpha: 0.05), width: 4),
-                      image: const DecorationImage(
+                      image: DecorationImage(
                         image: AssetImage('assets/images/sunil.png'),
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                          'Sunil',
-                          style: TextStyle(
-                            color: Colors.black54,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w300,
-                            letterSpacing: -0.5,
-                          ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Welcome back,',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.5,
                         ),
-                        const FittedBox(
-                          fit: BoxFit.scaleDown,
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Chhetri',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 36,
-                              fontWeight: FontWeight.w900,
-                              height: 1.0,
-                              letterSpacing: -1,
+                      ),
+                      const Text(
+                        'LIONEL MESSI',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 26,
+                          fontWeight: FontWeight.w900,
+                          height: 1.0,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      const Text(
+                        'ACADEMY PLAYER',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 9,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.5,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.shield, size: 12, color: Colors.black87),
+                            const SizedBox(width: 6),
+                            const Text(
+                              'CORE FC',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 0.5,
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                        const SizedBox(height: 12),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: Colors.black.withValues(alpha: 0.08),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                Icon(Icons.shield, color: Colors.black45, size: 16),
-                                SizedBox(width: 8),
-                                Text(
-                                  'CORE FC',
-                                  style: TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -5,6 +5,9 @@ import 'system_analytics_page.dart';
 import 'coach_recruitment_hub.dart';
 import 'premium_features_page.dart';
 import 'audit_logs_page.dart';
+import 'admin_create_match_page.dart';
+import 'admin_arrange_game_page.dart';
+import 'admin_notifications_page.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
@@ -44,7 +47,7 @@ class SuperAdminHome extends StatelessWidget {
                               gradient: LinearGradient(
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
-                                colors: [Colors.transparent, darkBg.withOpacity(0.8), darkBg],
+                                colors: [Colors.transparent, darkBg.withValues(alpha: 0.8), darkBg],
                               ),
                             ),
                           ),
@@ -84,10 +87,28 @@ class SuperAdminHome extends StatelessWidget {
                         const SizedBox(height: 20),
                         _buildAdminActionCard(
                           context,
+                          Icons.sports_soccer_rounded, 
+                          'CREATE NEW MATCH',
+                          'Schedule games (Organizer mode)', 
+                          [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)],
+                          () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminCreateMatchPage()))
+                        ),
+                        const SizedBox(height: 15),
+                        _buildAdminActionCard(
+                          context,
+                          Icons.event_note_rounded, 
+                          'ARRANGE GAME',
+                          'Coordinate fixtures between clubs', 
+                          [const Color(0xFFF093FB), const Color(0xFFF5576C)],
+                          () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminArrangeGamePage()))
+                        ),
+                        const SizedBox(height: 15),
+                        _buildAdminActionCard(
+                          context,
                           Icons.how_to_reg_rounded, 
                           'VERIFY ORGANIZERS/HOSTS',
                           '3 Pending Applications', 
-                          Colors.blueAccent,
+                          [const Color(0xFF007CFE), const Color(0xFF004A99)],
                           () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VerifyOrganizersPage()))
                         ),
                         const SizedBox(height: 15),
@@ -96,7 +117,7 @@ class SuperAdminHome extends StatelessWidget {
                           Icons.contact_page_outlined, 
                           'COACH RECRUITMENT HUB', 
                           'Access coach CVs & recruitment data', 
-                          Colors.purpleAccent,
+                          [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)],
                           () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CoachRecruitmentHub()))
                         ),
                         const SizedBox(height: 15),
@@ -105,7 +126,7 @@ class SuperAdminHome extends StatelessWidget {
                           Icons.star_outline_rounded, 
                           'PREMIUM ACADEMY FEATURES', 
                           'Manage owner subscriptions & billing', 
-                          goldColor,
+                          [const Color(0xFFFFB75E), const Color(0xFFED8F03)],
                           () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PremiumFeaturesPage()))
                         ),
                         const SizedBox(height: 15),
@@ -114,7 +135,7 @@ class SuperAdminHome extends StatelessWidget {
                           Icons.business_rounded, 
                           'MANAGE CLUBS & LOGOS', 
                           'Edit Names & Visual Identity', 
-                          goldColor,
+                          [const Color(0xFF00C6FF), const Color(0xFF0072FF)],
                           () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ManageClubsPage()))
                         ),
                         const SizedBox(height: 15),
@@ -123,7 +144,7 @@ class SuperAdminHome extends StatelessWidget {
                           Icons.analytics_outlined, 
                           'SYSTEM ANALYTICS', 
                           'Global performance metrics', 
-                          Colors.greenAccent,
+                          [const Color(0xFF38EF7D), const Color(0xFF11998E)],
                           () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SystemAnalyticsPage()))
                         ),
                         const SizedBox(height: 15),
@@ -132,7 +153,7 @@ class SuperAdminHome extends StatelessWidget {
                           Icons.security_rounded, 
                           'AUDIT LOGS', 
                           'Monitor administrative actions', 
-                          Colors.redAccent,
+                          [const Color(0xFFEE0979), const Color(0xFFF12711)],
                           () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AuditLogsPage()))
                         ),
                         const SizedBox(height: 60),
@@ -144,6 +165,42 @@ class SuperAdminHome extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildAlertItem(String msg, String category, String priority, List<Color> colors) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: colors,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(color: colors.first.withValues(alpha: 0.1), blurRadius: 10, offset: const Offset(0, 4))
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.2), shape: BoxShape.circle),
+            child: const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 20),
+          ),
+          const SizedBox(width: 15),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(msg, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
+                Text('$category | Priority: $priority', style: const TextStyle(color: Colors.white70, fontSize: 10)),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -162,6 +219,10 @@ class SuperAdminHome extends StatelessWidget {
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.5)),
           const Spacer(),
+          IconButton(
+            icon: const Icon(Icons.notifications_outlined, color: goldColor),
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminNotificationsPage())),
+          ),
           Builder(
             builder: (context) => IconButton(
               icon: const Icon(Icons.menu, color: goldColor),
@@ -264,22 +325,28 @@ class SuperAdminHome extends StatelessWidget {
     );
   }
 
-  Widget _buildAdminActionCard(BuildContext context, IconData icon, String title, String sub, Color color, VoidCallback onTap) {
+  Widget _buildAdminActionCard(BuildContext context, IconData icon, String title, String sub, List<Color> colors, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: surfaceColor,
+          gradient: LinearGradient(
+            colors: colors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.white.withOpacity(0.03)),
+          boxShadow: [
+            BoxShadow(color: colors.first.withValues(alpha: 0.2), blurRadius: 10, offset: const Offset(0, 4))
+          ],
         ),
         child: Row(
           children: [
             Container(
               padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(15)),
-              child: Icon(icon, color: color, size: 26),
+              decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(15)),
+              child: Icon(icon, color: Colors.white, size: 26),
             ),
             const SizedBox(width: 20),
             Expanded(
@@ -288,11 +355,11 @@ class SuperAdminHome extends StatelessWidget {
                 children: [
                   Text(title, style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 4),
-                  Text(sub, style: const TextStyle(color: Colors.white38, fontSize: 11)),
+                  Text(sub, style: const TextStyle(color: Colors.white70, fontSize: 11)),
                 ],
               ),
             ),
-            const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white10, size: 14),
+            const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white, size: 14),
           ],
         ),
       ),

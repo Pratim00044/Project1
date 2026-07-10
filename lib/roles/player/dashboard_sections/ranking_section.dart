@@ -14,21 +14,27 @@ class RankingSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('GLOBAL RANKINGS',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.5)),
+          const Row(
+            children: [
+              Icon(Icons.emoji_events_rounded, color: goldColor, size: 20),
+              SizedBox(width: 10),
+              Text('GLOBAL RANKINGS',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.5)),
+            ],
+          ),
           const SizedBox(height: 20),
-          _buildRankingCard('Current Rank', '#14', 'Top 5% in Region', Icons.trending_up, Colors.greenAccent),
+          _buildRankingColoredCard(0, 'Current Rank', '#14', 'Top 5% in Region', Icons.trending_up, [const Color(0xFF007CFE), const Color(0xFF004A99)]),
           const SizedBox(height: 15),
-          _buildRankingCard('Season Points', '2,450', '+250 from last match', Icons.bolt, Colors.blueAccent),
+          _buildRankingColoredCard(1, 'Season Points', '2,450', '+250 from last match', Icons.bolt, [const Color(0xFF38EF7D), const Color(0xFF11998E)]),
           const SizedBox(height: 30),
           const Text('LEADERBOARD',
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.5)),
           const SizedBox(height: 15),
@@ -46,33 +52,44 @@ class RankingSection extends StatelessWidget {
     );
   }
 
-  Widget _buildRankingCard(String label, String value, String sub, IconData icon, Color color) {
+  Widget _buildRankingColoredCard(int index, String label, String value, String sub, IconData icon, List<Color> colors) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: surfaceColor,
+        gradient: LinearGradient(
+          colors: [
+            colors[0].withValues(alpha: 0.8),
+            colors[1].withValues(alpha: 0.8),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.03)),
+        image: DecorationImage(
+          image: AssetImage('assets/images/img${(index % 4) + 1}.jpeg'),
+          fit: BoxFit.cover,
+          opacity: 0.4,
+        ),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(color: color.withValues(alpha: 0.1), shape: BoxShape.circle),
-            child: Icon(icon, color: color, size: 24),
+            decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), shape: BoxShape.circle),
+            child: Icon(icon, color: Colors.white, size: 24),
           ),
           const SizedBox(width: 20),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: const TextStyle(color: Colors.white38, fontSize: 11)),
+                Text(label, style: const TextStyle(color: Colors.white70, fontSize: 11)),
                 const SizedBox(height: 4),
                 Text(value, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 24)),
               ],
             ),
           ),
-          Text(sub, style: TextStyle(color: color.withValues(alpha: 0.7), fontSize: 10, fontWeight: FontWeight.bold)),
+          Text(sub, style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
         ],
       ),
     );
@@ -97,7 +114,7 @@ class RankingSection extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: isTop ? Colors.white.withValues(alpha: 0.05) : surfaceColor,
+            color: isTop ? Colors.white.withValues(alpha: 0.05) : const Color(0xFF121212),
             borderRadius: BorderRadius.circular(15),
           ),
           child: Row(

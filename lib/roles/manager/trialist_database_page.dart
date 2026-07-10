@@ -52,10 +52,10 @@ class TrialistDatabasePage extends StatelessWidget {
               itemCount: 4,
               itemBuilder: (context, index) {
                 final trialists = [
-                  {'name': 'Anirudh Thapa (Trialist)', 'age': '19', 'pos': 'CM', 'data': '88 Pace | 82 Pass', 'fee': '150 AED'},
-                  {'name': 'Sahal Abdul Samad (Trialist)', 'age': '18', 'pos': 'AM', 'data': '90 Drib | 85 Skill', 'fee': '200 AED'},
-                  {'name': 'L. Chhangte (Trialist)', 'age': '20', 'pos': 'LW', 'data': '95 Pace | 84 Cross', 'fee': '180 AED'},
-                  {'name': 'Akash Mishra (Trialist)', 'age': '21', 'pos': 'LB', 'data': '87 Stam | 89 Def', 'fee': '200 AED'},
+                  {'name': 'Marcus Rashford (Trialist)', 'age': '19', 'pos': 'CM', 'data': '88 Pace | 82 Pass', 'fee': '150 AED'},
+                  {'name': 'Bukayo Saka (Trialist)', 'age': '18', 'pos': 'AM', 'data': '90 Drib | 85 Skill', 'fee': '200 AED'},
+                  {'name': 'Vinícius Júnior (Trialist)', 'age': '20', 'pos': 'LW', 'data': '95 Pace | 84 Cross', 'fee': '180 AED'},
+                  {'name': 'Alphonso Davies (Trialist)', 'age': '21', 'pos': 'LB', 'data': '87 Stam | 89 Def', 'fee': '200 AED'},
                 ];
                 final t = trialists[index];
                 return Container(

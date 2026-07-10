@@ -326,115 +326,123 @@ class _PlayerDetailPageState extends State<PlayerDetailPage> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: darkBg,
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              expandedHeight: 300,
-              pinned: true,
-              backgroundColor: const Color(0xFF0D0D0D),
-              leading: IconButton(icon: const Icon(Icons.arrow_back, color: Colors.white), onPressed: () => Navigator.pop(context)),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.chat_bubble_outline, color: goldColor),
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(playerName: widget.playerName))),
-                ),
-              ],
-              flexibleSpace: FlexibleSpaceBar(
-                background: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [Colors.transparent, darkBg.withOpacity(0.8), darkBg],
-                        ),
-                      ),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 40),
-                        Stack(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(color: goldColor, width: 2),
-                                boxShadow: [BoxShadow(color: goldColor.withOpacity(0.2), blurRadius: 20)],
-                              ),
-                              child: const CircleAvatar(
-                                radius: 50,
-                                backgroundImage: AssetImage('assets/images/sunil.png'),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 15),
-                        Text(widget.playerName.toUpperCase(), style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900, letterSpacing: 1)),
-                        const SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _buildHeaderPill(widget.position),
-                            const SizedBox(width: 8),
-                            _buildHeaderPill('#${widget.playerNumber}'),
-                            const SizedBox(width: 8),
-                            _buildHeaderPill('TOWN SQUARE'),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Container(
-                color: darkBg,
-                child: TabBar(
-                  controller: _tabController,
-                  indicatorColor: goldColor,
-                  labelColor: goldColor,
-                  unselectedLabelColor: Colors.white38,
-                  labelStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1),
-                  tabs: const [
-                    Tab(text: 'SKILLS'),
-                    Tab(text: 'FITNESS'),
-                    Tab(text: 'ATTENDANCE'),
-                  ],
-                ),
-              ),
-            ),
-          ];
-        },
-        body: TabBarView(
-          controller: _tabController,
-          children: [
-            _buildSkillsTab(),
-            _buildFitnessTab(),
-            _buildAttendanceTab(),
-          ],
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/Core FC Theme .jpeg'),
+          fit: BoxFit.cover,
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
-        child: ElevatedButton(
-          onPressed: _showFitnessDialog,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: goldColor,
-            minimumSize: const Size(double.infinity, 65),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35)),
-            elevation: 10,
-            shadowColor: goldColor.withOpacity(0.3),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              SliverAppBar(
+                expandedHeight: 300,
+                pinned: true,
+                backgroundColor: const Color(0xFF0D0D0D),
+                elevation: 0,
+                leading: IconButton(icon: const Icon(Icons.arrow_back, color: Colors.white), onPressed: () => Navigator.pop(context)),
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.chat_bubble_outline, color: goldColor),
+                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(playerName: widget.playerName))),
+                  ),
+                ],
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Colors.transparent, darkBg.withOpacity(0.8), darkBg],
+                          ),
+                        ),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 40),
+                          Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: goldColor, width: 2),
+                              boxShadow: [BoxShadow(color: goldColor.withOpacity(0.2), blurRadius: 20)],
+                            ),
+                            child: const CircleAvatar(
+                              radius: 50,
+                              backgroundImage: AssetImage('assets/images/sunil.png'),
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          Text(widget.playerName.toUpperCase(), style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              _buildHeaderPill(widget.position),
+                              const SizedBox(width: 8),
+                              _buildHeaderPill('#${widget.playerNumber}'),
+                              const SizedBox(width: 8),
+                              _buildHeaderPill('TOWN SQUARE'),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Container(
+                  color: darkBg,
+                  child: TabBar(
+                    controller: _tabController,
+                    indicatorColor: goldColor,
+                    labelColor: goldColor,
+                    unselectedLabelColor: Colors.white38,
+                    labelStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1),
+                    tabs: const [
+                      Tab(text: 'SKILLS'),
+                      Tab(text: 'FITNESS'),
+                      Tab(text: 'ATTENDANCE'),
+                    ],
+                  ),
+                ),
+              ),
+            ];
+          },
+          body: Container(
+            color: darkBg,
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                _buildSkillsTab(),
+                _buildFitnessTab(),
+                _buildAttendanceTab(),
+              ],
+            ),
           ),
-          child: const Text('NEW EVALUATION', 
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 16, letterSpacing: 1)),
+        ),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
+          child: ElevatedButton(
+            onPressed: _showFitnessDialog,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: goldColor,
+              minimumSize: const Size(double.infinity, 65),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35)),
+              elevation: 10,
+              shadowColor: goldColor.withOpacity(0.3),
+            ),
+            child: const Text('NEW EVALUATION', 
+              style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 16, letterSpacing: 1)),
+          ),
         ),
       ),
     );
@@ -476,7 +484,6 @@ class _PlayerDetailPageState extends State<PlayerDetailPage> with SingleTickerPr
     Color color = _getSkillColor(label);
     double progress = rating / 5.0;
     
-
     Widget? trailing;
     if (label.toLowerCase().contains('readiness')) {
       Color lightColor = rating >= 4.0 ? Colors.green : (rating >= 2.5 ? Colors.orange : Colors.red);
@@ -487,7 +494,7 @@ class _PlayerDetailPageState extends State<PlayerDetailPage> with SingleTickerPr
     }
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
       decoration: BoxDecoration(
         color: surfaceColor,
         borderRadius: BorderRadius.circular(24),
@@ -495,7 +502,7 @@ class _PlayerDetailPageState extends State<PlayerDetailPage> with SingleTickerPr
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -519,7 +526,7 @@ class _PlayerDetailPageState extends State<PlayerDetailPage> with SingleTickerPr
               Text('${(progress * 100).toInt()}%', style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.w900)),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 15),
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: LinearProgressIndicator(

@@ -3,10 +3,11 @@ import 'player_dashboard.dart' hide surfaceColor;
 import 'player_team.dart' hide surfaceColor;
 import 'player_games.dart';
 import 'player_profile.dart';
-import 'professional_pathway.dart';
 import 'profile_details/security_detail.dart';
 import 'profile_details/help_center_detail.dart';
+import 'profile_details/notifications_page.dart';
 import 'drawer_pages.dart';
+import 'profile_menu_pages.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
@@ -41,38 +42,31 @@ class PlayerHomeState extends State<PlayerHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/Core FC Theme .jpeg'),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: PopScope(
-        canPop: _selectedIndex == 0 && _history.length <= 1,
-        onPopInvokedWithResult: (didPop, result) {
-          if (didPop) return;
-          if (_history.length > 1) {
-            setState(() {
-              _history.removeLast();
-              _selectedIndex = _history.last;
-            });
-          }
-        },
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: null,
-          endDrawer: _buildDrawer(context),
-          body: SafeArea(
-            bottom: false,
-            child: Column(
-              children: [
-                _buildHeader(context),
-                Expanded(child: _pages[_selectedIndex]),
-              ],
-            ),
+    return PopScope(
+      canPop: _selectedIndex == 0 && _history.length <= 1,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        if (_history.length > 1) {
+          setState(() {
+            _history.removeLast();
+            _selectedIndex = _history.last;
+          });
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        appBar: null,
+        endDrawer: _buildDrawer(context),
+        body: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
+              _buildHeader(context),
+              Expanded(child: _pages[_selectedIndex]),
+            ],
           ),
-          bottomNavigationBar: Container(
+        ),
+        bottomNavigationBar: Container(
           decoration: BoxDecoration(
             border: Border(top: BorderSide(color: goldColor.withValues(alpha: 0.1), width: 0.5)),
             color: const Color(0xFF0D0D0D),
@@ -99,9 +93,8 @@ class PlayerHomeState extends State<PlayerHome> {
           ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   Widget _buildDrawer(BuildContext context) {
     return Drawer(
@@ -124,8 +117,8 @@ class PlayerHomeState extends State<PlayerHome> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text('SUNIL CHHETRI', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-                              Text('Rank #14 | Global', style: TextStyle(color: goldColor.withValues(alpha: 0.7), fontSize: 11)),
+                              const Text('LIONEL MESSI', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                              Text('Rank #1 | Global', style: TextStyle(color: goldColor.withValues(alpha: 0.7), fontSize: 11)),
                             ],
                           ),
                         ),
@@ -134,10 +127,20 @@ class PlayerHomeState extends State<PlayerHome> {
                   ),
                   const Padding(
                     padding: EdgeInsets.fromLTRB(20, 25, 20, 10),
+                    child: Text('PLAYER MENU', style: TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
+                  ),
+                  _buildDrawerItem(Icons.auto_graph_rounded, 'Professional Pathway', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfessionalPathwayScreen()))),
+                  _buildDrawerItem(Icons.sports_soccer_rounded, 'Match History', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PlayerMatchesScreen()))),
+                  _buildDrawerItem(Icons.analytics_outlined, 'Performance Stats', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PlayerStatsScreen()))),
+                  _buildDrawerItem(Icons.how_to_reg_rounded, 'Attendance History', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PlayerAttendanceScreen()))),
+                  _buildDrawerItem(Icons.feedback_outlined, 'Coach Feedback', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PlayerFeedbackScreen()))),
+
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(20, 25, 20, 10),
                     child: Text('APP SETTINGS', style: TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
                   ),
                   _buildDrawerItem(Icons.person_outline_rounded, 'Account Preferences', () {}),
-                  _buildDrawerItem(Icons.notifications_none_rounded, 'Notifications', () {}),
+                  _buildDrawerItem(Icons.notifications_none_rounded, 'Notifications', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationsPage()))),
                   _buildDrawerItem(Icons.verified_user_outlined, 'Privacy & Security', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SecurityDetail()))),
                   _buildDrawerItem(Icons.language_rounded, 'Language', () {}),
                   
@@ -145,6 +148,7 @@ class PlayerHomeState extends State<PlayerHome> {
                     padding: EdgeInsets.fromLTRB(20, 25, 20, 10),
                     child: Text('OTHER', style: TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
                   ),
+                  _buildDrawerItem(Icons.play_circle_outline_rounded, 'Highlight Videos', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VideosPage()))),
                   _buildDrawerItem(Icons.newspaper_rounded, 'Latest News', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NewsPage()))),
                   _buildDrawerItem(Icons.fitness_center_rounded, 'Academy Sessions', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SessionsPage()))),
                   _buildDrawerItem(Icons.emoji_events_rounded, 'Global Rankings', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const RankingsPage()))),
@@ -209,17 +213,28 @@ class PlayerHomeState extends State<PlayerHome> {
 
   Widget _buildHeader(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+      padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
       child: Row(
         children: [
-          Image.asset('assets/logo.png', height: 35, fit: BoxFit.contain),
-          const SizedBox(width: 10),
-          const Text('STATIXA PLAYER',
-              style: TextStyle(
-                  color: Color(0xFFC0C0C0),
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.5)),
+          Image.asset('assets/logo.png', height: 65, fit: BoxFit.contain),
+          const SizedBox(width: 20),
+          const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('CORE FC',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.0)),
+              Text('PLAYER DASHBOARD',
+                  style: TextStyle(
+                      color: goldColor,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.5)),
+            ],
+          ),
           const Spacer(),
           Builder(
             builder: (context) => IconButton(

@@ -16,44 +16,79 @@ class ProfessionalPathwayPage extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(25),
             decoration: BoxDecoration(
-              color: surfaceColor,
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: goldColor.withValues(alpha: 0.1)),
               gradient: LinearGradient(
+                colors: [
+                  const Color(0xFF007CFE).withValues(alpha: 0.8),
+                  const Color(0xFF004A99).withValues(alpha: 0.8),
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [surfaceColor, const Color(0xFF1A1A1A)],
               ),
+              borderRadius: BorderRadius.circular(24),
+              image: const DecorationImage(
+                image: AssetImage('assets/images/img2.jpeg'),
+                fit: BoxFit.cover,
+                opacity: 0.4,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF007CFE).withValues(alpha: 0.2),
+                  blurRadius: 15,
+                  offset: const Offset(0, 8),
+                )
+              ],
             ),
             child: Column(
               children: [
-                const Icon(Icons.stars_rounded, color: goldColor, size: 48),
+                const Icon(Icons.stars_rounded, color: Colors.white, size: 48),
                 const SizedBox(height: 15),
                 const Text('PROFESSIONAL PATHWAY',
                     style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 1)),
                 const SizedBox(height: 10),
-                const Text('Step into the professional world. Get scouted by top clubs like Core FC.',
+                const Text('Step into the professional world. Get scouted by top clubs like Core FC, Dubai Lions FC, and Eagle FC.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white38, fontSize: 12, height: 1.5)),
+                    style: TextStyle(color: Colors.white70, fontSize: 12, height: 1.5)),
                 const SizedBox(height: 25),
                 ElevatedButton(
                   onPressed: () => _showRegistrationDialog(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: goldColor,
+                    backgroundColor: Colors.white,
                     minimumSize: const Size(double.infinity, 55),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                   ),
                   child: const Text('JOIN AS TRIALIST',
-                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 14)),
+                      style: TextStyle(color: Color(0xFF004A99), fontWeight: FontWeight.w900, fontSize: 14)),
                 ),
                 const SizedBox(height: 12),
-                const Text('Registration Fee: 150 AED',
-                    style: TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.bold)),
+                const Text('Next Trials: July 15th - Zayed Sports City',
+                    style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
               ],
             ),
           ),
           
-          const SizedBox(height: 25),
+          const SizedBox(height: 35),
+          const Text('UPCOMING OPPORTUNITIES', 
+              style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
+          const SizedBox(height: 15),
+          
+          _buildActionCard(
+            context,
+            Icons.explore,
+            'DUBAI CITY FC TRIALS',
+            'Open trials for U23 squad. Registration closing on July 10th.',
+            [const Color(0xFF38EF7D), const Color(0xFF11998E)],
+            () {},
+          ),
+          const SizedBox(height: 15),
+          _buildActionCard(
+            context,
+            Icons.explore,
+            'SHARJAH ELITE ACADEMY',
+            'Scouting event for defensive midfielders. Minimum age 16.',
+            [const Color(0xFFEE0979), const Color(0xFFF12711)],
+            () {},
+          ),
+          const SizedBox(height: 35),
           const Text('FOR POTENTIAL PROS', 
               style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
           const SizedBox(height: 15),
@@ -63,6 +98,7 @@ class ProfessionalPathwayPage extends StatelessWidget {
             Icons.description_outlined,
             'CREATE DIGITAL CV',
             'Upload your technical data, match highlights, and career history for club managers.',
+            [const Color(0xFFFFB75E), const Color(0xFFED8F03)],
             () {},
           ),
           const SizedBox(height: 15),
@@ -71,19 +107,7 @@ class ProfessionalPathwayPage extends StatelessWidget {
             Icons.visibility_outlined,
             'CLUB VISIBILITY',
             'Top clubs like Core FC pay to access trialist data. Get your profile in front of decision makers.',
-            () {},
-          ),
-          
-          const SizedBox(height: 30),
-          const Text('COACHES & MANAGERS', 
-              style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
-          const SizedBox(height: 15),
-          
-          _buildActionCard(
-            context,
-            Icons.assignment_ind_outlined,
-            'PRO COACHING CV',
-            'Register your coaching badges and tactical philosophy to find elite opportunities.',
+            [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)],
             () {},
           ),
           
@@ -91,8 +115,9 @@ class ProfessionalPathwayPage extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.03),
+              color: surfaceColor,
               borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
             ),
             child: const Row(
               children: [
@@ -113,25 +138,43 @@ class ProfessionalPathwayPage extends StatelessWidget {
     );
   }
 
-  Widget _buildActionCard(BuildContext context, IconData icon, String title, String desc, VoidCallback onTap) {
+  Widget _buildActionCard(BuildContext context, IconData icon, String title, String desc, List<Color> colors, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: surfaceColor,
+          gradient: LinearGradient(
+            colors: [
+              colors[0].withValues(alpha: 0.8),
+              colors[1].withValues(alpha: 0.8),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.02)),
+          image: const DecorationImage(
+            image: AssetImage('assets/images/img3.jpeg'),
+            fit: BoxFit.cover,
+            opacity: 0.4,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: colors[0].withValues(alpha: 0.2),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            )
+          ],
         ),
         child: Row(
           children: [
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: goldColor.withValues(alpha: 0.05),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(icon, color: goldColor, size: 24),
+              child: Icon(icon, color: Colors.white, size: 24),
             ),
             const SizedBox(width: 20),
             Expanded(
@@ -140,11 +183,11 @@ class ProfessionalPathwayPage extends StatelessWidget {
                 children: [
                   Text(title, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 4),
-                  Text(desc, style: const TextStyle(color: Colors.white38, fontSize: 11, height: 1.4)),
+                  Text(desc, style: const TextStyle(color: Colors.white70, fontSize: 11, height: 1.4)),
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: Colors.white12),
+            const Icon(Icons.chevron_right, color: Colors.white38),
           ],
         ),
       ),
@@ -175,7 +218,7 @@ class ProfessionalPathwayPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Registration Fee', style: TextStyle(color: Colors.white60, fontSize: 13)),
-                Text('150 AED', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16)),
+                const Text('150 AED', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16)),
               ],
             ),
           ],

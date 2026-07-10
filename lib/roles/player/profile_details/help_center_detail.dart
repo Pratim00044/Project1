@@ -81,7 +81,12 @@ class HelpCenterDetail extends StatelessWidget {
       decoration: BoxDecoration(
         color: surfaceColor,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.03)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+        image: const DecorationImage(
+          image: AssetImage('assets/images/img2.jpeg'),
+          fit: BoxFit.cover,
+          opacity: 0.3,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

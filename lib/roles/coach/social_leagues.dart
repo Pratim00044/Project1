@@ -5,6 +5,17 @@ const Color goldColor = Color(0xFFD4AF37);
 const Color surfaceColor = Color(0xFF121212);
 const Color greenAccent = Color(0xFF2ECC71);
 
+const List<Color> cardColors = [
+  Color(0xFF1E3A8A),
+  Color(0xFF3730A3),
+  Color(0xFF5B21B6),
+  Color(0xFF7C3AED),
+  Color(0xFF9D174D),
+  Color(0xFF991B1B),
+  Color(0xFF92400E),
+  Color(0xFF065F46),
+];
+
 class SocialLeaguesPage extends StatefulWidget {
   const SocialLeaguesPage({super.key});
 
@@ -14,7 +25,8 @@ class SocialLeaguesPage extends StatefulWidget {
 
 class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
   String _selectedFilter = 'ALL';
-  DateTime _selectedDate = DateTime.now();
+  DateTime _selectedDate = DateTime.parse('2024-06-10');
+  final ScrollController _dateScrollController = ScrollController();
 
   final List<String> _filters = ['ALL', 'VETS', 'MIXED', 'MEN', 'LADIES'];
 
@@ -71,20 +83,8 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
                   const Text('PICK A DATE', style: TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
                   const SizedBox(height: 15),
                   _buildDatePicker(),
-                  const SizedBox(height: 15),
-                  Row(
-                    children: [
-                      const Text('TODAY', style: TextStyle(color: greenAccent, fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 1)),
-                      const SizedBox(width: 8),
-                      const Text('•', style: TextStyle(color: Colors.white24)),
-                      const SizedBox(width: 8),
-                      const Text('JULY 8', style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.bold)),
-                      const SizedBox(width: 8),
-                      const Text('•', style: TextStyle(color: Colors.white24)),
-                      const SizedBox(width: 8),
-                      const Text('3 games', style: TextStyle(color: Colors.white38, fontSize: 12)),
-                    ],
-                  ),
+                  const SizedBox(height: 20),
+                  _buildDateSummary(),
                   const SizedBox(height: 30),
                   const Divider(color: Colors.white10),
                   const SizedBox(height: 20),
@@ -92,17 +92,17 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
                   const SizedBox(height: 15),
                   _buildFilterRow(),
                   const SizedBox(height: 30),
-                  _buildLeagueSection('MIXED', 'Core FC', '45 AED', '7-A-SIDE • 1 FIXTURE', 'assets/images/match.png'),
+                  _buildLeagueSection('MIXED', 'Core FC', '45 AED', '7-A-SIDE • 1 FIXTURE', cardColors[0]),
                   const SizedBox(height: 30),
-                  _buildLeagueSection('MEN', 'Dubai City Football Club', '55 AED', '5-A-SIDE • 2 FIXTURES', 'assets/images/login_background.jpeg'),
+                  _buildLeagueSection('MEN', 'Dubai City Football Club', '55 AED', '5-A-SIDE • 2 FIXTURES', cardColors[1]),
                   const SizedBox(height: 30),
-                  _buildLeagueSection('MIXED', 'United Football Club', '40 AED', '8-A-SIDE • 1 FIXTURE', 'assets/images/match.png'),
+                  _buildLeagueSection('MIXED', 'United Football Club', '40 AED', '8-A-SIDE • 1 FIXTURE', cardColors[2]),
                   const SizedBox(height: 30),
-                  _buildLeagueSection('MEN', 'Eagle FC', '65 AED', '9-A-SIDE • 3 FIXTURES', 'assets/images/login_background.jpeg'),
+                  _buildLeagueSection('MEN', 'Eagle FC', '65 AED', '9-A-SIDE • 3 FIXTURES', cardColors[3]),
                   const SizedBox(height: 30),
-                  _buildLeagueSection('MEN', 'Emirates Club', '69 AED', '11-A-SIDE • 1 FIXTURE', 'assets/images/match.png'),
+                  _buildLeagueSection('MEN', 'Emirates Club', '69 AED', '11-A-SIDE • 1 FIXTURE', cardColors[4]),
                   const SizedBox(height: 30),
-                  _buildLeagueSection('MEN', 'Gulf united FC', '75 AED', '11-A-SIDE • 2 FIXTURES', 'assets/images/login_background.jpeg'),
+                  _buildLeagueSection('MEN', 'Gulf united FC', '75 AED', '11-A-SIDE • 2 FIXTURES', cardColors[5]),
                   const SizedBox(height: 50),
                 ],
               ),
@@ -115,53 +115,116 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
 
   Widget _buildDatePicker() {
     return SizedBox(
-      height: 90,
-      child: Row(
+      height: 100,
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(color: surfaceColor, shape: BoxShape.circle, border: Border.all(color: Colors.white10)),
-            child: const Icon(Icons.chevron_left, color: Colors.white38, size: 20),
-          ),
-          const SizedBox(width: 15),
-          Expanded(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
             child: ListView.builder(
+              controller: _dateScrollController,
               scrollDirection: Axis.horizontal,
-              itemCount: 7,
+              itemCount: 14,
               itemBuilder: (context, index) {
-                final date = DateTime.now().add(Duration(days: index));
-                final isSelected = index == 0;
-                return Container(
-                  width: 75,
-                  margin: const EdgeInsets.only(right: 12),
-                  decoration: BoxDecoration(
-                    color: isSelected ? Colors.transparent : surfaceColor,
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(color: isSelected ? greenAccent : Colors.white.withValues(alpha: 0.05), width: 1.5),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(index == 0 ? 'TODAY' : ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'][date.weekday - 1], 
-                          style: TextStyle(color: isSelected ? greenAccent : Colors.white38, fontSize: 9, fontWeight: FontWeight.w900)),
-                      const SizedBox(height: 5),
-                      Text(date.day.toString(), style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900)),
-                      const SizedBox(height: 2),
-                      const Text('3', style: TextStyle(color: Colors.white24, fontSize: 9, fontWeight: FontWeight.bold)),
-                    ],
+                DateTime date = DateTime.parse('2024-06-10').add(Duration(days: index));
+                bool isSelected = date.day == _selectedDate.day;
+                String label = index == 0 ? 'TODAY' : ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'][date.weekday - 1];
+                
+                return GestureDetector(
+                  onTap: () => setState(() => _selectedDate = date),
+                  child: Container(
+                    width: 75,
+                    margin: const EdgeInsets.only(right: 12),
+                    decoration: BoxDecoration(
+                      color: isSelected ? Colors.transparent : const Color(0xFF1A1A1A),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: isSelected ? greenAccent : Colors.transparent, 
+                        width: 2
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(label,
+                          style: TextStyle(
+                            color: isSelected ? greenAccent : Colors.white24, 
+                            fontSize: 9, 
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 0.5
+                          )),
+                        const SizedBox(height: 5),
+                        Text(date.day.toString(),
+                          style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900)),
+                      ],
+                    ),
                   ),
                 );
               },
             ),
           ),
-          const SizedBox(width: 10),
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: const BoxDecoration(color: greenAccent, shape: BoxShape.circle),
-            child: const Icon(Icons.chevron_right, color: Colors.black, size: 20),
+          Positioned(
+            left: 0,
+            child: GestureDetector(
+              onTap: () {
+                _dateScrollController.animateTo(
+                  (_dateScrollController.offset - 87).clamp(0, _dateScrollController.position.maxScrollExtent),
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF1A1A1A),
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                ),
+                child: const Icon(Icons.chevron_left, color: Colors.white38, size: 18),
+              ),
+            ),
+          ),
+          Positioned(
+            right: 0,
+            child: GestureDetector(
+              onTap: () {
+                _dateScrollController.animateTo(
+                  (_dateScrollController.offset + 87).clamp(0, _dateScrollController.position.maxScrollExtent),
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
+                  color: greenAccent,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.chevron_right, color: Colors.black, size: 18),
+              ),
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildDateSummary() {
+    String dayName = _selectedDate.day == 10 ? 'TODAY' : ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'][_selectedDate.weekday - 1];
+    String monthName = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'][_selectedDate.month - 1];
+    
+    return Row(
+      children: [
+        Text(dayName, style: const TextStyle(color: greenAccent, fontSize: 14, fontWeight: FontWeight.w900)),
+        const SizedBox(width: 8),
+        const Text('•', style: TextStyle(color: Colors.white12)),
+        const SizedBox(width: 8),
+        Text('$monthName ${_selectedDate.day}', style: const TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w900)),
+        const SizedBox(width: 8),
+        const Text('•', style: TextStyle(color: Colors.white12)),
+        const SizedBox(width: 8),
+        const Text('3 games', style: TextStyle(color: Colors.white24, fontSize: 14, fontWeight: FontWeight.bold)),
+      ],
     );
   }
 
@@ -211,7 +274,7 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
     );
   }
 
-  Widget _buildLeagueSection(String category, String title, String price, String fixtures, String img) {
+  Widget _buildLeagueSection(String category, String title, String price, String fixtures, Color color) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -231,23 +294,23 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
             height: 180,
             width: double.infinity,
             decoration: BoxDecoration(
+              color: color,
               borderRadius: BorderRadius.circular(25),
-              image: DecorationImage(
-                image: AssetImage(img),
-                fit: BoxFit.cover,
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [color, color.withOpacity(0.6)],
               ),
+              boxShadow: [
+                BoxShadow(color: color.withOpacity(0.3), blurRadius: 15, offset: const Offset(0, 8))
+              ],
             ),
             child: Stack(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.transparent, Colors.black.withValues(alpha: 0.8)],
-                    ),
-                  ),
+                Positioned(
+                  right: -20,
+                  top: -20,
+                  child: Icon(Icons.emoji_events_rounded, size: 150, color: Colors.white.withOpacity(0.1)),
                 ),
                 Positioned(
                   top: 15, left: 15,
@@ -272,22 +335,22 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(25),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(title, style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900)),
-                      const SizedBox(height: 8),
+                      Text(title, style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900, height: 1.1)),
+                      const SizedBox(height: 12),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        decoration: BoxDecoration(color: greenAccent.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(8)),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(color: Colors.black.withOpacity(0.2), borderRadius: BorderRadius.circular(10)),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.calendar_today, color: greenAccent, size: 12),
+                            const Icon(Icons.sports_soccer_rounded, color: Colors.white, size: 14),
                             const SizedBox(width: 8),
-                            Text(fixtures, style: const TextStyle(color: greenAccent, fontSize: 10, fontWeight: FontWeight.w900)),
+                            Text(fixtures, style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900)),
                           ],
                         ),
                       ),
@@ -295,11 +358,11 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
                   ),
                 ),
                 Positioned(
-                  bottom: 20, right: 20,
+                  bottom: 25, right: 25,
                   child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.1), shape: BoxShape.circle),
-                    child: const Icon(Icons.chevron_right, color: Colors.white, size: 20),
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                    child: Icon(Icons.arrow_forward_ios_rounded, color: color, size: 18),
                   ),
                 ),
               ],

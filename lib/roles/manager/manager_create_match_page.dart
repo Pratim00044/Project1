@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 const Color goldColor = Color(0xFFD4AF37);
 const Color surfaceColor = Color(0xFF121212);
 
-class CreateGamePage extends StatefulWidget {
-  const CreateGamePage({super.key});
+class ManagerCreateMatchPage extends StatefulWidget {
+  const ManagerCreateMatchPage({super.key});
 
   @override
-  State<CreateGamePage> createState() => _CreateGamePageState();
+  State<ManagerCreateMatchPage> createState() => _ManagerCreateMatchPageState();
 }
 
-class _CreateGamePageState extends State<CreateGamePage> {
+class _ManagerCreateMatchPageState extends State<ManagerCreateMatchPage> {
   String _selectedMatchType = 'LEAGUE';
   String _selectedCategory = 'MEN';
   String _selectedSquadLimit = '11';
@@ -27,26 +27,16 @@ class _CreateGamePageState extends State<CreateGamePage> {
   final List<String> _venues = ['Wembley Stadium', 'Maracanã', 'Camp Nou', 'San Siro', 'Old Trafford', 'Allianz Arena', 'Bernabéu'];
   
   final List<Map<String, dynamic>> _players = [
+    {'name': 'Lionel Messi', 'selected': false},
+    {'name': 'Cristiano Ronaldo', 'selected': false},
+    {'name': 'Kylian Mbappé', 'selected': false},
+    {'name': 'Erling Haaland', 'selected': false},
+    {'name': 'Kevin De Bruyne', 'selected': false},
+    {'name': 'Neymar Jr', 'selected': false},
     {'name': 'Freddie Mercury', 'selected': false},
     {'name': 'David Bowie', 'selected': false},
     {'name': 'Mick Jagger', 'selected': false},
     {'name': 'John Lennon', 'selected': false},
-    {'name': 'Paul McCartney', 'selected': false},
-    {'name': 'George Harrison', 'selected': false},
-    {'name': 'Ringo Starr', 'selected': false},
-    {'name': 'Elton John', 'selected': false},
-    {'name': 'Elvis Presley', 'selected': false},
-    {'name': 'Bob Dylan', 'selected': false},
-    {'name': 'Jimmy Page', 'selected': false},
-    {'name': 'Robert Plant', 'selected': false},
-    {'name': 'Roger Waters', 'selected': false},
-    {'name': 'David Gilmour', 'selected': false},
-    {'name': 'Syd Barrett', 'selected': false},
-    {'name': 'Kurt Cobain', 'selected': false},
-    {'name': 'Jimi Hendrix', 'selected': false},
-    {'name': 'Jim Morrison', 'selected': false},
-    {'name': 'Janis Joplin', 'selected': false},
-    {'name': 'Amy Winehouse', 'selected': false},
   ];
 
   int get _selectedCount => _players.where((p) => p['selected'] == true).length;
@@ -217,6 +207,18 @@ class _CreateGamePageState extends State<CreateGamePage> {
     );
   }
 
+  Widget _buildSectionLabel(String text) {
+    return Text(
+      text,
+      style: const TextStyle(
+        color: Colors.white38,
+        fontSize: 11,
+        fontWeight: FontWeight.w900,
+        letterSpacing: 1,
+      ),
+    );
+  }
+
   Widget _buildChoiceChip(String label, bool isSelected, VoidCallback onTap) {
     return Expanded(
       child: GestureDetector(
@@ -289,59 +291,6 @@ class _CreateGamePageState extends State<CreateGamePage> {
     );
   }
 
-  Widget _buildSectionLabel(String text) {
-    return Text(
-      text,
-      style: const TextStyle(
-        color: Colors.white38,
-        fontSize: 11,
-        fontWeight: FontWeight.w900,
-        letterSpacing: 1,
-      ),
-    );
-  }
-
-  Widget _buildDropdownField(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 5, bottom: 8),
-          child: Text(
-            label,
-            style: const TextStyle(color: Colors.white24, fontSize: 9, fontWeight: FontWeight.bold, letterSpacing: 0.5),
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [surfaceColor, const Color(0xFF1A1A1A)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: Colors.white.withOpacity(0.05)),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                value,
-                style: TextStyle(
-                  color: value.contains('Select') ? Colors.white24 : Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const Icon(Icons.keyboard_arrow_down, color: goldColor, size: 20),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildVenueDropdown() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -372,34 +321,6 @@ class _CreateGamePageState extends State<CreateGamePage> {
               _selectedVenue = newValue;
             });
           },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMatchTypeChip(String type) {
-    bool isSelected = _selectedMatchType == type;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => setState(() => _selectedMatchType = type),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 15),
-          decoration: BoxDecoration(
-            color: isSelected ? goldColor.withOpacity(0.1) : surfaceColor,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: isSelected ? goldColor : Colors.white.withOpacity(0.05), width: 1.5),
-          ),
-          child: Center(
-            child: Text(
-              type,
-              style: TextStyle(
-                color: isSelected ? goldColor : Colors.white38,
-                fontSize: 10,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1,
-              ),
-            ),
-          ),
         ),
       ),
     );

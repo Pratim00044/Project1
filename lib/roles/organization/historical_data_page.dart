@@ -11,7 +11,7 @@ class HistoricalDataPage extends StatelessWidget {
     final List<Map<String, String>> _archives = [
       {'season': '2023 Winter', 'winner': 'National Gulf FC', 'mvp': 'Ryan Cooper'},
       {'season': '2023 Summer', 'winner': 'Turan Dubai FC', 'mvp': 'Sahal Samad'},
-      {'season': '2022 Annual', 'winner': 'National Paints FC', 'mvp': 'Sunil Chhetri'},
+      {'season': '2022 Annual', 'winner': 'National Paints FC', 'mvp': 'Cristiano Ronaldo'},
     ];
 
     return Scaffold(

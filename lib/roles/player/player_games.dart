@@ -1,251 +1,440 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'teammate_profile.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color surfaceColor = Color(0xFF121212);
 
-class PlayerGamesPage extends StatelessWidget {
+class PlayerGamesPage extends StatefulWidget {
   const PlayerGamesPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(25, 30, 25, 15),
-              child: Row(
-                children: [
-                  Icon(Icons.history, color: goldColor, size: 14),
-                  SizedBox(width: 8),
-                  Text('LAST GAME', style: TextStyle(color: goldColor, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
-                ],
-              ),
-            ),
-          ),
+  State<PlayerGamesPage> createState() => _PlayerGamesPageState();
+}
 
-          SliverToBoxAdapter(
-            child: GestureDetector(
-              onTap: () => _showMatchDetails(context, 'CORE FC', 'DUBAI CITY FC', isLive: true),
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: surfaceColor,
-                  borderRadius: BorderRadius.circular(25),
-                  border: Border.all(color: Colors.redAccent.withValues(alpha: 0.2)),
-                  image: const DecorationImage(
-                    image: AssetImage('assets/images/match.png'),
-                    fit: BoxFit.cover,
-                    opacity: 0.2,
+class _PlayerGamesPageState extends State<PlayerGamesPage> {
+  late DateTime selectedDate;
+  late List<DateTime> dates;
+  final ScrollController _calendarController = ScrollController();
+
+  final List<List<Color>> tileColors = [
+    [const Color(0xFF007CFE), const Color(0xFF004A99)],
+    [const Color(0xFF38EF7D), const Color(0xFF11998E)],
+    [const Color(0xFFEE0979), const Color(0xFFF12711)],
+    [const Color(0xFFFFB75E), const Color(0xFFED8F03)],
+    [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)],
+    [const Color(0xFF00D2FF), const Color(0xFF3A7BD5)],
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    DateTime today = DateTime(2026, 7, 10);
+    selectedDate = today;
+    dates = List.generate(14, (index) => today.add(Duration(days: index)));
+  }
+
+  @override
+  void dispose() {
+    _calendarController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    bool hasLiveMatch = selectedDate.day == 10; 
+    String matchOpponent = selectedDate.day == 10 ? 'DUBAI CITY FC' : 'UNITED FC';
+    String matchTime = selectedDate.day == 10 ? '78\'' : 'UPCOMING';
+
+    return Column(
+      children: [
+        _buildCalendarHeader(),
+        Expanded(
+          child: CustomScrollView(
+            key: ValueKey(selectedDate.day),
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              if (hasLiveMatch) ...[
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(25, 20, 25, 15),
+                    child: Text('LAST GAME', style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
                   ),
                 ),
-                child: Column(
-                  children: [
-                    const Text('PREMIER LEAGUE', style: TextStyle(color: Colors.white24, fontSize: 9, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _buildMatchTeam('CORE FC', true),
-                        const Column(
-                          children: [
-                            Text('2 - 1', style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w900)),
-                            Text('78\'', style: TextStyle(color: Colors.redAccent, fontSize: 10, fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                        _buildMatchTeam('DUBAI CITY FC', false),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.sports_soccer, color: goldColor, size: 12),
-                        SizedBox(width: 6),
-                        Text('Sunil Chhetri (45\'), Manvir Singh (62\')', style: TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    const Text('Dubai City FC: Cleiton Silva (30\')', style: TextStyle(color: Colors.white38, fontSize: 10)),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(25, 40, 25, 15),
-              child: Text('UPCOMING GAMES', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
-            ),
-          ),
-
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                _buildUpcomingGameTile(context, 'DUBAI CUP', 'FEB 15', 'REGISTERED', 'assets/images/login_background.jpeg'),
-                const SizedBox(height: 12),
-                _buildUpcomingGameTile(context, 'ALL STARS MATCH', 'FEB 20', 'OPEN', 'assets/images/login_background.jpeg'),
-              ]),
-            ),
-          ),
-
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(25, 40, 25, 15),
-              child: Text('DISCOVER MATCHES', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
-            ),
-          ),
-
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                _buildUpcomingGameTile(context, 'COMMUNITY SHIELD', 'MAR 05', 'NOT INTERESTED', 'assets/images/login_background.jpeg', isGray: true),
-              ]),
-            ),
-          ),
-
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(25, 40, 25, 15),
-              child: Text('PAST MATCHES', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
-            ),
-          ),
-
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final games = [
-                    {'opp': 'United Football Club', 'score': '3 - 0', 'date': 'JAN 28', 'result': 'WIN', 'goals': 'Chhetri (12\', 40\'), Thapa (88\')'},
-                    {'opp': 'Eagle FC', 'score': '1 - 1', 'date': 'JAN 21', 'result': 'DRAW', 'goals': 'Chhangte (55\')'},
-                    {'opp': 'Emirates Club', 'score': '2 - 0', 'date': 'JAN 14', 'result': 'WIN', 'goals': 'Chhetri (45+2\'), Apuia (70\')'},
-                  ];
-                  final game = games[index];
-                  bool isWin = game['result'] == 'WIN';
-
-                  return GestureDetector(
-                    onTap: () => _showMatchDetails(context, 'CORE FC', game['opp']!, isLive: false, gameData: game),
+                SliverToBoxAdapter(
+                  child: GestureDetector(
+                    onTap: () => _showMatchDetails(context, 'CORE FC', matchOpponent, isLive: true),
                     child: Container(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      padding: const EdgeInsets.all(18),
+                      margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                      padding: const EdgeInsets.all(25),
                       decoration: BoxDecoration(
-                        color: surfaceColor,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.03)),
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF8E2DE2), Color(0xFF4A00E0)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(30),
+                        image: const DecorationImage(
+                          image: AssetImage('assets/images/img1.jpeg'),
+                          fit: BoxFit.cover,
+                          opacity: 0.15,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF8E2DE2).withValues(alpha: 0.2),
+                            blurRadius: 15,
+                            offset: const Offset(0, 8),
+                          )
+                        ],
                       ),
-                      child: Row(
+                      child: Column(
                         children: [
-                          Column(
+                          const Text('DUBAI PREMIER LEAGUE', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                          const SizedBox(height: 25),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(game['date']!, style: const TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold)),
-                              const SizedBox(height: 4),
-                              Text(game['opp']!, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    _buildMatchTeam('CORE FC', true),
+                                    const SizedBox(height: 12),
+                                    Wrap(
+                                      spacing: 5,
+                                      runSpacing: 5,
+                                      alignment: WrapAlignment.center,
+                                      children: [
+                                        _buildScorerTitle('L. Messi (45\')', Colors.white, true),
+                                        _buildScorerTitle('K. Mbappe (62\')', Colors.white, true),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Column(
+                                children: [
+                                  const Text('2 - 1', style: TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.w900)),
+                                  Text(matchTime, style: const TextStyle(color: Colors.white70, fontSize: 10, fontWeight: FontWeight.w900)),
+                                ],
+                              ),
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    _buildMatchTeam(matchOpponent, false),
+                                    const SizedBox(height: 12),
+                                    _buildScorerTitle('E. Haaland (30\')', Colors.white, false),
+                                  ],
+                                ),
+                              ),
                             ],
-                          ),
-                          const Spacer(),
-                          Text(game['score']!, style: const TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.w900)),
-                          const SizedBox(width: 20),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: isWin ? Colors.green.withValues(alpha: 0.1) : Colors.white10,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Text(game['result']!, style: TextStyle(color: isWin ? Colors.greenAccent : Colors.white38, fontSize: 9, fontWeight: FontWeight.bold)),
                           ),
                         ],
                       ),
                     ),
-                  );
-                },
-                childCount: 3,
+                  ),
+                ),
+              ],
+
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(25, 25, 25, 15),
+                  child: Text('UPCOMING GAMES', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
+                ),
               ),
-            ),
-          ),
 
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(25, 40, 25, 15),
-              child: Text('LEAGUE STANDINGS', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
-            ),
-          ),
-
-          SliverToBoxAdapter(
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: surfaceColor,
-                borderRadius: BorderRadius.circular(25),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.03)),
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                    _buildUpcomingGameTile(context, 'DUBAI CUP', 'FEB 15', 'REGISTERED', tileColors[0]),
+                    const SizedBox(height: 15),
+                    _buildUpcomingGameTile(context, 'ALL STARS MATCH', 'FEB 20', 'OPEN', tileColors[1]),
+                  ]),
+                ),
               ),
-              child: Column(
-                children: [
-                  _buildTableHead(),
-                  const Divider(color: Colors.white10),
-                  _buildTableRow('1', 'CORE FC', '12', '28', true),
-                  _buildTableRow('2', 'GULF UNITED FC', '12', '25', false),
-                  _buildTableRow('3', 'UNITED FC', '11', '22', false),
-                  _buildTableRow('4', 'EMIRATES CLUB', '12', '20', false),
-                  _buildTableRow('5', 'EAGLE FC', '12', '18', false),
-                ],
+
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(25, 30, 25, 15),
+                  child: Text('DISCOVER MATCHES', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
+                ),
               ),
-            ),
-          ),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 50)),
-        ],
-      );
-  }
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                sliver: SliverToBoxAdapter(
+                  child: _buildUpcomingGameTile(context, 'COMMUNITY SHIELD', 'MAR 05', 'NOT REGISTERED', tileColors[2]),
+                ),
+              ),
 
-  Widget _buildUpcomingGameTile(BuildContext context, String title, String date, String status, String img, {bool isGray = false}) {
-    return Container(
-      height: 150,
-      margin: const EdgeInsets.only(bottom: 15),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),
-        image: DecorationImage(
-          image: AssetImage(img),
-          fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-            Colors.black.withValues(alpha: isGray ? 0.85 : 0.65),
-            BlendMode.darken,
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(25, 35, 25, 15),
+                  child: Text('PAST MATCHES', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
+                ),
+              ),
+
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final games = [
+                        {'opp': 'United Football Club', 'score': '3 - 0', 'date': 'JAN 28', 'result': 'WIN'},
+                        {'opp': 'Eagle FC', 'score': '1 - 1', 'date': 'JAN 21', 'result': 'DRAW'},
+                        {'opp': 'Emirates Club', 'score': '2 - 0', 'date': 'JAN 14', 'result': 'WIN'},
+                      ];
+                      if (index >= games.length) return null;
+                      final game = games[index];
+                      final colors = tileColors[(index + 3) % tileColors.length];
+                      bool isWin = game['result'] == 'WIN';
+
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 15),
+                        padding: const EdgeInsets.all(22),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              colors[0].withValues(alpha: 0.8),
+                              colors[1].withValues(alpha: 0.8),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(25),
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/img${(index % 4) + 1}.jpeg'),
+                            fit: BoxFit.cover,
+                            opacity: 0.4,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: colors[0].withValues(alpha: 0.1),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            )
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(game['date']!, style: const TextStyle(color: Colors.white70, fontSize: 10, fontWeight: FontWeight.w900)),
+                                  const SizedBox(height: 6),
+                                  Text(game['opp']!.toUpperCase(), 
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w900)),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 15),
+                            Text(game['score']!, style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900)),
+                            const SizedBox(width: 15),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(game['result']!, style: TextStyle(color: colors[0], fontSize: 10, fontWeight: FontWeight.w900)),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    childCount: 3,
+                  ),
+                ),
+              ),
+
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(25, 35, 25, 15),
+                  child: Text('LEAGUE STANDINGS', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
+                ),
+              ),
+
+              SliverToBoxAdapter(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.all(25),
+                  decoration: BoxDecoration(
+                    color: surfaceColor,
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 15),
+                        child: Row(
+                          children: [
+                            _standingHeader('POS', width: 30),
+                            _standingHeader('TEAM', isExpanded: true),
+                            _standingHeader('P', width: 30),
+                            _standingHeader('PTS', width: 40),
+                          ],
+                        ),
+                      ),
+                      const Divider(color: Colors.white10, height: 1),
+                      const SizedBox(height: 15),
+                      _standingRow('1', 'CORE FC', '12', '28', isMe: true),
+                      _standingRow('2', 'GULF UNITED FC', '12', '25'),
+                      _standingRow('3', 'UNITED FC', '11', '22'),
+                      _standingRow('4', 'EMIRATES CLUB', '12', '20'),
+                      _standingRow('5', 'EAGLE FC', '12', '18'),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SliverToBoxAdapter(child: SizedBox(height: 50)),
+            ],
           ),
         ),
+      ],
+    );
+  }
+
+  Widget _buildCalendarHeader() {
+    return Container(
+      height: 90,
+      margin: const EdgeInsets.only(top: 10, bottom: 5),
+      child: Row(
+        children: [
+          IconButton(
+            icon: const Icon(Icons.chevron_left, color: goldColor),
+            onPressed: () {
+              _calendarController.animateTo(
+                _calendarController.offset - 200,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            },
+          ),
+          Expanded(
+            child: ListView.builder(
+              controller: _calendarController,
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              itemCount: dates.length,
+              itemBuilder: (context, index) {
+                DateTime date = dates[index];
+                bool isSelected = date.day == selectedDate.day && date.month == selectedDate.month;
+
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedDate = date;
+                    });
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    width: 70,
+                    margin: const EdgeInsets.only(right: 12),
+                    decoration: BoxDecoration(
+                      color: isSelected ? goldColor : surfaceColor,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: isSelected ? goldColor : Colors.white.withValues(alpha: 0.05),
+                        width: 1.5,
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          DateFormat('EEE').format(date).toUpperCase(),
+                          style: TextStyle(
+                            color: isSelected ? Colors.black : Colors.white38,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          date.day.toString(),
+                          style: TextStyle(
+                            color: isSelected ? Colors.black : Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.chevron_right, color: goldColor),
+            onPressed: () {
+              _calendarController.animateTo(
+                _calendarController.offset + 200,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildUpcomingGameTile(BuildContext context, String title, String date, String status, List<Color> colors) {
+    return Container(
+      height: 160,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            colors[0].withValues(alpha: 0.8),
+            colors[1].withValues(alpha: 0.8),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(30),
+        image: const DecorationImage(
+          image: AssetImage('assets/images/img1.jpeg'),
+          fit: BoxFit.cover,
+          opacity: 0.4,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: colors[0].withValues(alpha: 0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          )
+        ],
       ),
       child: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(25),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(date, style: TextStyle(color: isGray ? Colors.white24 : goldColor, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1)),
-                const SizedBox(height: 4),
-                Expanded(
-                  child: Text(
-                    title, 
-                    style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                Text(date, style: const TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                const SizedBox(height: 8),
+                Text(
+                  title.toUpperCase(), 
+                  style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900),
                 ),
-                const SizedBox(height: 10),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
+                const Spacer(),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
                   child: Row(
                     children: [
-                      _buildGameMeta(Icons.location_on_outlined, 'Pitch 4, Dubai'),
+                      _buildGameMeta(Icons.location_on, 'PITCH 4, DUBAI'),
                       const SizedBox(width: 15),
-                      _buildGameMeta(Icons.groups_outlined, '4 Spots Left'),
+                      _buildGameMeta(Icons.people, '4 SPOTS LEFT'),
                       const SizedBox(width: 15),
-                      _buildGameMeta(Icons.bolt, 'High Intensity'),
+                      _buildGameMeta(Icons.bolt, 'HIGH INTENSITY'),
                     ],
                   ),
                 ),
@@ -253,18 +442,22 @@ class PlayerGamesPage extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 20,
-            right: 20,
+            top: 25,
+            right: 25,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: isGray ? Colors.white.withValues(alpha: 0.1) : goldColor.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: isGray ? Colors.white.withValues(alpha: 0.1) : goldColor.withValues(alpha: 0.3)),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
                 status, 
-                style: TextStyle(color: isGray ? Colors.white38 : goldColor, fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 0.5),
+                style: TextStyle(
+                  color: colors[0],
+                  fontSize: 9, 
+                  fontWeight: FontWeight.w900, 
+                  letterSpacing: 0.5
+                ),
               ),
             ),
           ),
@@ -276,35 +469,10 @@ class PlayerGamesPage extends StatelessWidget {
   Widget _buildGameMeta(IconData icon, String text) {
     return Row(
       children: [
-        Icon(icon, color: Colors.white60, size: 12),
+        Icon(icon, color: Colors.white70, size: 12),
         const SizedBox(width: 4),
-        Text(text, style: const TextStyle(color: Colors.white60, fontSize: 10, fontWeight: FontWeight.bold)),
+        Text(text, style: const TextStyle(color: Colors.white70, fontSize: 10, fontWeight: FontWeight.w900)),
       ],
-    );
-  }
-
-  Widget _buildTableHead() {
-    return const Row(
-      children: [
-        SizedBox(width: 30, child: Text('POS', style: TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold))),
-        Expanded(child: Text('TEAM', style: TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold))),
-        SizedBox(width: 30, child: Text('P', style: TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold))),
-        SizedBox(width: 30, child: Text('PTS', style: TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold))),
-      ],
-    );
-  }
-
-  Widget _buildTableRow(String pos, String team, String p, String pts, bool isMe) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        children: [
-          SizedBox(width: 30, child: Text(pos, style: TextStyle(color: isMe ? goldColor : Colors.white, fontWeight: FontWeight.bold))),
-          Expanded(child: Text(team, style: TextStyle(color: isMe ? goldColor : Colors.white, fontWeight: FontWeight.bold))),
-          SizedBox(width: 30, child: Text(p, style: TextStyle(color: isMe ? goldColor : Colors.white70))),
-          SizedBox(width: 30, child: Text(pts, style: TextStyle(color: isMe ? goldColor : Colors.white, fontWeight: FontWeight.w900))),
-        ],
-      ),
     );
   }
 
@@ -314,23 +482,67 @@ class PlayerGamesPage extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: isMe ? goldColor.withValues(alpha: 0.1) : Colors.white.withValues(alpha: 0.05),
+            color: Colors.white.withValues(alpha: 0.2),
             shape: BoxShape.circle,
           ),
-          child: Icon(Icons.shield, color: isMe ? goldColor : Colors.white24, size: 24),
+          child: const Icon(Icons.shield, color: Colors.white, size: 24),
         ),
         const SizedBox(height: 8),
-        Text(name, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
+        Text(name, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900)),
       ],
     );
+  }
+
+  Widget _buildScorerTitle(String text, Color color, bool isMe) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Text(text, 
+        style: const TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.w900),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  Widget _standingRow(String rank, String team, String played, String points, {bool isMe = false}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 30,
+            child: Text(rank, style: TextStyle(color: isMe ? goldColor : Colors.white, fontWeight: FontWeight.w900, fontSize: 13)),
+          ),
+          Expanded(
+            child: Text(team, style: TextStyle(color: isMe ? goldColor : Colors.white, fontWeight: FontWeight.w900, fontSize: 13, letterSpacing: 0.5)),
+          ),
+          SizedBox(
+            width: 30,
+            child: Text(played, style: TextStyle(color: isMe ? goldColor : Colors.white24, fontWeight: FontWeight.w900, fontSize: 13)),
+          ),
+          SizedBox(
+            width: 40,
+            child: Text(points, style: TextStyle(color: isMe ? goldColor : Colors.white, fontWeight: FontWeight.w900, fontSize: 14), textAlign: TextAlign.right),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _standingHeader(String text, {double? width, bool isExpanded = false}) {
+    Widget child = Text(text, style: const TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1));
+    if (isExpanded) return Expanded(child: child);
+    return SizedBox(width: width, child: (text == 'PTS') ? Text(text, style: const TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1), textAlign: TextAlign.right) : child);
   }
 
   void _showMatchDetails(BuildContext context, String teamA, String teamB, {required bool isLive, Map<String, String>? gameData}) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: const Color(0xFF080808),
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
+      backgroundColor: Colors.transparent,
       builder: (context) => _PlayerMatchDetailView(teamA: teamA, teamB: teamB, isLive: isLive, gameData: gameData),
     );
   }
@@ -349,35 +561,44 @@ class _PlayerMatchDetailView extends StatefulWidget {
 
 class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with SingleTickerProviderStateMixin {
   late TabController _innerTab;
-  final Color teamAColor = const Color(0xFFFFD700);
-  final Color teamBColor = const Color(0xFF00E5FF);
+  final Color teamAColor = const Color(0xFF007CFE);
+  final Color teamBColor = const Color(0xFF38EF7D);
+
+  final List<List<Color>> playerColors = [
+    [const Color(0xFF007CFE), const Color(0xFF004A99)],
+    [const Color(0xFF38EF7D), const Color(0xFF11998E)],
+    [const Color(0xFFEE0979), const Color(0xFFF12711)],
+    [const Color(0xFFFFB75E), const Color(0xFFED8F03)],
+    [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)],
+    [const Color(0xFF00D2FF), const Color(0xFF3A7BD5)],
+  ];
 
   final Map<String, List<Map<String, dynamic>>> _teamLineups = {
     'CORE FC': [
-      {'name': 'G. Sandhu', 'no': '1', 'pos': 'GK'},
-      {'name': 'S. Bose', 'no': '3', 'pos': 'LB'},
-      {'name': 'S. Jhingan', 'no': '5', 'pos': 'CB'},
-      {'name': 'Anwar Ali', 'no': '4', 'pos': 'CB'},
-      {'name': 'P. Kotal', 'no': '2', 'pos': 'RB'},
-      {'name': 'A. Thapa', 'no': '7', 'pos': 'CM'},
-      {'name': 'Apuia Ralte', 'no': '8', 'pos': 'CM'},
-      {'name': 'S. Samad', 'no': '10', 'pos': 'AM'},
-      {'name': 'L. Chhangte', 'no': '17', 'pos': 'RW'},
-      {'name': 'Manvir Singh', 'no': '9', 'pos': 'LW'},
-      {'name': 'Sunil Chhetri', 'no': '11', 'pos': 'ST'},
+      {'name': 'E. Martinez', 'no': '1', 'pos': 'GK'},
+      {'name': 'T. Hernandez', 'no': '3', 'pos': 'LB'},
+      {'name': 'V. van Dijk', 'no': '4', 'pos': 'CB'},
+      {'name': 'Ruben Dias', 'no': '5', 'pos': 'CB'},
+      {'name': 'K. Walker', 'no': '2', 'pos': 'RB'},
+      {'name': 'K. De Bruyne', 'no': '17', 'pos': 'CM'},
+      {'name': 'Rodri', 'no': '16', 'pos': 'CM'},
+      {'name': 'J. Bellingham', 'no': '10', 'pos': 'AM'},
+      {'name': 'M. Salah', 'no': '11', 'pos': 'RW'},
+      {'name': 'K. Mbappe', 'no': '7', 'pos': 'LW'},
+      {'name': 'L. Messi', 'no': '10', 'pos': 'ST'},
     ],
     'DUBAI CITY FC': [
-      {'name': 'P. Gill', 'no': '1', 'pos': 'GK'},
-      {'name': 'H. Maher', 'no': '4', 'pos': 'CB'},
-      {'name': 'Anwar Ali', 'no': '3', 'pos': 'CB'},
-      {'name': 'M. Rakip', 'no': '12', 'pos': 'RB'},
-      {'name': 'M. Zothanpuia', 'no': '5', 'pos': 'LB'},
-      {'name': 'J. Singh', 'no': '8', 'pos': 'CDM'},
-      {'name': 'M. Talal', 'no': '10', 'pos': 'CAM'},
-      {'name': 'S. Crespo', 'no': '21', 'pos': 'CM'},
-      {'name': 'N. Mahesh', 'no': '11', 'pos': 'LW'},
-      {'name': 'Nandhakumar', 'no': '22', 'pos': 'RW'},
-      {'name': 'Cleiton Silva', 'no': '9', 'pos': 'ST'},
+      {'name': 'Ederson', 'no': '31', 'pos': 'GK'},
+      {'name': 'Marquinhos', 'no': '5', 'pos': 'CB'},
+      {'name': 'Ruben Dias', 'no': '3', 'pos': 'CB'},
+      {'name': 'A. Hakimi', 'no': '2', 'pos': 'RB'},
+      {'name': 'Joao Cancelo', 'no': '7', 'pos': 'LB'},
+      {'name': 'D. Rice', 'no': '41', 'pos': 'CDM'},
+      {'name': 'Phil Foden', 'no': '47', 'pos': 'CAM'},
+      {'name': 'B. Silva', 'no': '20', 'pos': 'CM'},
+      {'name': 'Vini Jr.', 'no': '7', 'pos': 'LW'},
+      {'name': 'B. Saka', 'no': '7', 'pos': 'RW'},
+      {'name': 'E. Haaland', 'no': '9', 'pos': 'ST'},
     ],
   };
 
@@ -393,11 +614,17 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
   }
 
   @override
+  void dispose() {
+    _innerTab.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.95,
       decoration: const BoxDecoration(
-        color: Color(0xFF020202),
+        color: Color(0xFF000000),
         borderRadius: BorderRadius.vertical(top: Radius.circular(35)),
       ),
       child: Column(
@@ -412,11 +639,8 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
           const SizedBox(height: 20),
           TabBar(
             controller: _innerTab,
-            indicator: UnderlineTabIndicator(
-              borderSide: BorderSide(width: 3.0, color: teamAColor),
-              insets: const EdgeInsets.symmetric(horizontal: 40.0),
-            ),
-            labelColor: Colors.white,
+            indicatorColor: goldColor,
+            labelColor: goldColor,
             unselectedLabelColor: Colors.white24,
             labelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 1.5),
             dividerColor: Colors.transparent,
@@ -443,21 +667,24 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildTeamInfo(widget.teamA, teamAColor, true),
+          _buildTeamInfo(widget.teamA, teamAColor),
           Column(
             children: [
-              Text(widget.isLive ? 'LIVE' : 'FINISHED', style: TextStyle(color: widget.isLive ? Colors.redAccent : Colors.white38, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
-              const SizedBox(height: 5),
               const Text('2 - 1', style: TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.w900)),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(color: Colors.redAccent, borderRadius: BorderRadius.circular(6)),
+                child: const Text('LIVE', style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.w900)),
+              ),
             ],
           ),
-          _buildTeamInfo(widget.teamB, teamBColor, false),
+          _buildTeamInfo(widget.teamB, teamBColor),
         ],
       ),
     );
   }
 
-  Widget _buildTeamInfo(String name, Color color, bool isHome) {
+  Widget _buildTeamInfo(String name, Color color) {
     return Column(
       children: [
         Container(
@@ -465,12 +692,12 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
           decoration: BoxDecoration(
             color: color.withValues(alpha: 0.1),
             shape: BoxShape.circle,
-            border: Border.all(color: color.withValues(alpha: 0.2), width: 2),
+            border: Border.all(color: color, width: 2),
           ),
           child: Icon(Icons.shield, color: color, size: 30),
         ),
         const SizedBox(height: 10),
-        Text(name, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900)),
+        Text(name, style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900)),
       ],
     );
   }
@@ -500,10 +727,10 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: color.withValues(alpha: 0.2)),
+              border: Border.all(color: color),
             ),
             child: Text(team, 
-              style: TextStyle(color: color, fontWeight: FontWeight.w900, fontSize: 10, letterSpacing: 1),
+              style: TextStyle(color: color, fontWeight: FontWeight.w900, fontSize: 9, letterSpacing: 1),
               textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis),
           ),
           const SizedBox(height: 15),
@@ -512,6 +739,7 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
               itemCount: players.length,
               itemBuilder: (context, index) {
                 final player = players[index];
+                final colors = playerColors[index % playerColors.length];
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -529,33 +757,66 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
                     margin: const EdgeInsets.only(bottom: 8),
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF111111),
+                      color: surfaceColor,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: color.withValues(alpha: 0.05)),
-                      gradient: LinearGradient(
-                        begin: isHome ? Alignment.centerLeft : Alignment.centerRight,
-                        end: isHome ? Alignment.centerRight : Alignment.centerLeft,
-                        colors: [color.withValues(alpha: 0.05), Colors.transparent],
-                      ),
+                      border: Border.all(color: colors[0], width: 1.5),
                     ),
                     child: Row(
                       mainAxisAlignment: isHome ? MainAxisAlignment.start : MainAxisAlignment.end,
                       children: [
-                        if (isHome) _playerNoCircle(player['no'], color),
-                        if (isHome) const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: isHome ? CrossAxisAlignment.start : CrossAxisAlignment.end,
-                            children: [
-                              Text(player['name'], 
-                                style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
-                                maxLines: 1, overflow: TextOverflow.ellipsis),
-                              Text(player['pos'], style: TextStyle(color: color.withValues(alpha: 0.5), fontSize: 8, fontWeight: FontWeight.bold)),
-                            ],
+                        if (isHome) 
+                          Container(
+                            width: 30, height: 30,
+                            margin: const EdgeInsets.only(right: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              image: const DecorationImage(
+                                image: AssetImage('assets/images/sunil.png'),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
-                        ),
-                        if (!isHome) const SizedBox(width: 10),
-                        if (!isHome) _playerNoCircle(player['no'], color),
+                        if (isHome)
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(player['name'].toUpperCase(), 
+                                  style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900),
+                                  maxLines: 1, overflow: TextOverflow.ellipsis),
+                                Text(player['pos'], style: TextStyle(color: colors[0], fontSize: 8, fontWeight: FontWeight.w900)),
+                              ],
+                            ),
+                          ),
+                        if (isHome) const SizedBox(width: 5),
+                        if (isHome) _playerNoCircle(player['no'], colors[0]),
+
+                        if (!isHome) _playerNoCircle(player['no'], colors[0]),
+                        if (!isHome) const SizedBox(width: 5),
+                        if (!isHome)
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(player['name'].toUpperCase(), 
+                                  style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900),
+                                  maxLines: 1, overflow: TextOverflow.ellipsis),
+                                Text(player['pos'], style: TextStyle(color: colors[0], fontSize: 8, fontWeight: FontWeight.w900)),
+                              ],
+                            ),
+                          ),
+                        if (!isHome) 
+                          Container(
+                            width: 30, height: 30,
+                            margin: const EdgeInsets.only(left: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              image: const DecorationImage(
+                                image: AssetImage('assets/images/sunil.png'),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -572,7 +833,7 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
     return Container(
       width: 22, height: 22,
       decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(6)),
-      child: Center(child: Text(no, style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w900))),
+      child: Center(child: Text(no, style: const TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.w900))),
     );
   }
 
@@ -581,11 +842,11 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
       padding: const EdgeInsets.all(30),
       child: Column(
         children: [
-          _buildEventItem('78\'', 'Substitution: Sahal OUT, Thapa IN', Icons.swap_vert, teamAColor),
-          _buildEventItem('62\'', 'GOAL! Manvir Singh', Icons.sports_soccer, teamAColor, sub: 'Assist: Chhangte'),
-          _buildEventItem('45\'', 'GOAL! Sunil Chhetri', Icons.sports_soccer, teamAColor, sub: 'Penalty Kick'),
-          _buildEventItem('30\'', 'GOAL! Cleiton Silva', Icons.sports_soccer, teamBColor, sub: 'Header'),
-          _buildEventItem('15\'', 'Yellow Card: Sandesh Jhingan', Icons.rectangle, teamAColor),
+          _buildEventItem('78\'', 'SUBSTITUTION: J. BELLINGHAM OUT, MUSIALA IN', Icons.swap_vert, playerColors[0][0]),
+          _buildEventItem('62\'', 'GOAL! K. MBAPPE', Icons.sports_soccer, playerColors[1][0], sub: 'ASSIST: M. SALAH'),
+          _buildEventItem('45\'', 'GOAL! L. MESSI', Icons.sports_soccer, playerColors[2][0], sub: 'PENALTY KICK'),
+          _buildEventItem('30\'', 'GOAL! E. HAALAND', Icons.sports_soccer, playerColors[3][0], sub: 'HEADER'),
+          _buildEventItem('15\'', 'YELLOW CARD: V. VAN DIJK', Icons.rectangle, playerColors[4][0]),
         ],
       ),
     );
@@ -603,7 +864,7 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
           ),
           Container(
             padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(color: color.withValues(alpha: 0.1), shape: BoxShape.circle),
+            decoration: BoxDecoration(color: color.withValues(alpha: 0.1), shape: BoxShape.circle, border: Border.all(color: color.withValues(alpha: 0.3))),
             child: Icon(icon, color: color, size: 16),
           ),
           const SizedBox(width: 20),
@@ -611,8 +872,8 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(event, style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold)),
-                if (sub != null) Text(sub, style: const TextStyle(color: Colors.white38, fontSize: 12)),
+                Text(event, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w900)),
+                if (sub != null) Text(sub, style: const TextStyle(color: Colors.white38, fontSize: 11, fontWeight: FontWeight.w700)),
               ],
             ),
           ),
@@ -630,13 +891,6 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
           height: 1000,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.3),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-              )
-            ],
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(30),
@@ -658,40 +912,33 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
   Widget _buildFormationPlayers() {
     return Stack(
       children: [
-        _formationPlayer(0.5, 0.05, '1', 'G. Sandhu', teamAColor, isTop: true),
-        
-        _formationPlayer(0.1, 0.16, '3', 'S. Bose', teamAColor, isTop: true),
-        _formationPlayer(0.37, 0.16, '5', 'S. Jhingan', teamAColor, isTop: true),
-        _formationPlayer(0.63, 0.16, '4', 'Anwar', teamAColor, isTop: true),
-        _formationPlayer(0.9, 0.16, '2', 'P. Kotal', teamAColor, isTop: true),
-        
-        _formationPlayer(0.25, 0.28, '7', 'Thapa', teamAColor, isTop: true),
-        _formationPlayer(0.5, 0.28, '8', 'Apuia', teamAColor, isTop: true),
-        _formationPlayer(0.75, 0.28, '10', 'Samad', teamAColor, isTop: true),
-        
-        _formationPlayer(0.15, 0.40, '9', 'Manvir', teamAColor, isTop: true),
-        _formationPlayer(0.5, 0.40, '11', 'Chhetri', teamAColor, isTop: true),
-        _formationPlayer(0.85, 0.40, '17', 'Chhangte', teamAColor, isTop: true),
-
-        _formationPlayer(0.5, 0.95, '1', 'P. Gill', teamBColor, isTop: false),
-        
-        _formationPlayer(0.1, 0.84, '5', 'Zothan', teamBColor, isTop: false),
-        _formationPlayer(0.37, 0.84, '4', 'Maher', teamBColor, isTop: false),
-        _formationPlayer(0.63, 0.84, '3', 'Anwar', teamBColor, isTop: false),
-        _formationPlayer(0.9, 0.84, '12', 'Rakip', teamBColor, isTop: false),
-        
-        _formationPlayer(0.1, 0.72, '11', 'Mahesh', teamBColor, isTop: false),
-        _formationPlayer(0.37, 0.72, '8', 'Jeakson', teamBColor, isTop: false),
-        _formationPlayer(0.63, 0.72, '21', 'Crespo', teamBColor, isTop: false),
-        _formationPlayer(0.9, 0.72, '22', 'Nandha', teamBColor, isTop: false),
-        
-        _formationPlayer(0.3, 0.60, '10', 'Talal', teamBColor, isTop: false),
-        _formationPlayer(0.7, 0.60, '9', 'Cleiton', teamBColor, isTop: false),
+        _formationPlayer(0.5, 0.05, '1', 'Martinez', playerColors[0][0]),
+        _formationPlayer(0.1, 0.16, '3', 'Hernandez', playerColors[1][0]),
+        _formationPlayer(0.37, 0.16, '4', 'Van Dijk', playerColors[2][0]),
+        _formationPlayer(0.63, 0.16, '5', 'Dias', playerColors[3][0]),
+        _formationPlayer(0.9, 0.16, '2', 'Walker', playerColors[4][0]),
+        _formationPlayer(0.25, 0.28, '17', 'Bruyne', playerColors[5][0]),
+        _formationPlayer(0.5, 0.28, '16', 'Rodri', playerColors[0][0]),
+        _formationPlayer(0.75, 0.28, '10', 'Bellingham', playerColors[1][0]),
+        _formationPlayer(0.15, 0.40, '7', 'Mbappe', playerColors[2][0]),
+        _formationPlayer(0.5, 0.40, '10', 'Messi', playerColors[3][0]),
+        _formationPlayer(0.85, 0.40, '11', 'Salah', playerColors[4][0]),
+        _formationPlayer(0.5, 0.95, '31', 'Ederson', playerColors[5][0]),
+        _formationPlayer(0.1, 0.84, '7', 'Cancelo', playerColors[0][0]),
+        _formationPlayer(0.37, 0.84, '5', 'Marquinhos', playerColors[1][0]),
+        _formationPlayer(0.63, 0.84, '3', 'Dias', playerColors[2][0]),
+        _formationPlayer(0.9, 0.84, '2', 'Hakimi', playerColors[3][0]),
+        _formationPlayer(0.1, 0.72, '7', 'Vini Jr.', playerColors[4][0]),
+        _formationPlayer(0.37, 0.72, '41', 'Rice', playerColors[5][0]),
+        _formationPlayer(0.63, 0.72, '20', 'Silva', playerColors[0][0]),
+        _formationPlayer(0.9, 0.72, '7', 'Saka', playerColors[1][0]),
+        _formationPlayer(0.3, 0.60, '47', 'Foden', playerColors[2][0]),
+        _formationPlayer(0.7, 0.60, '9', 'Haaland', playerColors[3][0]),
       ],
     );
   }
 
-  Widget _formationPlayer(double x, double y, String no, String name, Color color, {required bool isTop}) {
+  Widget _formationPlayer(double x, double y, String no, String name, Color color) {
     return Align(
       alignment: FractionalOffset(x, y),
       child: Column(
@@ -703,7 +950,7 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
             decoration: BoxDecoration(
               color: const Color(0xFF1A1A1A),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: color.withValues(alpha: 0.5), width: 1.5),
+              border: Border.all(color: color, width: 2),
               image: const DecorationImage(
                 image: AssetImage('assets/images/sunil.png'),
                 fit: BoxFit.cover,
@@ -737,13 +984,13 @@ class GoogleStylePitchPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5;
 
-    final Paint pitchPaint = Paint()..color = const Color(0xFF58B36E);
+    final Paint pitchPaint = Paint()..color = const Color(0xFF121212);
 
     canvas.drawRRect(
         RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, size.width, size.height), const Radius.circular(30)),
         pitchPaint);
 
-    final Paint grassPaint = Paint()..color = Colors.black.withValues(alpha: 0.05);
+    final Paint grassPaint = Paint()..color = Colors.white.withValues(alpha: 0.02);
     int stripes = 12;
     for (int i = 0; i < stripes; i++) {
       if (i % 2 == 0) {

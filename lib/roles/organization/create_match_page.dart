@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 const Color goldColor = Color(0xFFD4AF37);
 const Color surfaceColor = Color(0xFF121212);
 
-class CreateGamePage extends StatefulWidget {
-  const CreateGamePage({super.key});
+class CreateMatchPage extends StatefulWidget {
+  const CreateMatchPage({super.key});
 
   @override
-  State<CreateGamePage> createState() => _CreateGamePageState();
+  State<CreateMatchPage> createState() => _CreateMatchPageState();
 }
 
-class _CreateGamePageState extends State<CreateGamePage> {
+class _CreateMatchPageState extends State<CreateMatchPage> {
   String _selectedMatchType = 'LEAGUE';
   String _selectedCategory = 'MEN';
   String _selectedSquadLimit = '11';

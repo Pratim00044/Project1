@@ -8,6 +8,17 @@ const Color surfaceColor = Color(0xFF121212);
 const Color greenAccent = Color(0xFF2ECC71);
 const Color cardLightColor = Color(0xFFC0C0C0);
 
+const List<Color> cardColors = [
+  Color(0xFF1E3A8A),
+  Color(0xFF3730A3),
+  Color(0xFF5B21B6),
+  Color(0xFF7C3AED),
+  Color(0xFF9D174D),
+  Color(0xFF991B1B),
+  Color(0xFF92400E),
+  Color(0xFF065F46),
+];
+
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
 
@@ -16,8 +27,36 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  DateTime _selectedDate = DateTime.now();
+  DateTime _selectedDate = DateTime.parse('2024-06-10');
   late VideoPlayerController _videoController;
+  final ScrollController _dateScrollController = ScrollController();
+
+  final Map<String, Map<String, List<Map<String, String>>>> _scheduleData = {
+    '2024-06-10': {
+      'matches': [
+        {'teams': 'CORE FC vs REAL MADRID', 'league': 'CHAMPIONS LEAGUE', 'time': '06:00 PM'},
+      ],
+      'sessions': [
+        {'title': 'TACTICAL DRILLS', 'category': 'TRAINING', 'time': '04:00 PM'},
+        {'title': 'YOUTH DEVELOPMENT', 'category': 'ACADEMY', 'time': '05:30 PM'},
+      ]
+    },
+    '2024-06-11': {
+      'matches': [
+        {'teams': 'BAYERN MUNICH vs CORE FC', 'league': 'EUROPA LEAGUE', 'time': '08:30 PM'},
+      ],
+      'sessions': [
+        {'title': 'FITNESS & AGILITY', 'category': 'TRAINING', 'time': '08:00 AM'},
+      ]
+    },
+    '2024-06-12': {
+      'matches': [],
+      'sessions': [
+        {'title': 'GOALKEEPER TRAINING', 'category': 'TRAINING', 'time': '09:00 AM'},
+        {'title': 'U12 TECHNICAL SKILLS', 'category': 'ACADEMY', 'time': '04:30 PM'},
+      ]
+    },
+  };
 
   @override
   void initState() {
@@ -39,6 +78,9 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    String dateKey = "${_selectedDate.year}-${_selectedDate.month.toString().padLeft(2, '0')}-${_selectedDate.day.toString().padLeft(2, '0')}";
+    var dailySchedule = _scheduleData[dateKey] ?? {'matches': [], 'sessions': []};
+
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
@@ -54,11 +96,11 @@ class _DashboardPageState extends State<DashboardPage> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
-                _buildSmallDataBox(Icons.history, '12 Years', 'Experience', 'assets/images/Age.png'),
+                _buildGradientStatTile(Icons.history, '12 Years', 'Experience', [const Color(0xFF007CFE), const Color(0xFF004A99)]),
                 const SizedBox(width: 12),
-                _buildSmallDataBox(Icons.groups_rounded, 'Under 8s', 'Primary Squad', 'assets/images/Forward.png'),
+                _buildGradientStatTile(Icons.groups_rounded, 'Under 8s', 'Primary Squad', [const Color(0xFF38EF7D), const Color(0xFF11998E)]),
                 const SizedBox(width: 12),
-                _buildSmallDataBox(Icons.analytics_outlined, 'A+ UEFA', 'License', 'assets/images/Attack.png'),
+                _buildGradientStatTile(Icons.analytics_outlined, 'A+ UEFA', 'License', [const Color(0xFFEE0979), const Color(0xFFF12711)]),
               ],
             ),
           ),
@@ -66,8 +108,8 @@ class _DashboardPageState extends State<DashboardPage> {
 
         const SliverToBoxAdapter(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(20, 35, 20, 15),
-            child: Text('UPCOMING SESSIONS',
+            padding: EdgeInsets.fromLTRB(20, 35, 20, 10),
+            child: Text('GAME',
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 10,
@@ -78,16 +120,44 @@ class _DashboardPageState extends State<DashboardPage> {
 
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                _buildSharpDataBox(Icons.timer_outlined, '18:00 PM', 'TODAY', 'assets/images/league_green.png'),
-                const SizedBox(width: 12),
-                _buildSharpDataBox(Icons.fitness_center_rounded, 'Tactical', 'Type', 'assets/images/league_blue.png'),
-                const SizedBox(width: 12),
-                _buildSharpDataBox(Icons.location_on_outlined, 'Pitch 4', 'Location', 'assets/images/league_red.png'),
-              ],
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: _buildDateWheels(),
+          ),
+        ),
+
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: _buildCreateMatchSectionCoach(context),
+          ),
+        ),
+
+        SliverToBoxAdapter(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+        if (dailySchedule['matches']!.isNotEmpty) ...[
+          _buildSectionHeaderNormal('UPCOMING MATCHES'),
+          ...dailySchedule['matches']!.asMap().entries.map((entry) => _buildUpcomingMatchItem(entry.value['teams']!, entry.value['league']!, '${_selectedDate.day}/${_selectedDate.month}', entry.value['time']!, cardColors[entry.key % cardColors.length])),
+        ],
+        
+        if (dailySchedule['sessions']!.isNotEmpty) ...[
+          _buildSectionHeaderNormal('UPCOMING SESSIONS'),
+          ...dailySchedule['sessions']!.asMap().entries.map((entry) => _buildUpcomingSessionItem(entry.value['title']!, entry.value['category']!, '${_selectedDate.day}/${_selectedDate.month}', entry.value['time']!, cardColors[(entry.key + 2) % cardColors.length])),
+        ],
+
+              if (dailySchedule['matches']!.isEmpty && dailySchedule['sessions']!.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.all(40),
+                  child: Center(
+                    child: Text('NO SCHEDULED ACTIVITIES FOR THIS DAY', 
+                      style: TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1)),
+                  ),
+                ),
+              
+              _buildSectionHeaderNormal('MATCH SECTION'),
+              _buildForeignLeaguesSection(),
+            ],
           ),
         ),
 
@@ -108,33 +178,16 @@ class _DashboardPageState extends State<DashboardPage> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
-                _buildSharpDataBox(Icons.emoji_events_rounded, '12', 'TROPHIES', 'assets/images/league_gold.png'),
+                _buildGradientStatTile(Icons.emoji_events_rounded, '12', 'TROPHIES', [const Color(0xFFFFB75E), const Color(0xFFED8F03)]),
                 const SizedBox(width: 12),
-                _buildSharpDataBox(Icons.trending_up_rounded, '85%', 'WIN RATE', 'assets/images/league_blue.png'),
+                _buildGradientStatTile(Icons.trending_up_rounded, '85%', 'WIN RATE', [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)]),
                 const SizedBox(width: 12),
-                _buildSharpDataBox(Icons.assignment_ind_rounded, '150', 'MANAGED', 'assets/images/league_green.png'),
+                _buildGradientStatTile(Icons.assignment_ind_rounded, '150', 'MANAGED', [const Color(0xFF00D2FF), const Color(0xFF3A7BD5)]),
               ],
             ),
           ),
         ),
 
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-            child: ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateTrainingPage()));
-              },
-              icon: const Icon(Icons.add, color: Colors.black),
-              label: const Text('SCHEDULE BESPOKE SESSION', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: goldColor,
-                minimumSize: const Size(double.infinity, 55),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              ),
-            ),
-          ),
-        ),
 
         const SliverToBoxAdapter(
           child: Padding(
@@ -158,12 +211,6 @@ class _DashboardPageState extends State<DashboardPage> {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateTrainingPage()));
                   }),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildActionTile(context, Icons.sports_rounded, 'CREATE\nGAME', Colors.blueAccent, () {
-                     Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateGamePage()));
-                  }),
-                ),
               ],
             ),
           ),
@@ -173,11 +220,6 @@ class _DashboardPageState extends State<DashboardPage> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           sliver: SliverList(
             delegate: SliverChildListDelegate([
-              _buildSectionHeader('MATCH SCHEDULE'),
-              const SizedBox(height: 15),
-              _buildUpcomingMatchItem('Mohun Bagan vs Kerala Blasters', 'ISL League', '02 JUL', '19:30'),
-              _buildUpcomingMatchItem('Mohun Bagan vs East Bengal', 'Derby Friendly', '08 JUL', '18:00'),
-              const SizedBox(height: 35),
               _buildSectionHeader('ACADEMY RANKINGS'),
               const SizedBox(height: 15),
               _buildRankingSection(),
@@ -194,94 +236,155 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _buildSessionList() {
-    final sessions = [
-      {'time': '6-7pm', 'age': 'Under 8s', 'location': 'Town Square - Una Pitch', 'players': '12'},
-      {'time': '7-8pm', 'age': 'Under 10s', 'location': 'Town Square - Una Pitch', 'players': '15'},
-    ];
-
-    return Column(
-      children: sessions.map((s) => Container(
-        margin: const EdgeInsets.only(bottom: 12),
+  Widget _buildCreateMatchSectionCoach(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateGamePage())),
+      child: Container(
+        width: double.infinity,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: surfaceColor,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.02)),
+          borderRadius: BorderRadius.circular(25),
+          border: Border.all(color: goldColor.withValues(alpha: 0.3)),
+          gradient: LinearGradient(
+            colors: [goldColor.withValues(alpha: 0.8), const Color(0xFF000000)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
         ),
         child: Row(
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(color: greenAccent.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12)),
-              child: Text(s['time']!, style: const TextStyle(color: greenAccent, fontWeight: FontWeight.bold, fontSize: 12)),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.sports_soccer_rounded, color: Colors.white, size: 28),
             ),
-            const SizedBox(width: 15),
-            Expanded(
+            const SizedBox(width: 20),
+            const Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(s['age']!, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      const Icon(Icons.location_on_outlined, color: Colors.white24, size: 12),
-                      const SizedBox(width: 4),
-                      Text(s['location']!, style: const TextStyle(color: Colors.white38, fontSize: 11)),
-                    ],
-                  ),
+                  Text('CREATE NEW MATCH', 
+                    style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                  SizedBox(height: 4),
+                  Text('Schedule custom games & manage squads', 
+                    style: TextStyle(color: Colors.white70, fontSize: 10, fontWeight: FontWeight.bold)),
                 ],
               ),
             ),
-            Column(
-              children: [
-                const Icon(Icons.people_outline, color: goldColor, size: 16),
-                Text(s['players']!, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 12)),
-              ],
-            ),
+            const SizedBox(width: 10),
+            const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white, size: 18),
           ],
         ),
-      )).toList(),
+      ),
     );
   }
 
-  Widget _buildUpcomingMatchItem(String teams, String league, String date, String time) {
+  Widget _buildSectionHeaderNormal(String title) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
+      child: Text(title,
+          style: const TextStyle(
+              color: Colors.white38,
+              fontSize: 11,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.5)),
+    );
+  }
+
+  Widget _buildForeignLeaguesSection() {
+    final leagues = [
+      {'name': 'SAUDI PRO LEAGUE', 'match': 'Al-Hilal vs Al-Ittihad', 'time': '20:30'},
+      {'name': 'UEFA CHAMPIONS LEAGUE', 'match': 'Core FC vs Dortmund', 'time': '18:00'},
+      {'name': 'LA LIGA', 'match': 'Real Madrid vs Barcelona', 'time': '22:00'},
+      {'name': 'PREMIER LEAGUE', 'match': 'Man City vs Arsenal', 'time': '19:30'},
+    ];
+
+    return Column(
+      children: leagues.asMap().entries.map((entry) {
+        final int index = entry.key;
+        final Map<String, String> l = entry.value;
+        final Color color = cardColors[index % cardColors.length];
+        
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(color: color.withOpacity(0.2)),
+            gradient: LinearGradient(
+              colors: [color.withOpacity(0.15), color.withOpacity(0.05)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 32, height: 32,
+                decoration: BoxDecoration(color: color.withOpacity(0.2), borderRadius: BorderRadius.circular(8)),
+                child: Icon(Icons.emoji_events_outlined, color: color, size: 16),
+              ),
+              const SizedBox(width: 15),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(l['name']!.toUpperCase(), style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                    const SizedBox(height: 4),
+                    Text(l['match']!, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              ),
+              Text(l['time']!, style: const TextStyle(color: Colors.white38, fontSize: 12, fontWeight: FontWeight.bold)),
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildUpcomingMatchItem(String teams, String league, String date, String time, Color color) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: surfaceColor,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.02)),
-        image: const DecorationImage(
-          image: AssetImage('assets/images/match.png'),
-          fit: BoxFit.cover,
-          opacity: 0.1,
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: color.withOpacity(0.2)),
+        gradient: LinearGradient(
+          colors: [color.withOpacity(0.15), color.withOpacity(0.05)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
       ),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.05), shape: BoxShape.circle),
-            child: const Icon(Icons.sports_soccer, color: goldColor, size: 20),
+            width: 40, height: 40,
+            decoration: BoxDecoration(color: color.withOpacity(0.2), borderRadius: BorderRadius.circular(10)),
+            child: Icon(Icons.sports_soccer_rounded, color: color, size: 20),
           ),
           const SizedBox(width: 15),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(teams, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                Text(teams, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
                 const SizedBox(height: 4),
-                Text(league, style: const TextStyle(color: Colors.white38, fontSize: 12)),
+                Text(league, style: const TextStyle(color: Colors.white38, fontSize: 10)),
               ],
             ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(date, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 12)),
-              Text(time, style: const TextStyle(color: Colors.white38, fontSize: 11)),
+              Text(date, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 11)),
+              Text(time, style: const TextStyle(color: Colors.white38, fontSize: 10)),
             ],
           ),
         ],
@@ -289,18 +392,186 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
+  Widget _buildUpcomingSessionItem(String title, String category, String date, String time, Color color) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: color.withOpacity(0.2)),
+        gradient: LinearGradient(
+          colors: [color.withOpacity(0.15), color.withOpacity(0.05)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 40, height: 40,
+            decoration: BoxDecoration(color: color.withOpacity(0.2), borderRadius: BorderRadius.circular(10)),
+            child: Icon(category == 'TRAINING' ? Icons.fitness_center_rounded : Icons.school_outlined, color: color, size: 20),
+          ),
+          const SizedBox(width: 15),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
+                const SizedBox(height: 4),
+                Text(category, style: const TextStyle(color: Colors.white38, fontSize: 10)),
+              ],
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(date, style: const TextStyle(color: greenAccent, fontWeight: FontWeight.bold, fontSize: 11)),
+              Text(time, style: const TextStyle(color: Colors.white38, fontSize: 10)),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDateWheels() {
+    String dayName = _selectedDate.day == 10 ? 'TODAY' : ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'][_selectedDate.weekday - 1];
+    String monthName = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'][_selectedDate.month - 1];
+    
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('PICK A DATE',
+            style: TextStyle(
+                color: Colors.white38,
+                fontSize: 10,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.5)),
+        const SizedBox(height: 15),
+        SizedBox(
+          height: 100,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: ListView.builder(
+                  controller: _dateScrollController,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 14,
+                  itemBuilder: (context, index) {
+                    DateTime date = DateTime.parse('2024-06-10').add(Duration(days: index));
+                    bool isSelected = date.day == _selectedDate.day;
+                    String label = index == 0 ? 'TODAY' : ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'][date.weekday - 1];
+                    
+                    return GestureDetector(
+                      onTap: () => setState(() => _selectedDate = date),
+                      child: Container(
+                        width: 75,
+                        margin: const EdgeInsets.only(right: 12),
+                        decoration: BoxDecoration(
+                          color: isSelected ? Colors.transparent : const Color(0xFF1A1A1A),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: isSelected ? greenAccent : Colors.transparent, 
+                            width: 2
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(label,
+                              style: TextStyle(
+                                color: isSelected ? greenAccent : Colors.white24, 
+                                fontSize: 9, 
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 0.5
+                              )),
+                            const SizedBox(height: 5),
+                            Text(date.day.toString(),
+                              style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900)),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Positioned(
+                left: 0,
+                child: GestureDetector(
+                  onTap: () {
+                    _dateScrollController.animateTo(
+                      (_dateScrollController.offset - 87).clamp(0, _dateScrollController.position.maxScrollExtent),
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1A1A1A),
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                    ),
+                    child: const Icon(Icons.chevron_left, color: Colors.white38, size: 18),
+                  ),
+                ),
+              ),
+              Positioned(
+                right: 0,
+                child: GestureDetector(
+                  onTap: () {
+                    _dateScrollController.animateTo(
+                      (_dateScrollController.offset + 87).clamp(0, _dateScrollController.position.maxScrollExtent),
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(
+                      color: greenAccent,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.chevron_right, color: Colors.black, size: 18),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 20),
+        Row(
+          children: [
+            Text(dayName, style: const TextStyle(color: greenAccent, fontSize: 14, fontWeight: FontWeight.w900)),
+            const SizedBox(width: 8),
+            const Text('•', style: TextStyle(color: Colors.white12)),
+            const SizedBox(width: 8),
+            Text('$monthName ${_selectedDate.day}', style: const TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w900)),
+            const SizedBox(width: 8),
+            const Text('•', style: TextStyle(color: Colors.white12)),
+            const SizedBox(width: 8),
+            const Text('3 games', style: TextStyle(color: Colors.white24, fontSize: 14, fontWeight: FontWeight.bold)),
+          ],
+        ),
+      ],
+    );
+  }
+
   Widget _buildRankingSection() {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF121212),
-        borderRadius: BorderRadius.circular(25),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.02)),
-        image: const DecorationImage(
-          image: AssetImage('assets/images/league_gold.png'),
-          fit: BoxFit.cover,
-          opacity: 0.1,
+        gradient: const LinearGradient(
+          colors: [Color(0xFF1E1E1E), Color(0xFF121212)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
+        borderRadius: BorderRadius.circular(25),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: Column(
         children: [
@@ -311,7 +582,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text('ACADEMY RANKINGS', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 10),
                   Row(
                     children: [
                       _buildAwardTypePill('WEEK'),
@@ -326,17 +597,17 @@ class _DashboardPageState extends State<DashboardPage> {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(color: goldColor.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
-                child: const Text('2024', style: TextStyle(color: goldColor, fontSize: 9, fontWeight: FontWeight.bold)),
+                child: const Text('2024', style: TextStyle(color: goldColor, fontSize: 10, fontWeight: FontWeight.bold)),
               ),
             ],
           ),
           const SizedBox(height: 25),
-          _buildRankingItem('TOP GK', 'Gurpreet Singh', 'Under 8s', '98% Save Rate', Colors.greenAccent),
-          _buildRankingItem('TOP DEFENDER', 'Sandesh Jhingan', 'Under 10s', '45 Tackles', Colors.blueAccent),
-          _buildRankingItem('TOP MIDFIELDER', 'Sahal Abdul', 'Under 8s', '12 Assists', Colors.purpleAccent),
-          _buildRankingItem('TOP STRIKER', 'Sunil Chhetri', 'Under 8s', '24 Goals', Colors.orangeAccent),
+          _buildRankingItem('TOP GK', 'MANUEL NEUER', 'Under 8s', '98% Save Rate', [const Color(0xFF38EF7D), const Color(0xFF11998E)]),
+          _buildRankingItem('TOP DEFENDER', 'SERGIO RAMOS', 'Under 10s', '45 Tackles', [const Color(0xFF007CFE), const Color(0xFF004A99)]),
+          _buildRankingItem('TOP MIDFIELDER', 'LUKA MODRIC', 'Under 8s', '12 Assists', [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)]),
+          _buildRankingItem('TOP STRIKER', 'CRISTIANO RONALDO', 'Under 8s', '24 Goals', [const Color(0xFFEE0979), const Color(0xFFF12711)]),
         ],
       ),
     );
@@ -353,33 +624,54 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _buildRankingItem(String category, String name, String team, String stat, Color color) {
+  Widget _buildRankingItem(String category, String name, String team, String stat, List<Color> colors) {
+    IconData icon;
+    switch (category) {
+      case 'TOP GK': icon = Icons.security_rounded; break;
+      case 'TOP DEFENDER': icon = Icons.shield_rounded; break;
+      case 'TOP MIDFIELDER': icon = Icons.settings_input_component_rounded; break;
+      case 'TOP STRIKER': icon = Icons.ads_click_rounded; break;
+      default: icon = Icons.person_rounded;
+    }
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
-      child: Row(
-        children: [
-          Container(
-            width: 4, height: 35,
-            decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(2)),
-          ),
-          const SizedBox(width: 15),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: surfaceColor,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 35, height: 35,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: colors, begin: Alignment.topLeft, end: Alignment.bottomRight),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, color: Colors.white, size: 18),
+            ),
+            const SizedBox(width: 15),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(category, style: TextStyle(color: colors[0], fontSize: 9, fontWeight: FontWeight.bold, letterSpacing: 1)),
+                  Text(name, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(category, style: TextStyle(color: color, fontSize: 9, fontWeight: FontWeight.bold, letterSpacing: 1)),
-                Text(name, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                Text(team, style: const TextStyle(color: Colors.white38, fontSize: 10)),
+                Text(stat, style: const TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.bold)),
               ],
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(team, style: const TextStyle(color: Colors.white38, fontSize: 10)),
-              Text(stat, style: const TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.bold)),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -392,46 +684,70 @@ class _DashboardPageState extends State<DashboardPage> {
     ];
 
     return Column(
-      children: academies.map((a) => Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: const Color(0xFF121212),
-          borderRadius: BorderRadius.circular(20),
-          image: const DecorationImage(
-            image: AssetImage('assets/images/login_background.jpeg'),
-            fit: BoxFit.cover,
-            opacity: 0.1,
-          ),
-        ),
-        child: Row(
-          children: [
-            Container(
-              height: 40, width: 40,
-              decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.05), borderRadius: BorderRadius.circular(10)),
-              child: const Icon(Icons.school_outlined, color: goldColor, size: 20),
+      children: academies.asMap().entries.map((entry) {
+        final int index = entry.key;
+        final Map<String, String> a = entry.value;
+        final List<Color> cardColors = _getVibrantGradients(index);
+        
+        return Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: cardColors,
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-            const SizedBox(width: 15),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(color: cardColors.first.withValues(alpha: 0.2), blurRadius: 10, offset: const Offset(0, 4))
+            ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                height: 35, width: 35,
+                decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(10)),
+                child: const Icon(Icons.school_outlined, color: Colors.white, size: 18),
+              ),
+              const SizedBox(width: 15),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(a['name']!, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    Text(a['location']!, style: const TextStyle(color: Colors.white70, fontSize: 11)),
+                  ],
+                ),
+              ),
+              Row(
                 children: [
-                  Text(a['name']!, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                  Text(a['location']!, style: const TextStyle(color: Colors.white38, fontSize: 11)),
+                  const Icon(Icons.star_rounded, color: Colors.white, size: 14),
+                  const SizedBox(width: 4),
+                  Text(a['rating']!, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
                 ],
               ),
-            ),
-            Row(
-              children: [
-                const Icon(Icons.star_rounded, color: goldColor, size: 14),
-                const SizedBox(width: 4),
-                Text(a['rating']!, style: const TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.bold)),
-              ],
-            ),
-          ],
-        ),
-      )).toList(),
+            ],
+          ),
+        );
+      }).toList(),
     );
+  }
+
+  List<Color> _getVibrantGradients(int index) {
+    const gradients = [
+      [Color(0xFF007CFE), Color(0xFF004A99)],
+      [Color(0xFF38EF7D), Color(0xFF11998E)],
+      [Color(0xFFEE0979), Color(0xFFF12711)],
+      [Color(0xFF8E2DE2), Color(0xFF4A00E0)],
+      [Color(0xFFF093FB), Color(0xFFF5576C)],
+      [Color(0xFFFFB75E), Color(0xFFED8F03)],
+      [Color(0xFF00C6FF), Color(0xFF0072FF)],
+      [Color(0xFF56CCF2), Color(0xFF2F80ED)],
+      [Color(0xFFF2994A), Color(0xFFF2C94C)],
+      [Color(0xFFB3FFAB), Color(0xFF12FFF7)],
+    ];
+    return gradients[index % gradients.length];
   }
 
   Widget _buildSectionHeader(String title) {
@@ -454,195 +770,160 @@ class _DashboardPageState extends State<DashboardPage> {
       width: double.infinity,
       height: 180,
       decoration: BoxDecoration(
-        color: cardLightColor,
-        borderRadius: BorderRadius.circular(40),
+        gradient: const LinearGradient(
+          colors: [Color(0xFF0F2027), Color(0xFF203A43), Color(0xFF2C5364)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
-            color: cardLightColor.withValues(alpha: 0.2),
-            blurRadius: 40,
-            offset: const Offset(0, 15),
+            color: Colors.black.withValues(alpha: 0.5),
+            blurRadius: 30,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(40),
-        child: Stack(
-          children: [
-            if (_videoController.value.isInitialized)
-              SizedBox.expand(
-                child: FittedBox(
-                  fit: BoxFit.cover,
-                  child: SizedBox(
-                    width: _videoController.value.size.width,
-                    height: _videoController.value.size.height,
-                    child: VideoPlayer(_videoController),
-                  ),
-                ),
-              )
-            else
-              Container(color: cardLightColor),
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: [
-                    cardLightColor.withValues(alpha: 0.8),
-                    cardLightColor.withValues(alpha: 0.2),
-                  ],
-                ),
-              ),
+      child: Stack(
+        children: [
+          Positioned(
+            right: -20,
+            bottom: -20,
+            child: Opacity(
+              opacity: 0.1,
+              child: const Icon(Icons.sports_soccer, size: 200, color: Colors.white),
             ),
-            Padding(
-              padding: const EdgeInsets.all(25),
-              child: Row(
-                children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.black.withValues(alpha: 0.05), width: 4),
-                      color: surfaceColor,
-                    ),
-                    child: const Icon(Icons.person, size: 50, color: Colors.black38),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                          'Coach',
-                          style: TextStyle(
-                            color: Colors.black54,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w300,
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                        const FittedBox(
-                          fit: BoxFit.scaleDown,
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'James',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 36,
-                              fontWeight: FontWeight.w900,
-                              height: 1.0,
-                              letterSpacing: -1,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: Colors.black.withValues(alpha: 0.08),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Text(
-                            'ELITE ACADEMY',
-                            style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                      ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(25),
+            child: Row(
+              children: [
+                Container(
+                  width: 90,
+                  height: 90,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.3), width: 4),
+                    image: const DecorationImage(
+                      image: AssetImage('assets/images/sunil.png'),
+                      fit: BoxFit.cover,
                     ),
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Welcome back,',
+                        style: TextStyle(
+                          color: Colors.white60,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const Text(
+                        'COACH JAMES',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w900,
+                          height: 1.1,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: greenAccent.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.verified, size: 12, color: greenAccent),
+                            const SizedBox(width: 6),
+                            const Text(
+                              'CORE FC - U8',
+                              style: TextStyle(
+                                color: greenAccent,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'HEAD COACH | LICENSE A+ UEFA',
+                        style: TextStyle(
+                          color: goldColor.withValues(alpha: 0.8),
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildSmallDataBox(IconData icon, String val, String sub, String bgImage) {
+  Widget _buildGradientStatTile(IconData icon, String val, String label, List<Color> colors) {
     return Expanded(
       child: Container(
-        height: 90,
+        height: 100,
         decoration: BoxDecoration(
-          color: surfaceColor,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
-          image: DecorationImage(
-            image: AssetImage(bgImage),
-            fit: BoxFit.cover,
-            opacity: 0.3,
+          gradient: LinearGradient(
+            colors: colors,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
-        ),
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Icon(icon, color: Colors.white24, size: 16),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                FittedBox(
-                  child: Text(val,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold)),
-                ),
-                Text(sub,
-                    style: const TextStyle(
-                        color: Colors.white38,
-                        fontSize: 8,
-                        fontWeight: FontWeight.w500)),
-              ],
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: colors[0].withValues(alpha: 0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildSharpDataBox(IconData icon, String val, String sub, String bgImage) {
-    return Expanded(
-      child: Container(
-        height: 120,
-        decoration: BoxDecoration(
-          color: surfaceColor,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
-          image: DecorationImage(
-            image: AssetImage(bgImage),
-            fit: BoxFit.cover,
-            opacity: 0.4,
-          ),
-        ),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: Colors.white24, size: 20),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                FittedBox(
-                  child: Text(val,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold)),
+            Icon(icon, color: Colors.white, size: 16),
+            const SizedBox(height: 8),
+            FittedBox(
+              child: Text(
+                val,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w900,
                 ),
-                Text(sub,
-                    style: const TextStyle(
-                        color: Colors.white38,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w500)),
-              ],
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              label.toUpperCase(),
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 7,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 0.5,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
@@ -656,24 +937,31 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Container(
         height: 120,
         decoration: BoxDecoration(
-          color: surfaceColor,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: color.withValues(alpha: 0.2)),
-          image: const DecorationImage(
-            image: AssetImage('assets/images/match.png'),
-            fit: BoxFit.cover,
-            opacity: 0.1,
-          ),
           gradient: LinearGradient(
+            colors: [color, color.withValues(alpha: 0.7)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [color.withValues(alpha: 0.1), Colors.transparent],
           ),
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: color.withValues(alpha: 0.3),
+              blurRadius: 15,
+              offset: const Offset(0, 8),
+            ),
+          ],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: color, size: 30),
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: Colors.white, size: 28),
+            ),
             const SizedBox(height: 12),
             Text(label,
                 textAlign: TextAlign.center,
@@ -684,56 +972,6 @@ class _DashboardPageState extends State<DashboardPage> {
                     letterSpacing: 1)),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildDatePicker() {
-    return SizedBox(
-      height: 90,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: 14,
-        itemBuilder: (context, index) {
-          final date = DateTime.now().add(Duration(days: index));
-          final isSelected = date.day == _selectedDate.day && date.month == _selectedDate.month;
-          final isToday = date.day == DateTime.now().day && date.month == DateTime.now().month;
-
-          return GestureDetector(
-            onTap: () => setState(() => _selectedDate = date),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              width: 70,
-              margin: const EdgeInsets.only(right: 12),
-              decoration: BoxDecoration(
-                color: isSelected ? goldColor.withValues(alpha: 0.1) : surfaceColor,
-                borderRadius: BorderRadius.circular(18),
-                border: Border.all(
-                    color: isSelected ? goldColor : Colors.white.withValues(alpha: 0.05),
-                    width: 1.5),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                      isToday
-                          ? 'TODAY'
-                          : ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'][date.weekday - 1],
-                      style: TextStyle(
-                          color: isSelected ? goldColor : Colors.white38,
-                          fontSize: 9,
-                          fontWeight: FontWeight.w900)),
-                  const SizedBox(height: 5),
-                  Text(date.day.toString(),
-                      style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.white70,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w900)),
-                ],
-              ),
-            ),
-          );
-        },
       ),
     );
   }

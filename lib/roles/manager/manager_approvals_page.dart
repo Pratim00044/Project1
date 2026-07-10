@@ -27,19 +27,35 @@ class ManagerApprovalsPage extends StatelessWidget {
         itemCount: approvals.length,
         itemBuilder: (context, index) {
           final item = approvals[index];
+          List<Color> gradientColors;
+          if (item['status'] == 'Urgent') {
+            gradientColors = [const Color(0xFFEE0979), const Color(0xFFF12711)];
+          } else if (item['status'] == 'Review') {
+            gradientColors = [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)];
+          } else {
+            gradientColors = [const Color(0xFF0F2027), const Color(0xFF203A43)];
+          }
+
           return Container(
             margin: const EdgeInsets.only(bottom: 15),
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: surfaceColor,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.02)),
+              gradient: LinearGradient(
+                colors: gradientColors,
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(color: gradientColors.first.withValues(alpha: 0.1), blurRadius: 10, offset: const Offset(0, 4))
+              ],
             ),
             child: Row(
               children: [
-                CircleAvatar(
-                  backgroundColor: goldColor.withValues(alpha: 0.1),
-                  child: const Icon(Icons.rule_rounded, color: goldColor, size: 20),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(12)),
+                  child: const Icon(Icons.rule_rounded, color: Colors.white, size: 20),
                 ),
                 const SizedBox(width: 20),
                 Expanded(
@@ -48,7 +64,7 @@ class ManagerApprovalsPage extends StatelessWidget {
                     children: [
                       Text(item['title'], style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 4),
-                      Text(item['desc'], style: const TextStyle(color: Colors.white38, fontSize: 11)),
+                      Text(item['desc'], style: const TextStyle(color: Colors.white70, fontSize: 11)),
                     ],
                   ),
                 ),
@@ -57,8 +73,12 @@ class ManagerApprovalsPage extends StatelessWidget {
                   children: [
                     Text(item['amount'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14)),
                     const SizedBox(height: 4),
-                    Text(item['status'].toUpperCase(), 
-                      style: TextStyle(color: item['status'] == 'Urgent' ? Colors.redAccent : goldColor, fontSize: 9, fontWeight: FontWeight.bold)),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(6)),
+                      child: Text(item['status'].toUpperCase(), 
+                        style: const TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
+                    ),
                   ],
                 ),
               ],

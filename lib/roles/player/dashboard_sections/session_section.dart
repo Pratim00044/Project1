@@ -32,14 +32,14 @@ class _SessionSectionState extends State<SessionSection> {
         children: [
           _buildHeaderSection('UPCOMING SESSIONS', () => setState(() => _filterMode = 'all_upcoming')),
           const SizedBox(height: 15),
-          _buildSessionCard('TACTICAL TRAINING', '09:00 AM - 11:00 AM', 'Pitch A', Icons.psychology, {
+          _buildSessionCard(0, 'TACTICAL TRAINING', '09:00 AM - 11:00 AM', 'Pitch A', Icons.psychology, {
             'coach': 'Zinedine Zidane',
             'focus': 'Positional play, transition speed',
             'squad': 'Full Squad',
             'intensity': 'High'
           }),
           const SizedBox(height: 12),
-          _buildSessionCard('STRENGTH & CONDITIONING', '02:00 PM - 03:30 PM', 'Gym Center', Icons.fitness_center, {
+          _buildSessionCard(1, 'STRENGTH & CONDITIONING', '02:00 PM - 03:30 PM', 'Gym Center', Icons.fitness_center, {
             'coach': 'Dr. Marcus Fitness',
             'focus': 'Core stability, explosive power',
             'squad': 'Group B',
@@ -49,7 +49,7 @@ class _SessionSectionState extends State<SessionSection> {
           const SizedBox(height: 35),
           _buildHeaderSection('RECENT SESSIONS', () => setState(() => _filterMode = 'all_recent')),
           const SizedBox(height: 15),
-          _buildSessionCard('PRACTICE MATCH', 'Yesterday', 'Main Stadium', Icons.sports_soccer, {
+          _buildSessionCard(2, 'PRACTICE MATCH', 'Yesterday', 'Main Stadium', Icons.sports_soccer, {
             'result': 'Win 2-0',
             'performance': 'Excellent, 1 Goal, 1 Assist',
             'match_type': 'Internal Scrimmage',
@@ -82,9 +82,17 @@ class _SessionSectionState extends State<SessionSection> {
     );
   }
 
-  Widget _buildSessionCard(String title, String time, String location, IconData icon, Map<String, dynamic> data, {bool completed = false}) {
+  Widget _buildSessionCard(int index, String title, String time, String location, IconData icon, Map<String, dynamic> data, {bool completed = false}) {
     bool isConfirmed = _confirmedSessions.contains(title);
     
+    final List<String> tileImages = [
+      'assets/images/img1.jpeg',
+      'assets/images/img2.jpeg',
+      'assets/images/img3.jpeg',
+      'assets/images/img4.jpeg',
+    ];
+    String currentImage = tileImages[index % tileImages.length];
+
     return GestureDetector(
       onTap: () => setState(() => _selectedSession = {
         'title': title,
@@ -99,7 +107,12 @@ class _SessionSectionState extends State<SessionSection> {
         decoration: BoxDecoration(
           color: surfaceColor,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: isConfirmed ? goldColor.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.03)),
+          border: Border.all(color: isConfirmed ? goldColor.withValues(alpha: 0.3) : Colors.white.withValues(alpha: 0.05)),
+          image: DecorationImage(
+            image: AssetImage(currentImage),
+            fit: BoxFit.cover,
+            opacity: 0.4,
+          ),
         ),
         child: Row(
           children: [
@@ -292,6 +305,7 @@ class _SessionSectionState extends State<SessionSection> {
               separatorBuilder: (context, index) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
                 return _buildSessionCard(
+                  index,
                   isUpcoming ? 'FUTURE DRILL ${index + 1}' : 'PAST GAME ${index + 1}',
                   isUpcoming ? 'Feb ${index + 5}, 2024' : 'Jan ${25 - index}, 2024',
                   'Training Ground',

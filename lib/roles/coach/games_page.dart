@@ -4,6 +4,16 @@ import 'social_leagues.dart';
 import 'create_game_page.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
+const List<Color> cardColors = [
+  Color(0xFF1E3A8A),
+  Color(0xFF3730A3),
+  Color(0xFF5B21B6),
+  Color(0xFF7C3AED),
+  Color(0xFF9D174D),
+  Color(0xFF991B1B),
+  Color(0xFF92400E),
+  Color(0xFF065F46),
+];
 
 class GamesPage extends StatefulWidget {
   const GamesPage({super.key});
@@ -14,6 +24,9 @@ class GamesPage extends StatefulWidget {
 
 class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMixin {
   late TabController _tab;
+  DateTime _selectedDate = DateTime.parse('2024-06-10');
+  final ScrollController _dateScrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -28,43 +41,166 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('GAMES',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 2)),
-              _buildCreateButton(context),
-            ],
+    String dayName = _selectedDate.day == 10 ? 'TODAY' : ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'][_selectedDate.weekday - 1];
+    String monthName = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'][_selectedDate.month - 1];
+
+    return NestedScrollView(
+      headerSliverBuilder: (context, innerBoxIsScrolled) => [
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+            child: const Text('GAMES',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 2)),
           ),
         ),
-          TabBar(
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('PICK A DATE',
+                    style: TextStyle(
+                        color: Colors.white38,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.5)),
+                const SizedBox(height: 15),
+                SizedBox(
+                  height: 100,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        child: ListView.builder(
+                          controller: _dateScrollController,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 14,
+                          itemBuilder: (context, index) {
+                            DateTime date = DateTime.parse('2024-06-10').add(Duration(days: index));
+                            bool isSelected = date.day == _selectedDate.day;
+                            String label = index == 0 ? 'TODAY' : ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'][date.weekday - 1];
+                            
+                            return GestureDetector(
+                              onTap: () => setState(() => _selectedDate = date),
+                              child: Container(
+                                width: 75,
+                                margin: const EdgeInsets.only(right: 12),
+                                decoration: BoxDecoration(
+                                  color: isSelected ? Colors.transparent : const Color(0xFF1A1A1A),
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                    color: isSelected ? const Color(0xFF2ECC71) : Colors.transparent, 
+                                    width: 2
+                                  ),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(label,
+                                      style: TextStyle(
+                                        color: isSelected ? const Color(0xFF2ECC71) : Colors.white24, 
+                                        fontSize: 9, 
+                                        fontWeight: FontWeight.w900,
+                                        letterSpacing: 0.5
+                                      )),
+                                    const SizedBox(height: 5),
+                                    Text(date.day.toString(),
+                                      style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900)),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      Positioned(
+                        left: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            _dateScrollController.animateTo(
+                              (_dateScrollController.offset - 87).clamp(0, _dateScrollController.position.maxScrollExtent),
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF1A1A1A),
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                            ),
+                            child: const Icon(Icons.chevron_left, color: Colors.white38, size: 18),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            _dateScrollController.animateTo(
+                              (_dateScrollController.offset + 87).clamp(0, _dateScrollController.position.maxScrollExtent),
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF2ECC71),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(Icons.chevron_right, color: Colors.black, size: 18),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Text(dayName, style: const TextStyle(color: Color(0xFF2ECC71), fontSize: 14, fontWeight: FontWeight.w900)),
+                    const SizedBox(width: 8),
+                    const Text('•', style: TextStyle(color: Colors.white12)),
+                    const SizedBox(width: 8),
+                    Text('$monthName ${_selectedDate.day}', style: const TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w900)),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: _SliverAppBarDelegate(
+            TabBar(
               controller: _tab,
               indicatorColor: goldColor,
               labelColor: goldColor,
               unselectedLabelColor: Colors.white24,
               indicatorSize: TabBarIndicatorSize.label,
               dividerColor: Colors.transparent,
-              tabs: const [Tab(text: 'MATCHES'), Tab(text: 'LEAGUES'), Tab(text: 'TRAINING')]),
-          Expanded(
-            child: TabBarView(
-              controller: _tab,
-              children: [
-                _buildMatchTab(context),
-                _buildLeagueTab(context),
-                _buildTrainingTab(context),
-              ],
+              tabs: const [Tab(text: 'MATCHES'), Tab(text: 'LEAGUES'), Tab(text: 'TRAINING')],
             ),
           ),
+        ),
+      ],
+      body: TabBarView(
+        controller: _tab,
+        children: [
+          _buildMatchTab(context),
+          _buildLeagueTab(context),
+          _buildTrainingTab(context),
         ],
-      );
+      ),
+    );
   }
 
   Widget _buildCreateButton(BuildContext context) {
@@ -78,9 +214,9 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
         ],
       ),
       child: ElevatedButton.icon(
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateGamePage())),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateTrainingPage())),
         icon: const Icon(Icons.add, size: 18, color: Colors.black),
-        label: const Text('CREATE',
+        label: const Text('SCHEDULE',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
@@ -97,13 +233,13 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
       children: [
         _buildSectionTitle('LIVE MATCHES'),
         const SizedBox(height: 15),
-        _buildLiveCard(context, 'MOHUN BAGAN', 'KERALA BLASTERS', '2', '1', '78\'',
-            'Hero Indian Super League'),
+        _buildLiveCard(context, 'REAL MADRID', 'BARCELONA', '2', '1', '78\'',
+            'LA LIGA', cardColors[0]),
         const SizedBox(height: 30),
         _buildSectionTitle('UPCOMING FIXTURES'),
         const SizedBox(height: 15),
         LayoutBuilder(builder: (context, constraints) {
-          double aspectRatio = constraints.maxWidth < 600 ? 1.4 : 1.8;
+          double aspectRatio = constraints.maxWidth < 600 ? 1.1 : 1.5;
           return GridView(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -114,14 +250,14 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
               childAspectRatio: aspectRatio,
             ),
             children: [
-              _buildUpcomingBoxCard(context, 'MOHUN BAGAN vs EAST BENGAL', 'JUL 02', '19:30',
-                  'League Match', 'Salt Lake Stadium'),
-              _buildUpcomingBoxCard(context, 'MOHUN BAGAN vs MUMBAI CITY', 'JUL 08', '20:00',
-                  'Friendly', 'Mumbai Football Arena'),
-              _buildUpcomingBoxCard(context, 'MOHUN BAGAN vs FC GOA', 'JUL 15', '19:30',
-                  'Durand Cup', 'Fatorda Stadium'),
-              _buildUpcomingBoxCard(context, 'MOHUN BAGAN vs BENGALURU FC', 'JUL 22', '18:00',
-                  'League Match', 'Kanteerava Stadium'),
+              _buildUpcomingBoxCard(context, 'CORE FC vs ARSENAL', 'JUL 02', '19:30',
+                  'Premier League', 'Emirates Stadium', cardColors[1]),
+              _buildUpcomingBoxCard(context, 'MAN CITY vs CORE FC', 'JUL 08', '20:00',
+                  'Champions League', 'Etihad Stadium', cardColors[2]),
+              _buildUpcomingBoxCard(context, 'CORE FC vs LIVERPOOL', 'JUL 15', '19:30',
+                  'Premier League', 'Anfield', cardColors[3]),
+              _buildUpcomingBoxCard(context, 'BAYERN MUNICH vs CORE FC', 'JUL 22', '18:00',
+                  'Champions League', 'Allianz Arena', cardColors[4]),
             ],
           );
         }),
@@ -168,7 +304,7 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
         _buildSectionTitle('ACTIVE LEAGUES'),
         const SizedBox(height: 15),
         LayoutBuilder(builder: (context, constraints) {
-          double aspectRatio = constraints.maxWidth < 600 ? 1.5 : 2.0;
+          double aspectRatio = constraints.maxWidth < 600 ? 1.1 : 1.5;
           return GridView(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -179,10 +315,10 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
               childAspectRatio: aspectRatio,
             ),
             children: [
-              _buildLeagueBoxCard('Super Cup', 'Bhubaneswar', '16 Teams', 'IN PROGRESS', Icons.emoji_events),
-              _buildLeagueBoxCard('Santosh Trophy', 'Multiple', '32 Teams', 'REGISTRATION OPEN', Icons.emoji_events, isGold: true),
-              _buildLeagueBoxCard('I-League 2', 'Pan-India', '12 Teams', 'UPCOMING', Icons.emoji_events),
-              _buildLeagueBoxCard('Durand Cup', 'Kolkata', '24 Teams', 'REGISTRATION OPEN', Icons.emoji_events, isGold: true),
+              _buildLeagueBoxCard('Champions League', 'Europe', '32 Teams', 'IN PROGRESS', Icons.emoji_events, color: cardColors[5]),
+              _buildLeagueBoxCard('Premier League', 'England', '20 Teams', 'REGISTRATION OPEN', Icons.emoji_events, isGold: true, color: cardColors[6]),
+              _buildLeagueBoxCard('La Liga', 'Spain', '20 Teams', 'UPCOMING', Icons.emoji_events, color: cardColors[7]),
+              _buildLeagueBoxCard('Saudi Pro League', 'Saudi Arabia', '18 Teams', 'REGISTRATION OPEN', Icons.emoji_events, isGold: true, color: cardColors[0]),
             ],
           );
         }),
@@ -205,36 +341,34 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
           ],
         ),
         const SizedBox(height: 15),
-        _buildTrainingCard(context, 'TACTICAL DRILLS', 'JUL 01', '08:00', 'Core Academy Pitch', isUpcoming: true),
+        _buildTrainingCard(context, 'TACTICAL DRILLS', 'JUL 01', '08:00', 'Core Academy Pitch', isUpcoming: true, color: cardColors[1]),
         const SizedBox(height: 15),
-        _buildTrainingCard(context, 'FITNESS TEST', 'JUL 03', '07:30', 'Main Stadium Gym', isUpcoming: true),
+        _buildTrainingCard(context, 'FITNESS TEST', 'JUL 03', '07:30', 'Main Stadium Gym', isUpcoming: true, color: cardColors[2]),
         
         const SizedBox(height: 35),
         _buildSectionTitle('PAST SESSIONS'),
         const SizedBox(height: 15),
-        _buildTrainingCard(context, 'DEFENSIVE POSITIONING', 'JUN 28', '09:00', 'Pitch B', isUpcoming: false),
+        _buildTrainingCard(context, 'DEFENSIVE POSITIONING', 'JUN 28', '09:00', 'Pitch B', isUpcoming: false, color: cardColors[3]),
         const SizedBox(height: 15),
-        _buildTrainingCard(context, 'SHOOTING PRACTICE', 'JUN 25', '16:00', 'Pitch A', isUpcoming: false),
+        _buildTrainingCard(context, 'SHOOTING PRACTICE', 'JUN 25', '16:00', 'Pitch A', isUpcoming: false, color: cardColors[4]),
         const SizedBox(height: 50),
       ],
     );
   }
 
-  Widget _buildTrainingCard(BuildContext context, String title, String date, String time, String venue, {required bool isUpcoming}) {
+  Widget _buildTrainingCard(BuildContext context, String title, String date, String time, String venue, {required bool isUpcoming, required Color color}) {
     return GestureDetector(
       onTap: () => _showTrainingDetails(context, title, date, time, venue, isUpcoming),
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: const Color(0xFF121212),
+          color: color.withOpacity(0.1),
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.white.withOpacity(0.05)),
+          border: Border.all(color: color.withOpacity(0.2)),
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: isUpcoming 
-              ? [const Color(0xFF1A1A1A), const Color(0xFF0D0D0D)]
-              : [const Color(0xFF121212), const Color(0xFF080808)],
+            colors: [color.withOpacity(0.2), color.withOpacity(0.05)],
           ),
         ),
         child: Column(
@@ -321,24 +455,19 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
           letterSpacing: 2));
 
   Widget _buildLiveCard(BuildContext context, String t1, String t2, String s1, String s2,
-      String time, String l) {
+      String time, String l, Color color) {
     return GestureDetector(
       onTap: () => _showMatchDetails(context, t1, t2),
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: const Color(0xFF121212),
+          color: color,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.redAccent.withOpacity(0.3)),
-          image: const DecorationImage(
-            image: AssetImage('assets/images/match.png'),
-            fit: BoxFit.cover,
-            opacity: 0.2,
-          ),
-          gradient: const LinearGradient(
+          border: Border.all(color: Colors.white.withOpacity(0.1)),
+          gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFF1A1A1A), Color(0xFF080808)],
+            colors: [color, color.withOpacity(0.7)],
           ),
         ),
         child: Column(
@@ -405,97 +534,126 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
   }
 
   Widget _buildUpcomingBoxCard(
-      BuildContext context, String t, String d, String time, String type, String v) {
+      BuildContext context, String t, String d, String time, String type, String v, Color color) {
     return GestureDetector(
       onTap: () => _showMatchDetails(context, t.split('vs')[0].trim(), t.split('vs')[1].trim()),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        padding: const EdgeInsets.all(15),
         decoration: BoxDecoration(
-          color: const Color(0xFF121212),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.white.withOpacity(0.05)),
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: color.withOpacity(0.2)),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [color.withOpacity(0.2), color.withOpacity(0.05)],
+          ),
         ),
-        child: LayoutBuilder(builder: (context, constraints) {
-          double baseWidth = 250.0;
-          double scale = (constraints.maxWidth / baseWidth).clamp(0.7, 1.2);
-          
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(d, style: TextStyle(color: goldColor, fontSize: 9 * scale, fontWeight: FontWeight.bold)),
-                  Text(time, style: TextStyle(color: Colors.white38, fontSize: 9 * scale)),
-                ],
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 4.0),
-                child: Divider(color: Colors.white10, thickness: 0.5),
-              ),
-              Text(type.toUpperCase(), style: TextStyle(color: goldColor, fontSize: 8 * scale, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 2),
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerLeft,
-                child: Text(t, 
-                    style: TextStyle(color: Colors.white, fontSize: 13 * scale, fontWeight: FontWeight.bold)),
-              ),
-              Text(v, 
-                  style: TextStyle(color: Colors.white24, fontSize: 10 * scale), 
-                  maxLines: 1, 
-                  overflow: TextOverflow.ellipsis),
-            ],
-          );
-        }),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 30, height: 30,
+                  decoration: BoxDecoration(
+                    color: goldColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.sports_soccer_rounded, color: goldColor, size: 16),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(d, style: const TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.bold)),
+                    Text(time, style: const TextStyle(color: Colors.white38, fontSize: 10)),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(type.toUpperCase(), style: const TextStyle(color: goldColor, fontSize: 9, fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+                const SizedBox(height: 4),
+                Text(t, 
+                    style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis),
+                Text(v, 
+                    style: const TextStyle(color: Colors.white24, fontSize: 11), 
+                    maxLines: 1, 
+                    overflow: TextOverflow.ellipsis),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildLeagueBoxCard(String n, String l, String t, String s, IconData icon, {bool isGold = false}) {
+  Widget _buildLeagueBoxCard(String n, String l, String t, String s, IconData icon, {bool isGold = false, required Color color}) {
+    Color statusColor = s.contains('OPEN') ? Colors.greenAccent : (s.contains('PROGRESS') ? goldColor : Colors.white38);
+    
     return GestureDetector(
       onTap: () => _showLeagueDetails(n, s),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        padding: const EdgeInsets.all(15),
         decoration: BoxDecoration(
-          color: isGold ? goldColor.withOpacity(0.05) : const Color(0xFF121212),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: isGold ? goldColor.withOpacity(0.3) : Colors.white.withOpacity(0.03)),
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: isGold ? goldColor.withOpacity(0.3) : color.withOpacity(0.2)),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [color.withOpacity(0.15), color.withOpacity(0.05)],
+          ),
         ),
-        child: LayoutBuilder(builder: (context, constraints) {
-          double baseWidth = 200.0;
-          double scale = (constraints.maxWidth / baseWidth).clamp(0.8, 1.2);
-          
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(n, 
-                      style: TextStyle(color: Colors.white, fontSize: 13 * scale, fontWeight: FontWeight.bold), 
-                      maxLines: 1, 
-                      overflow: TextOverflow.ellipsis),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: s.contains('OPEN') ? Colors.green.withOpacity(0.1) : Colors.white.withOpacity(0.05),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(s.contains('OPEN') ? 'OPEN' : s, 
-                        style: TextStyle(color: s.contains('OPEN') ? Colors.greenAccent : Colors.white38, fontSize: 7 * scale, fontWeight: FontWeight.bold)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 32, height: 32,
+                  decoration: BoxDecoration(
+                    color: (isGold ? goldColor : Colors.white10).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Text(l, style: TextStyle(color: Colors.white38, fontSize: 9 * scale)),
-              const SizedBox(height: 4),
-              Text(t, style: TextStyle(color: goldColor, fontSize: 9 * scale, fontWeight: FontWeight.w500)),
-            ],
-          );
-        }),
+                  child: Icon(icon, color: isGold ? goldColor : Colors.white38, size: 16),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: statusColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(s.contains('OPEN') ? 'OPEN' : s, 
+                      style: TextStyle(color: statusColor, fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(n, 
+                    style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold), 
+                    maxLines: 1, 
+                    overflow: TextOverflow.ellipsis),
+                const SizedBox(height: 4),
+                Text(l, style: const TextStyle(color: Colors.white38, fontSize: 11)),
+                const SizedBox(height: 2),
+                Text(t, style: const TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.bold)),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -543,6 +701,30 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
 
 }
 
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverAppBarDelegate(this._tabBar);
+
+  final TabBar _tabBar;
+
+  @override
+  double get minExtent => _tabBar.preferredSize.height;
+  @override
+  double get maxExtent => _tabBar.preferredSize.height;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: Colors.black,
+      child: _tabBar,
+    );
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return false;
+  }
+}
+
 class _MatchDetailView extends StatefulWidget {
   final String teamA;
   final String teamB;
@@ -556,21 +738,21 @@ class _MatchDetailViewState extends State<_MatchDetailView> with SingleTickerPro
   late TabController _innerTab;
 
   final Map<String, List<String>> _teamLineups = {
-    'MOHUN BAGAN': [
-      'Vishal Kaith', 'Subhasish Bose', 'Alberto Rodriguez', 'Tom Aldred', 'Asish Rai',
-      'Anirudh Thapa', 'Lalengmawia', 'Sahal Abdul Samad', 'Liston Colaco', 'Manvir Singh', 'Jason Cummings'
+    'REAL MADRID': [
+      'Thibaut Courtois', 'Dani Carvajal', 'Eder Militao', 'Antonio Rudiger', 'Ferland Mendy',
+      'Federico Valverde', 'Aurelien Tchouameni', 'Jude Bellingham', 'Rodrygo', 'Kylian Mbappe', 'Vinicius Jr'
     ],
-    'KERALA BLASTERS': [
-      'Som Kumar', 'Milos Drincic', 'Pritam Kotal', 'Sandeep Singh', 'Aibanhah Dohling',
-      'Vibin Mohanan', 'Jeakson Singh', 'Luna', 'Rahul KP', 'Daisuke Sakai', 'Kwame Peprah'
+    'BARCELONA': [
+      'Marc-Andre ter Stegen', 'Jules Kounde', 'Pau Cubarsi', 'Inigo Martinez', 'Alejandro Balde',
+      'Marc Casado', 'Pedri', 'Dani Olmo', 'Lamine Yamal', 'Robert Lewandowski', 'Raphinha'
     ],
-    'EAST BENGAL': [
-      'Prabhsukhan Gill', 'Hijazi Maher', 'Anwar Ali', 'Mohammad Rakip', 'Mark Zothanpuia',
-      'Jeakson Singh', 'Madih Talal', 'Saul Crespo', 'Naorem Mahesh', 'Nandhakumar Sekar', 'Dimitrios Diamantakos'
+    'CORE FC': [
+      'Alisson Becker', 'Kyle Walker', 'Ruben Dias', 'Virgil van Dijk', 'Theo Hernandez',
+      'Kevin De Bruyne', 'Rodri', 'Luka Modric', 'Mohamed Salah', 'Erling Haaland', 'Phil Foden'
     ],
-    'BENGALURU FC': [
-      'Gurpreet Singh', 'Rahul Bheke', 'Aleksandar Jovanovic', 'Nikhil Poojary', 'Roshan Singh',
-      'Suresh Wangjam', 'Lalremzuala Fanai', 'Ryan Williams', 'Sunil Chhetri', 'Jorge Pereyra Diaz', 'Edgar Mendez'
+    'ARSENAL': [
+      'David Raya', 'Ben White', 'William Saliba', 'Gabriel Magalhaes', 'Riccardo Calafiori',
+      'Declan Rice', 'Thomas Partey', 'Martin Odegaard', 'Bukayo Saka', 'Kai Havertz', 'Gabriel Martinelli'
     ],
   };
 
@@ -748,11 +930,11 @@ class _TrainingDetailView extends StatefulWidget {
 
 class _TrainingDetailViewState extends State<_TrainingDetailView> {
   final List<Map<String, dynamic>> _players = [
-    {'name': 'Sunil Chhetri', 'attended': true, 'rating': 4.5},
-    {'name': 'Sahal Abdul', 'attended': true, 'rating': 4.0},
-    {'name': 'Anirudh Thapa', 'attended': false, 'rating': 0.0},
-    {'name': 'Sandesh Jhingan', 'attended': true, 'rating': 3.5},
-    {'name': 'Gurpreet Singh', 'attended': true, 'rating': 5.0},
+    {'name': 'Cristiano Ronaldo', 'attended': true, 'rating': 4.5},
+    {'name': 'Luka Modric', 'attended': true, 'rating': 4.0},
+    {'name': 'Kevin De Bruyne', 'attended': false, 'rating': 0.0},
+    {'name': 'Virgil van Dijk', 'attended': true, 'rating': 3.5},
+    {'name': 'Alisson Becker', 'attended': true, 'rating': 5.0},
   ];
 
   @override
@@ -800,12 +982,17 @@ class _TrainingDetailViewState extends State<_TrainingDetailView> {
                   margin: const EdgeInsets.only(bottom: 12),
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF121212),
+                    color: cardColors[index % cardColors.length].withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: cardColors[index % cardColors.length].withOpacity(0.2)),
                   ),
                   child: Row(
                     children: [
-                      const CircleAvatar(radius: 20, backgroundColor: Color(0xFF1A1A1A), child: Icon(Icons.person, color: goldColor, size: 20)),
+                      const CircleAvatar(
+                        radius: 20, 
+                        backgroundColor: Colors.transparent,
+                        backgroundImage: AssetImage('assets/images/sunil.png'),
+                      ),
                       const SizedBox(width: 15),
                       Expanded(
                         child: Column(
