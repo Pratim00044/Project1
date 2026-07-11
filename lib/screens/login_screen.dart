@@ -27,10 +27,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final List<Map<String, dynamic>> _roles = [
     {'name': 'PLAYER', 'icon': Icons.directions_run_outlined, 'color': goldColor},
-    {'name': 'ORGANISER/HOST', 'icon': Icons.groups_outlined, 'color': Colors.tealAccent},
+    {'name': 'ORGANISER', 'icon': Icons.groups_outlined, 'color': Colors.tealAccent},
     {'name': 'COACH', 'icon': Icons.sports_outlined, 'color': Colors.grey},
     {'name': 'MANAGER', 'icon': Icons.manage_accounts_outlined, 'color': Colors.purpleAccent},
-    {'name': 'SUPER ADMIN', 'icon': Icons.admin_panel_settings_outlined, 'color': goldColor},
+    {'name': 'ADMIN', 'icon': Icons.admin_panel_settings_outlined, 'color': goldColor},
   ];
 
   late PageController _pageController;
@@ -58,10 +58,10 @@ class _LoginScreenState extends State<LoginScreen> {
   void _handleLogin() {
     Widget homePage;
     switch (_roles[_currentIndex]['name']) {
-      case 'SUPER ADMIN':
+      case 'ADMIN':
         homePage = const SuperAdminHome();
         break;
-      case 'ORGANISER/HOST':
+      case 'ORGANISER':
         homePage = const OrganisationHome();
         break;
       case 'PLAYER':

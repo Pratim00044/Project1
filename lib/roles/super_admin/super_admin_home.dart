@@ -71,7 +71,7 @@ class SuperAdminHome extends StatelessWidget {
                               const Text('STATIXA COMMAND CENTER',
                                 style: TextStyle(color: goldColor, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 3)),
                               const SizedBox(height: 5),
-                              const Text('SUPER ADMIN',
+                              const Text('ADMIN',
                                 style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: 1)),
                             ],
                           ),
@@ -106,7 +106,7 @@ class SuperAdminHome extends StatelessWidget {
                         _buildAdminActionCard(
                           context,
                           Icons.how_to_reg_rounded, 
-                          'VERIFY ORGANISERS/HOSTS',
+                          'VERIFY ORGANISERS',
                           '3 Pending Applications', 
                           [const Color(0xFF007CFE), const Color(0xFF004A99)],
                           () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VerifyOrganisersPage()))
@@ -259,7 +259,7 @@ class SuperAdminHome extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text('SUPER ADMIN',
+                              const Text('ADMIN',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
