@@ -39,24 +39,24 @@ class MorePage extends StatelessWidget {
                 _buildSectionTitle('COACHING TOOLS'),
                 const SizedBox(height: 15),
                 _buildResponsiveGrid([
-                  _buildToolCard('Scouting', Icons.search_rounded, 'Find new talents', goldColor),
-                  _buildToolCard('Tactics', Icons.dashboard_customize_rounded, 'Advanced strategies', Colors.blueAccent),
-                  _buildToolCard('Training', Icons.fitness_center_rounded, 'Drills & Schedules', Colors.orangeAccent),
-                  _buildToolCard('Analysis', Icons.analytics_rounded, 'Match statistics', Colors.purpleAccent),
+                  _buildToolCard('Scouting', Icons.search_rounded, 'Find new talents', goldColor, 'assets/images/img1.jpeg'),
+                  _buildToolCard('Tactics', Icons.dashboard_customize_rounded, 'Advanced strategies', Colors.blueAccent, 'assets/images/img2.jpeg'),
+                  _buildToolCard('Training', Icons.fitness_center_rounded, 'Drills & Schedules', Colors.orangeAccent, 'assets/images/img3.jpeg'),
+                  _buildToolCard('Analysis', Icons.analytics_rounded, 'Match statistics', Colors.purpleAccent, 'assets/images/img4.jpeg'),
                 ]),
                 const SizedBox(height: 35),
                 _buildSectionTitle('CLUB MANAGEMENT'),
                 const SizedBox(height: 15),
-                _buildMenuOption(context, Icons.account_balance_wallet_rounded, 'Finances', 'Budget & Salary management', 
+                _buildMenuOption(context, Icons.account_balance_wallet_rounded, 'Finances', 'Budget & Salary management', 'assets/images/img1.jpeg',
                   onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ManagerBudgetPage()))),
-                _buildMenuOption(context, Icons.stadium_rounded, 'Facilities', 'Stadium & Training ground'),
-                _buildMenuOption(context, Icons.history_edu_rounded, 'Club History', 'Honours & Heritage'),
+                _buildMenuOption(context, Icons.stadium_rounded, 'Facilities', 'Stadium & Training ground', 'assets/images/img2.jpeg'),
+                _buildMenuOption(context, Icons.history_edu_rounded, 'Club History', 'Honours & Heritage', 'assets/images/img3.jpeg'),
                 const SizedBox(height: 35),
                 _buildSectionTitle('SUPPORT & APP'),
                 const SizedBox(height: 15),
-                _buildMenuOption(context, Icons.help_outline_rounded, 'Help Center', 'FAQs & Documentation'),
-                _buildMenuOption(context, Icons.feedback_outlined, 'Send Feedback', 'Suggest new features'),
-                _buildMenuOption(context, Icons.info_outline_rounded, 'About App', 'Version 2.1.0 (Elite)'),
+                _buildMenuOption(context, Icons.help_outline_rounded, 'Help Center', 'FAQs & Documentation', 'assets/images/img4.jpeg'),
+                _buildMenuOption(context, Icons.feedback_outlined, 'Send Feedback', 'Suggest new features', 'assets/images/img1.jpeg'),
+                _buildMenuOption(context, Icons.info_outline_rounded, 'About App', 'Version 2.1.0 (Elite)', 'assets/images/img2.jpeg'),
                 const SizedBox(height: 40),
               ]),
             ),
@@ -88,13 +88,17 @@ class MorePage extends StatelessWidget {
     });
   }
 
-  Widget _buildToolCard(String title, IconData icon, String subtitle, Color color) {
+  Widget _buildToolCard(String title, IconData icon, String subtitle, Color color, String imagePath) {
     return Container(
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: const Color(0xFF121212),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: color.withValues(alpha: 0.1)),
+        image: DecorationImage(
+          image: AssetImage(imagePath),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(Colors.black38, BlendMode.darken),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,16 +123,20 @@ class MorePage extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuOption(BuildContext context, IconData icon, String title, String subtitle, {VoidCallback? onTap}) {
+  Widget _buildMenuOption(BuildContext context, IconData icon, String title, String subtitle, String imagePath, {VoidCallback? onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFF121212),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: Colors.white.withValues(alpha: 0.02)),
+          image: DecorationImage(
+            image: AssetImage(imagePath),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(Colors.black38, BlendMode.darken),
+          ),
         ),
         child: Row(
           children: [

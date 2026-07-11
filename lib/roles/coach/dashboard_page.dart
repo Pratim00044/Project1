@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'create_training_page.dart';
 import 'create_game_page.dart';
+import 'coach_notifications_page.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color surfaceColor = Color(0xFF121212);
@@ -92,15 +93,19 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
 
         SliverToBoxAdapter(
+          child: _buildNotificationBanner(context),
+        ),
+
+        SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
-                _buildGradientStatTile(Icons.history, '12 Years', 'Experience', [const Color(0xFF007CFE), const Color(0xFF004A99)]),
+                _buildGradientStatTile(0, Icons.history, '12 Years', 'Experience', [const Color(0xFF007CFE), const Color(0xFF004A99)]),
                 const SizedBox(width: 12),
-                _buildGradientStatTile(Icons.groups_rounded, 'Under 8s', 'Primary Squad', [const Color(0xFF38EF7D), const Color(0xFF11998E)]),
+                _buildGradientStatTile(1, Icons.groups_rounded, 'Under 8s', 'Primary Squad', [const Color(0xFF38EF7D), const Color(0xFF11998E)]),
                 const SizedBox(width: 12),
-                _buildGradientStatTile(Icons.analytics_outlined, 'A+ UEFA', 'License', [const Color(0xFFEE0979), const Color(0xFFF12711)]),
+                _buildGradientStatTile(2, Icons.analytics_outlined, 'A+ UEFA', 'License', [const Color(0xFFEE0979), const Color(0xFFF12711)]),
               ],
             ),
           ),
@@ -178,11 +183,11 @@ class _DashboardPageState extends State<DashboardPage> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
-                _buildGradientStatTile(Icons.emoji_events_rounded, '12', 'TROPHIES', [const Color(0xFFFFB75E), const Color(0xFFED8F03)]),
+                _buildGradientStatTile(3, Icons.emoji_events_rounded, '12', 'TROPHIES', [const Color(0xFFFFB75E), const Color(0xFFED8F03)]),
                 const SizedBox(width: 12),
-                _buildGradientStatTile(Icons.trending_up_rounded, '85%', 'WIN RATE', [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)]),
+                _buildGradientStatTile(4, Icons.trending_up_rounded, '85%', 'WIN RATE', [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)]),
                 const SizedBox(width: 12),
-                _buildGradientStatTile(Icons.assignment_ind_rounded, '150', 'MANAGED', [const Color(0xFF00D2FF), const Color(0xFF3A7BD5)]),
+                _buildGradientStatTile(5, Icons.assignment_ind_rounded, '150', 'MANAGED', [const Color(0xFF00D2FF), const Color(0xFF3A7BD5)]),
               ],
             ),
           ),
@@ -243,13 +248,12 @@ class _DashboardPageState extends State<DashboardPage> {
         width: double.infinity,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: surfaceColor,
           borderRadius: BorderRadius.circular(25),
           border: Border.all(color: goldColor.withValues(alpha: 0.3)),
-          gradient: LinearGradient(
-            colors: [goldColor.withValues(alpha: 0.8), const Color(0xFF000000)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+          image: const DecorationImage(
+            image: AssetImage('assets/images/img1.jpeg'),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(Colors.black38, BlendMode.darken),
           ),
         ),
         child: Row(
@@ -313,20 +317,19 @@ class _DashboardPageState extends State<DashboardPage> {
           margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
             borderRadius: BorderRadius.circular(15),
             border: Border.all(color: color.withOpacity(0.2)),
-            gradient: LinearGradient(
-              colors: [color.withOpacity(0.15), color.withOpacity(0.05)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+            image: DecorationImage(
+              image: AssetImage('assets/images/img${(index % 4) + 1}.jpeg'),
+              fit: BoxFit.cover,
+              colorFilter: const ColorFilter.mode(Colors.black38, BlendMode.darken),
             ),
           ),
           child: Row(
             children: [
               Container(
                 width: 32, height: 32,
-                decoration: BoxDecoration(color: color.withOpacity(0.2), borderRadius: BorderRadius.circular(8)),
+                decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
                 child: Icon(Icons.emoji_events_outlined, color: color, size: 16),
               ),
               const SizedBox(width: 15),
@@ -353,13 +356,12 @@ class _DashboardPageState extends State<DashboardPage> {
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(15),
         border: Border.all(color: color.withOpacity(0.2)),
-        gradient: LinearGradient(
-          colors: [color.withOpacity(0.15), color.withOpacity(0.05)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+        image: const DecorationImage(
+          image: AssetImage('assets/images/img1.jpeg'),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(Colors.black38, BlendMode.darken),
         ),
       ),
       child: Row(
@@ -397,13 +399,12 @@ class _DashboardPageState extends State<DashboardPage> {
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(15),
         border: Border.all(color: color.withOpacity(0.2)),
-        gradient: LinearGradient(
-          colors: [color.withOpacity(0.15), color.withOpacity(0.05)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+        image: const DecorationImage(
+          image: AssetImage('assets/images/img2.jpeg'),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(Colors.black38, BlendMode.darken),
         ),
       ),
       child: Row(
@@ -565,11 +566,7 @@ class _DashboardPageState extends State<DashboardPage> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF1E1E1E), Color(0xFF121212)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: Colors.black,
         borderRadius: BorderRadius.circular(25),
         border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
@@ -604,10 +601,10 @@ class _DashboardPageState extends State<DashboardPage> {
             ],
           ),
           const SizedBox(height: 25),
-          _buildRankingItem('TOP GK', 'MANUEL NEUER', 'Under 8s', '98% Save Rate', [const Color(0xFF38EF7D), const Color(0xFF11998E)]),
-          _buildRankingItem('TOP DEFENDER', 'SERGIO RAMOS', 'Under 10s', '45 Tackles', [const Color(0xFF007CFE), const Color(0xFF004A99)]),
-          _buildRankingItem('TOP MIDFIELDER', 'LUKA MODRIC', 'Under 8s', '12 Assists', [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)]),
-          _buildRankingItem('TOP STRIKER', 'CRISTIANO RONALDO', 'Under 8s', '24 Goals', [const Color(0xFFEE0979), const Color(0xFFF12711)]),
+          _buildRankingItem('TOP GK', 'MANUEL NEUER', 'Under 8s', '98% Save Rate', [const Color(0xFF38EF7D), const Color(0xFF11998E)], 0),
+          _buildRankingItem('TOP DEFENDER', 'SERGIO RAMOS', 'Under 10s', '45 Tackles', [const Color(0xFF007CFE), const Color(0xFF004A99)], 1),
+          _buildRankingItem('TOP MIDFIELDER', 'LUKA MODRIC', 'Under 8s', '12 Assists', [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)], 2),
+          _buildRankingItem('TOP STRIKER', 'CRISTIANO RONALDO', 'Under 8s', '24 Goals', [const Color(0xFFEE0979), const Color(0xFFF12711)], 3),
         ],
       ),
     );
@@ -624,7 +621,7 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _buildRankingItem(String category, String name, String team, String stat, List<Color> colors) {
+  Widget _buildRankingItem(String category, String name, String team, String stat, List<Color> colors, int index) {
     IconData icon;
     switch (category) {
       case 'TOP GK': icon = Icons.security_rounded; break;
@@ -639,9 +636,13 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Container(
         padding: const EdgeInsets.all(15),
         decoration: BoxDecoration(
-          color: surfaceColor,
           borderRadius: BorderRadius.circular(15),
           border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+          image: DecorationImage(
+            image: AssetImage('assets/images/img${(index % 4) + 1}.jpeg'),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(Colors.black38, BlendMode.darken),
+          ),
         ),
         child: Row(
           children: [
@@ -693,15 +694,15 @@ class _DashboardPageState extends State<DashboardPage> {
           margin: const EdgeInsets.only(bottom: 12),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: cardColors,
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(color: cardColors.first.withValues(alpha: 0.2), blurRadius: 10, offset: const Offset(0, 4))
             ],
+            image: DecorationImage(
+              image: AssetImage('assets/images/img${(index % 4) + 1}.jpeg'),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.3), BlendMode.darken),
+            ),
           ),
           child: Row(
             children: [
@@ -731,6 +732,47 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
         );
       }).toList(),
+    );
+  }
+
+  Widget _buildNotificationBanner(BuildContext context) {
+    return InkWell(
+      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CoachNotificationsPage())),
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+        decoration: BoxDecoration(
+          color: surfaceColor,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: goldColor.withValues(alpha: 0.1), width: 1),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: goldColor.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.notifications_active_rounded, color: goldColor, size: 22),
+            ),
+            const SizedBox(width: 15),
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('NEW MATCH CREATED', 
+                    style: TextStyle(color: goldColor, fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                  SizedBox(height: 4),
+                  Text('Lionel Scaloni has scheduled a new league match.',
+                    style: TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.w500)),
+                ],
+              ),
+            ),
+            const Icon(Icons.arrow_forward_ios_rounded, color: goldColor, size: 14),
+          ],
+        ),
+      ),
     );
   }
 
@@ -770,12 +812,11 @@ class _DashboardPageState extends State<DashboardPage> {
       width: double.infinity,
       height: 180,
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF0F2027), Color(0xFF203A43), Color(0xFF2C5364)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
         borderRadius: BorderRadius.circular(30),
+        image: const DecorationImage(
+          image: AssetImage('assets/images/img2.jpeg'),
+          fit: BoxFit.cover,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.5),
@@ -786,12 +827,17 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
       child: Stack(
         children: [
-          Positioned(
-            right: -20,
-            bottom: -20,
-            child: Opacity(
-              opacity: 0.1,
-              child: const Icon(Icons.sports_soccer, size: 200, color: Colors.white),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  Colors.black.withValues(alpha: 0.1),
+                  Colors.black.withValues(alpha: 0.8),
+                ],
+              ),
             ),
           ),
           Padding(
@@ -801,12 +847,19 @@ class _DashboardPageState extends State<DashboardPage> {
                 Container(
                   width: 90,
                   height: 90,
+                  padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.3), width: 4),
-                    image: const DecorationImage(
-                      image: AssetImage('assets/images/sunil.png'),
-                      fit: BoxFit.cover,
+                    color: Colors.white,
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.6), width: 2.5),
+                  ),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/coach.png'),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
@@ -816,54 +869,79 @@ class _DashboardPageState extends State<DashboardPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
+                      Text(
                         'Welcome back,',
                         style: TextStyle(
-                          color: Colors.white60,
+                          color: Colors.white.withValues(alpha: 0.9),
                           fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.5,
+                          shadows: [
+                            Shadow(
+                              color: Colors.black.withValues(alpha: 0.5),
+                              blurRadius: 10,
+                              offset: const Offset(0, 2),
+                            )
+                          ],
                         ),
                       ),
-                      const Text(
-                        'COACH JAMES',
+                      Text(
+                        'LIONEL SCALONI',
                         style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
+                          color: goldColor,
+                          fontSize: 26,
                           fontWeight: FontWeight.w900,
-                          height: 1.1,
+                          height: 1.0,
+                          letterSpacing: -0.5,
+                          shadows: [
+                            Shadow(
+                              color: Colors.black.withValues(alpha: 0.5),
+                              blurRadius: 15,
+                              offset: const Offset(0, 4),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        'ACADEMY COACH',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 9,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.5,
+                          shadows: [
+                            Shadow(
+                              color: Colors.black.withValues(alpha: 0.5),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            )
+                          ],
                         ),
                       ),
                       const SizedBox(height: 12),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: greenAccent.withValues(alpha: 0.1),
+                          color: Colors.black.withValues(alpha: 0.6),
                           borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: goldColor.withValues(alpha: 0.2)),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.verified, size: 12, color: greenAccent),
+                            const Icon(Icons.shield, size: 12, color: goldColor),
                             const SizedBox(width: 6),
                             const Text(
                               'CORE FC - U8',
                               style: TextStyle(
-                                color: greenAccent,
+                                color: Colors.white,
                                 fontSize: 10,
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 0.5,
                               ),
                             ),
                           ],
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'HEAD COACH | LICENSE A+ UEFA',
-                        style: TextStyle(
-                          color: goldColor.withValues(alpha: 0.8),
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1,
                         ),
                       ),
                     ],
@@ -877,55 +955,52 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _buildGradientStatTile(IconData icon, String val, String label, List<Color> colors) {
+  Widget _buildGradientStatTile(int index, IconData icon, String val, String label, List<Color> colors) {
     return Expanded(
-      child: Container(
-        height: 100,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: colors,
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+      child: AspectRatio(
+        aspectRatio: 1.8,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            image: DecorationImage(
+              image: AssetImage('assets/images/img${(index % 4) + 1}.jpeg'),
+              fit: BoxFit.cover,
+            ),
           ),
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: colors[0].withValues(alpha: 0.3),
-              blurRadius: 8,
-              offset: const Offset(0, 3),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withValues(alpha: 0.1),
+                  Colors.black.withValues(alpha: 0.6),
+                ],
+              ),
             ),
-          ],
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: Colors.white, size: 16),
-            const SizedBox(height: 8),
-            FittedBox(
-              child: Text(
-                val,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w900,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, color: Colors.white, size: 24),
+                const SizedBox(height: 6),
+                FittedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(
+                      val,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w900,
+                        shadows: [Shadow(color: Colors.black.withValues(alpha: 0.5), blurRadius: 4)],
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-            const SizedBox(height: 2),
-            Text(
-              label.toUpperCase(),
-              style: const TextStyle(
-                color: Colors.white70,
-                fontSize: 7,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 0.5,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
+          ),
         ),
       ),
     );

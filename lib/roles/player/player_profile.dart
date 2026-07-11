@@ -59,8 +59,8 @@ class _PlayerProfileState extends State<PlayerProfile> {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
+                          darkBg.withValues(alpha: 0.1), 
                           darkBg.withValues(alpha: 0.2), 
-                          darkBg.withValues(alpha: 0.8), 
                           darkBg
                         ],
                       ),
@@ -196,36 +196,43 @@ class _PlayerProfileState extends State<PlayerProfile> {
               style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
           ),
           Container(
-            padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF1A1A1A), Color(0xFF0D0D0D)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
               image: const DecorationImage(
                 image: AssetImage('assets/images/img3.jpeg'),
                 fit: BoxFit.cover,
-                opacity: 0.1,
               ),
               borderRadius: BorderRadius.circular(25),
               border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
             ),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildWalletStat('525 AED', 'Total Wallet'),
-                    Container(width: 1, height: 40, color: Colors.white10),
-                    _buildWalletStat('65 AED', 'Remaining', isWarning: true),
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black.withValues(alpha: 0.1),
+                    Colors.black.withValues(alpha: 0.2),
                   ],
                 ),
-                const SizedBox(height: 25),
-                const Divider(color: Colors.white10, height: 1),
-                const SizedBox(height: 25),
-                _buildModernTileValue('₹1.4B', 'Estimated Market Value', Icons.trending_up_rounded, Colors.greenAccent),
-              ],
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _buildWalletStat('525 AED', 'Total Wallet'),
+                      Container(width: 1, height: 40, color: Colors.white10),
+                      _buildWalletStat('65 AED', 'Remaining', isWarning: true),
+                    ],
+                  ),
+                  const SizedBox(height: 25),
+                  const Divider(color: Colors.white10, height: 1),
+                  const SizedBox(height: 25),
+                  _buildModernTileValue('₹1.4B', 'Estimated Market Value', Icons.trending_up_rounded, Colors.greenAccent),
+                ],
+              ),
             ),
           ),
 
@@ -338,21 +345,11 @@ class _PlayerProfileState extends State<PlayerProfile> {
 
   Widget _buildModernTile(int index, String val, String label, IconData icon, List<Color> colors, {String? emoji}) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            colors[0].withValues(alpha: 0.8),
-            colors[1].withValues(alpha: 0.8),
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
         borderRadius: BorderRadius.circular(15),
         image: DecorationImage(
           image: AssetImage('assets/images/img${(index % 4) + 1}.jpeg'),
           fit: BoxFit.cover,
-          opacity: 0.4,
         ),
         boxShadow: [
           BoxShadow(
@@ -362,22 +359,36 @@ class _PlayerProfileState extends State<PlayerProfile> {
           )
         ],
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: Colors.white.withValues(alpha: 0.7), size: 16),
-          const SizedBox(height: 6),
-          FittedBox(
-            child: Row(
-              children: [
-                if (emoji != null) Padding(padding: const EdgeInsets.only(right: 4), child: Text(emoji, style: const TextStyle(fontSize: 10))),
-                Text(val, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 13)),
-              ],
-            ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.black.withValues(alpha: 0.1),
+              Colors.black.withValues(alpha: 0.2),
+            ],
           ),
-          const SizedBox(height: 2),
-          Text(label.toUpperCase(), style: const TextStyle(color: Colors.white70, fontSize: 8, fontWeight: FontWeight.bold)),
-        ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: Colors.white.withValues(alpha: 0.7), size: 16),
+            const SizedBox(height: 6),
+            FittedBox(
+              child: Row(
+                children: [
+                  if (emoji != null) Padding(padding: const EdgeInsets.only(right: 4), child: Text(emoji, style: const TextStyle(fontSize: 10))),
+                  Text(val, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 13)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(label.toUpperCase(), style: const TextStyle(color: Colors.white70, fontSize: 8, fontWeight: FontWeight.bold)),
+          ],
+        ),
       ),
     );
   }

@@ -58,7 +58,7 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   final List<Map<String, dynamic>> _roles = [
-    {'name': 'PLAYER', 'icon': Icons.directions_run_outlined, 'color': Colors.blueAccent},
+    {'name': 'PLAYER', 'icon': Icons.directions_run_outlined, 'color': goldColor},
   ];
 
   late PageController _pageController;
@@ -169,7 +169,7 @@ class _SignupScreenState extends State<SignupScreen> {
             children: [
               Positioned.fill(
                 child: Image.asset(
-                  'assets/images/img.png',
+                  'assets/images/img_1.png',
                   fit: BoxFit.cover,
                 ),
               ),

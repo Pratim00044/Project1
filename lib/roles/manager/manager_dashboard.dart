@@ -156,7 +156,7 @@ class ManagerDashboard extends StatelessWidget {
                         ),
                       ),
                       const Text(
-                        'MANAGER XYZ',
+                        'DORIVAL JÚNIOR',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 22,
@@ -190,7 +190,7 @@ class ManagerDashboard extends StatelessWidget {
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.white.withValues(alpha: 0.2), width: 3),
                     image: const DecorationImage(
-                      image: AssetImage('assets/images/sunil.png'),
+                      image: AssetImage('assets/images/manager.png'),
                       fit: BoxFit.cover,
                     ),
                   ),

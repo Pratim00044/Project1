@@ -4,15 +4,15 @@ const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
 const Color surfaceColor = Color(0xFF121212);
 
-class VerifyOrganizersPage extends StatefulWidget {
-  const VerifyOrganizersPage({super.key});
+class VerifyOrganisersPage extends StatefulWidget {
+  const VerifyOrganisersPage({super.key});
 
   @override
-  State<VerifyOrganizersPage> createState() => _VerifyOrganizersPageState();
+  State<VerifyOrganisersPage> createState() => _VerifyOrganisersPageState();
 }
 
-class _VerifyOrganizersPageState extends State<VerifyOrganizersPage> {
-  final List<Map<String, dynamic>> _pendingOrganizers = [
+class _VerifyOrganisersPageState extends State<VerifyOrganisersPage> {
+  final List<Map<String, dynamic>> _pendingOrganisers = [
     {
       'name': 'John Doe',
       'email': 'john.doe@example.com',
@@ -39,7 +39,7 @@ class _VerifyOrganizersPageState extends State<VerifyOrganizersPage> {
     },
   ];
 
-  void _showOrganizerDetails(Map<String, dynamic> organizer) {
+  void _showOrganiserDetails(Map<String, dynamic> organiser) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -61,7 +61,7 @@ class _VerifyOrganizersPageState extends State<VerifyOrganizersPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Expanded(
-                    child: Text('ORGANIZER/HOST APPLICATION', 
+                    child: Text('ORGANISER/HOST APPLICATION', 
                       style: TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1.5),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -78,21 +78,21 @@ class _VerifyOrganizersPageState extends State<VerifyOrganizersPage> {
               const SizedBox(height: 25),
               const Text('Personal Information', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 15),
-              _buildDetailRow('Full Name', organizer['name']),
-              _buildDetailRow('Email Address', organizer['email']),
+              _buildDetailRow('Full Name', organiser['name']),
+              _buildDetailRow('Email Address', organiser['email']),
               _buildDetailRow('Phone Number', '+971 50 123 4567'),
               
               const Divider(color: Colors.white10, height: 40),
               const Text('Club Details', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 15),
-              _buildDetailRow('Target Club', organizer['clubName']),
-              _buildDetailRow('Professional Experience', organizer['experience']),
+              _buildDetailRow('Target Club', organiser['clubName']),
+              _buildDetailRow('Professional Experience', organiser['experience']),
               
               const Divider(color: Colors.white10, height: 40),
               const Text('Verification Documents', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 15),
               _buildDocumentItem('Identity Proof (Emirates ID)', 'Verified'),
-              _buildDocumentItem('Coaching License', organizer['documents']),
+              _buildDocumentItem('Coaching License', organiser['documents']),
               _buildDocumentItem('Club Affiliation Letter', 'Pending'),
               
               const SizedBox(height: 40),
@@ -102,7 +102,7 @@ class _VerifyOrganizersPageState extends State<VerifyOrganizersPage> {
                     child: OutlinedButton(
                       onPressed: () {
                         setState(() {
-                          _pendingOrganizers.remove(organizer);
+                          _pendingOrganisers.remove(organiser);
                         });
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Application Rejected')));
@@ -120,10 +120,10 @@ class _VerifyOrganizersPageState extends State<VerifyOrganizersPage> {
                     child: ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          _pendingOrganizers.remove(organizer);
+                          _pendingOrganisers.remove(organiser);
                         });
                         Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Organizer/Host ${organizer['name']} approved!')));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Organiser/Host ${organiser['name']} approved!')));
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.greenAccent,
@@ -184,13 +184,13 @@ class _VerifyOrganizersPageState extends State<VerifyOrganizersPage> {
         title: const Text('PENDING APPROVALS', style: TextStyle(color: goldColor, fontSize: 14, fontWeight: FontWeight.bold, letterSpacing: 1.5)),
         leading: IconButton(icon: const Icon(Icons.arrow_back, color: Colors.white), onPressed: () => Navigator.pop(context)),
       ),
-      body: _pendingOrganizers.isEmpty
-          ? const Center(child: Text('No pending organizers', style: TextStyle(color: Colors.white24)))
+      body: _pendingOrganisers.isEmpty
+          ? const Center(child: Text('No pending organisers', style: TextStyle(color: Colors.white24)))
           : ListView.builder(
               padding: const EdgeInsets.all(20),
-              itemCount: _pendingOrganizers.length,
+              itemCount: _pendingOrganisers.length,
               itemBuilder: (context, index) {
-                final organizer = _pendingOrganizers[index];
+                final organiser = _pendingOrganisers[index];
                 return Container(
                   margin: const EdgeInsets.only(bottom: 15),
                   decoration: BoxDecoration(
@@ -201,10 +201,10 @@ class _VerifyOrganizersPageState extends State<VerifyOrganizersPage> {
                   child: ListTile(
                     contentPadding: const EdgeInsets.all(16),
                     leading: const CircleAvatar(backgroundColor: Color(0xFF1A1A1A), child: Icon(Icons.person, color: goldColor)),
-                    title: Text(organizer['name'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                    subtitle: Text(organizer['clubName'], style: const TextStyle(color: Colors.white38, fontSize: 12)),
+                    title: Text(organiser['name'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    subtitle: Text(organiser['clubName'], style: const TextStyle(color: Colors.white38, fontSize: 12)),
                     trailing: const Icon(Icons.chevron_right, color: Colors.white10),
-                    onTap: () => _showOrganizerDetails(organizer),
+                    onTap: () => _showOrganiserDetails(organiser),
                   ),
                 );
               },

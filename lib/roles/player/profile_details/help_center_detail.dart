@@ -85,7 +85,6 @@ class HelpCenterDetail extends StatelessWidget {
         image: const DecorationImage(
           image: AssetImage('assets/images/img2.jpeg'),
           fit: BoxFit.cover,
-          opacity: 0.3,
         ),
       ),
       child: Column(

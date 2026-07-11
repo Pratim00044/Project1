@@ -94,196 +94,231 @@ class _SquadPageState extends State<SquadPage> {
             ),
           ),
 
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-            child: Column(
-              children: [
-                _buildSquadCategory('GOALKEEPERS'),
-                _buildPlayerCard(context, 'ALISSON BECKER', 'GK', '1', cardColors[0]),
-                _buildPlayerCard(context, 'THIBAUT COURTOIS', 'GK', '23', cardColors[1]),
-                const SizedBox(height: 25),
-                _buildSquadCategory('DEFENSE'),
-                _buildPlayerCard(context, 'RUBEN DIAS', 'CB', '3', cardColors[2]),
-                _buildPlayerCard(context, 'KYLE WALKER', 'RB', '2', cardColors[3]),
-                _buildPlayerCard(context, 'THEO HERNANDEZ', 'LB', '19', cardColors[4]),
-                _buildPlayerCard(context, 'VIRGIL VAN DIJK', 'CB', '04', cardColors[5]),
-                const SizedBox(height: 25),
-                _buildSquadCategory('MIDFIELD'),
-                _buildPlayerCard(context, 'KEVIN DE BRUYNE', 'CAM', '17', cardColors[6]),
-                _buildPlayerCard(context, 'JUDE BELLINGHAM', 'CM', '05', cardColors[7]),
-                _buildPlayerCard(context, 'LUKA MODRIC', 'CM', '10', cardColors[0]),
-                const SizedBox(height: 25),
-                _buildSquadCategory('ATTACK'),
-                _buildPlayerCard(context, 'ERLING HAALAND', 'ST', '09', cardColors[1]),
-                _buildPlayerCard(context, 'KYLIAN MBAPPE', 'ST', '07', cardColors[2]),
-                _buildPlayerCard(context, 'CRISTIANO RONALDO', 'ST', '07', cardColors[3]),
-                const SizedBox(height: 50),
-              ],
-            ),
-          ),
-        ],
-      );
-  }
-
-  Widget _buildPlayerCountBadge() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-      decoration: BoxDecoration(
-        color: goldColor.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: goldColor.withOpacity(0.2)),
-      ),
-      child: const Row(
-        children: [
-          Icon(Icons.people_outline, color: goldColor, size: 14),
-          SizedBox(width: 6),
-          Text('24 PLAYERS',
-              style: TextStyle(color: goldColor, fontSize: 10, fontWeight: FontWeight.w900)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTeamChip(String team) {
-    bool isSelected = _selectedTeam == team;
-    return GestureDetector(
-      onTap: () => setState(() => _selectedTeam = team),
-      child: Container(
-        margin: const EdgeInsets.only(right: 12),
-        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
-        decoration: BoxDecoration(
-          color: isSelected ? goldColor : const Color(0xFF121212),
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: isSelected ? goldColor : Colors.white.withOpacity(0.05)),
-          boxShadow: isSelected ? [BoxShadow(color: goldColor.withOpacity(0.2), blurRadius: 10)] : null,
-        ),
-        child: Text(
-          team,
-          style: TextStyle(
-            color: isSelected ? Colors.black : Colors.white38,
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLocationChip(String loc) {
-    bool isSelected = _selectedLocation == loc;
-    return GestureDetector(
-      onTap: () => setState(() => _selectedLocation = loc),
-      child: Container(
-        margin: const EdgeInsets.only(right: 12),
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.white.withOpacity(0.1) : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: isSelected ? goldColor.withOpacity(0.5) : Colors.white10),
-        ),
-        child: Row(
-          children: [
-            Icon(Icons.location_on_outlined, color: isSelected ? goldColor : Colors.white24, size: 12),
-            const SizedBox(width: 6),
-            Text(
-              loc,
-              style: TextStyle(
-                color: isSelected ? Colors.white : Colors.white24,
-                fontSize: 11,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSquadCategory(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
-      child: Row(
-        children: [
-          Text(title,
-              style: const TextStyle(
-                  color: goldColor,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.5)),
-          const SizedBox(width: 15),
-          const Expanded(child: Divider(color: Colors.white10, thickness: 0.5)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPlayerCard(BuildContext context, String name, String position, String number, Color color) {
-    return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PlayerDetailPage(
-            playerName: name,
-            playerNumber: number,
-            position: position,
-          ),
-        ),
-      ),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 15),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: color.withOpacity(0.2)),
-        ),
-        child: Row(
-          children: [
-            Container(
-              height: 60,
-              width: 60,
-              decoration: BoxDecoration(
-                  color: color,
-                  borderRadius: BorderRadius.circular(18),
-                  image: const DecorationImage(
-                    image: AssetImage('assets/images/sunil.png'),
-                    fit: BoxFit.cover,
-                  ),
-                  border: Border.all(color: Colors.white.withOpacity(0.1))),
-            ),
-            const SizedBox(width: 15),
-            Expanded(
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(name,
-                      style: const TextStyle(
-                          color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                        decoration: BoxDecoration(color: goldColor.withOpacity(0.1), borderRadius: BorderRadius.circular(6)),
-                        child: Text(position, style: const TextStyle(color: goldColor, fontSize: 9, fontWeight: FontWeight.bold)),
-                      ),
-                      const SizedBox(width: 8),
-                      const Text('TOWN SQUARE', style: TextStyle(color: Colors.white24, fontSize: 9, fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  const Text('Parent Phone: +971 50 123 4567', style: TextStyle(color: Colors.white24, fontSize: 10)),
+                  _buildSquadCategory('GOALKEEPERS'),
+                  _buildPlayerCard(context, 0, 'ALISSON BECKER', 'GK', '1', cardColors[0]),
+                  _buildPlayerCard(context, 1, 'THIBAUT COURTOIS', 'GK', '23', cardColors[1]),
+                  const SizedBox(height: 25),
+                  _buildSquadCategory('DEFENSE'),
+                  _buildPlayerCard(context, 2, 'RUBEN DIAS', 'CB', '3', cardColors[2]),
+                  _buildPlayerCard(context, 3, 'KYLE WALKER', 'RB', '2', cardColors[3]),
+                  _buildPlayerCard(context, 4, 'THEO HERNANDEZ', 'LB', '19', cardColors[4]),
+                  _buildPlayerCard(context, 5, 'VIRGIL VAN DIJK', 'CB', '04', cardColors[5]),
+                  const SizedBox(height: 25),
+                  _buildSquadCategory('MIDFIELD'),
+                  _buildPlayerCard(context, 6, 'KEVIN DE BRUYNE', 'CAM', '17', cardColors[6]),
+                  _buildPlayerCard(context, 7, 'JUDE BELLINGHAM', 'CM', '05', cardColors[7]),
+                  _buildPlayerCard(context, 8, 'LUKA MODRIC', 'CM', '10', cardColors[0]),
+                  const SizedBox(height: 25),
+                  _buildSquadCategory('ATTACK'),
+                  _buildPlayerCard(context, 9, 'ERLING HAALAND', 'ST', '09', cardColors[1]),
+                  _buildPlayerCard(context, 10, 'KYLIAN MBAPPE', 'ST', '07', cardColors[2]),
+                  _buildPlayerCard(context, 11, 'CRISTIANO RONALDO', 'ST', '07', cardColors[3]),
+                  const SizedBox(height: 50),
                 ],
               ),
             ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(color: Colors.white.withOpacity(0.03), shape: BoxShape.circle),
-              child: const Icon(Icons.analytics_outlined, color: goldColor, size: 18),
-            ),
+          ],
+        );
+    }
+  
+    Widget _buildPlayerCountBadge() {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: goldColor.withOpacity(0.2)),
+          image: const DecorationImage(
+            image: AssetImage('assets/images/img1.jpeg'),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(Colors.black38, BlendMode.darken),
+          ),
+        ),
+        child: const Row(
+          children: [
+            Icon(Icons.people_outline, color: goldColor, size: 14),
+            SizedBox(width: 6),
+            Text('24 PLAYERS',
+                style: TextStyle(color: goldColor, fontSize: 10, fontWeight: FontWeight.w900)),
           ],
         ),
-      ),
-    );
-  }
+      );
+    }
+  
+    Widget _buildTeamChip(String team) {
+      bool isSelected = _selectedTeam == team;
+      return GestureDetector(
+        onTap: () => setState(() => _selectedTeam = team),
+        child: Container(
+          margin: const EdgeInsets.only(right: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(color: isSelected ? goldColor : Colors.white.withOpacity(0.05)),
+            image: !isSelected ? const DecorationImage(
+              image: AssetImage('assets/images/img2.jpeg'),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(Colors.black26, BlendMode.darken),
+            ) : null,
+            color: isSelected ? goldColor : null,
+            boxShadow: isSelected ? [BoxShadow(color: goldColor.withOpacity(0.2), blurRadius: 10)] : null,
+          ),
+          child: Text(
+            team,
+            style: TextStyle(
+              color: isSelected ? Colors.black : Colors.white70,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      );
+    }
+  
+    Widget _buildLocationChip(String loc) {
+      bool isSelected = _selectedLocation == loc;
+      return GestureDetector(
+        onTap: () => setState(() => _selectedLocation = loc),
+        child: Container(
+          margin: const EdgeInsets.only(right: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+          decoration: BoxDecoration(
+            color: isSelected ? Colors.white.withOpacity(0.1) : Colors.transparent,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: isSelected ? goldColor.withOpacity(0.5) : Colors.white10),
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.location_on_outlined, color: isSelected ? goldColor : Colors.white24, size: 12),
+              const SizedBox(width: 6),
+              Text(
+                loc,
+                style: TextStyle(
+                  color: isSelected ? Colors.white : Colors.white24,
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+  
+    Widget _buildSquadCategory(String title) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 15),
+        child: Row(
+          children: [
+            Text(title,
+                style: const TextStyle(
+                    color: goldColor,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.5)),
+            const SizedBox(width: 15),
+            const Expanded(child: Divider(color: Colors.white10, thickness: 0.5)),
+          ],
+        ),
+      );
+    }
+  
+    Widget _buildPlayerCard(BuildContext context, int index, String name, String position, String number, Color color) {
+      final List<String> tileImages = [
+        'assets/images/img1.jpeg',
+        'assets/images/img2.jpeg',
+        'assets/images/img3.jpeg',
+        'assets/images/img4.jpeg',
+      ];
+      String currentImage = tileImages[index % tileImages.length];
+  
+      return GestureDetector(
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PlayerDetailPage(
+              playerName: name,
+              playerNumber: number,
+              position: position,
+            ),
+          ),
+        ),
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 15),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            image: DecorationImage(
+              image: AssetImage(currentImage),
+              fit: BoxFit.cover,
+            ),
+            boxShadow: [
+              BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 4))
+            ],
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  Colors.black.withValues(alpha: 0.8),
+                  Colors.black.withValues(alpha: 0.3),
+                ],
+              ),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  height: 60,
+                  width: 60,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(18),
+                      image: const DecorationImage(
+                        image: AssetImage('assets/images/sunil.png'),
+                        fit: BoxFit.cover,
+                      ),
+                      border: Border.all(color: Colors.white.withOpacity(0.1))),
+                ),
+                const SizedBox(width: 15),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(name,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold, shadows: [Shadow(color: Colors.black, blurRadius: 4)])),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            decoration: BoxDecoration(color: goldColor.withOpacity(0.1), borderRadius: BorderRadius.circular(6)),
+                            child: Text(position, style: const TextStyle(color: goldColor, fontSize: 9, fontWeight: FontWeight.bold)),
+                          ),
+                          const SizedBox(width: 8),
+                          const Text('TOWN SQUARE', style: TextStyle(color: Colors.white70, fontSize: 9, fontWeight: FontWeight.bold, shadows: [Shadow(color: Colors.black, blurRadius: 4)])),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      const Text('Parent Phone: +971 50 123 4567', style: TextStyle(color: Colors.white60, fontSize: 10, shadows: [Shadow(color: Colors.black, blurRadius: 4)])),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), shape: BoxShape.circle),
+                  child: const Icon(Icons.analytics_outlined, color: goldColor, size: 18),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
 }

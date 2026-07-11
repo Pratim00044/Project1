@@ -76,6 +76,7 @@ class NotificationsPage extends StatelessWidget {
         itemBuilder: (context, index) {
           final notif = notifications[index];
           final bool isNew = notif['isNew'] == 'true';
+          final bool isEven = index % 2 == 0;
           
           final List<String> tileImages = [
             'assets/images/img1.jpeg',
@@ -85,76 +86,99 @@ class NotificationsPage extends StatelessWidget {
           ];
           String currentImage = tileImages[index % tileImages.length];
 
+          Widget iconWidget = Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: isNew ? goldColor.withValues(alpha: 0.2) : Colors.black.withValues(alpha: 0.6),
+              shape: BoxShape.circle,
+              border: Border.all(color: isNew ? goldColor.withValues(alpha: 0.3) : Colors.white10),
+            ),
+            child: Icon(
+              _getIcon(notif['icon']!),
+              color: isNew ? goldColor : Colors.white38,
+              size: 20,
+            ),
+          );
+
+          Widget contentWidget = Expanded(
+            child: Column(
+              crossAxisAlignment: isEven ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+              children: [
+                Row(
+                  mainAxisAlignment: isEven ? MainAxisAlignment.start : MainAxisAlignment.end,
+                  children: [
+                    if (!isEven && isNew)
+                      Container(
+                        margin: const EdgeInsets.only(right: 8),
+                        width: 6, height: 6,
+                        decoration: const BoxDecoration(color: goldColor, shape: BoxShape.circle),
+                      ),
+                    Text(notif['title']!,
+                        style: TextStyle(
+                            color: isNew ? goldColor : Colors.white70,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 0.5,
+                            shadows: [Shadow(color: Colors.black, blurRadius: 4)])),
+                    if (isEven && isNew)
+                      Container(
+                        margin: const EdgeInsets.only(left: 8),
+                        width: 6, height: 6,
+                        decoration: const BoxDecoration(color: goldColor, shape: BoxShape.circle),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                Text(notif['desc']!,
+                    textAlign: isEven ? TextAlign.left : TextAlign.right,
+                    style: TextStyle(
+                        color: isNew ? Colors.white : Colors.white70,
+                        fontSize: 13,
+                        height: 1.4,
+                        shadows: [Shadow(color: Colors.black, blurRadius: 8)])),
+                const SizedBox(height: 10),
+                Text(notif['time']!,
+                    style: const TextStyle(
+                      color: Colors.white38, 
+                      fontSize: 10, 
+                      fontWeight: FontWeight.bold,
+                      shadows: [Shadow(color: Colors.black, blurRadius: 2)],
+                    )),
+              ],
+            ),
+          );
+
           return Container(
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-            padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
-              color: surfaceColor,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: isNew ? goldColor.withValues(alpha: 0.3) : Colors.white.withValues(alpha: 0.05),
-              ),
+              borderRadius: BorderRadius.circular(25),
               image: DecorationImage(
                 image: AssetImage(currentImage),
                 fit: BoxFit.cover,
-                opacity: 0.25,
               ),
-              gradient: isNew ? LinearGradient(
-                colors: [goldColor.withValues(alpha: 0.1), Colors.transparent],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ) : null,
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: isNew ? goldColor.withValues(alpha: 0.1) : Colors.black,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    _getIcon(notif['icon']!),
-                    color: isNew ? goldColor : Colors.white38,
-                    size: 20,
-                  ),
-                ),
-                const SizedBox(width: 15),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(notif['title']!,
-                              style: TextStyle(
-                                  color: isNew ? goldColor : Colors.white70,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 0.5)),
-                          if (isNew)
-                            Container(
-                              width: 6,
-                              height: 6,
-                              decoration: const BoxDecoration(color: goldColor, shape: BoxShape.circle),
-                            ),
-                        ],
-                      ),
-                      const SizedBox(height: 6),
-                      Text(notif['desc']!,
-                          style: TextStyle(
-                              color: isNew ? Colors.white : Colors.white38,
-                              fontSize: 13,
-                              height: 1.4)),
-                      const SizedBox(height: 10),
-                      Text(notif['time']!,
-                          style: const TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                ),
+              boxShadow: [
+                BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 10, offset: const Offset(0, 4))
               ],
+            ),
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                gradient: LinearGradient(
+                  begin: isEven ? Alignment.centerLeft : Alignment.centerRight,
+                  end: isEven ? Alignment.centerRight : Alignment.centerLeft,
+                  colors: [
+                    Colors.black.withValues(alpha: 0.7),
+                    Colors.black.withValues(alpha: 0.2),
+                  ],
+                ),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: isEven 
+                  ? [iconWidget, const SizedBox(width: 15), contentWidget]
+                  : [contentWidget, const SizedBox(width: 15), iconWidget],
+              ),
             ),
           );
         },

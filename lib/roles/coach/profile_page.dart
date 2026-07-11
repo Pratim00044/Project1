@@ -57,7 +57,7 @@ class ProfilePage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 15),
-                      const Text('COACH JAMES',
+                      const Text('LIONEL SCALONI',
                         style: TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900, letterSpacing: 1)),
                       const SizedBox(height: 8),
                       _buildHeaderPill('HEAD COACH | CORE FC', isGold: true),
@@ -100,8 +100,8 @@ class ProfilePage extends StatelessWidget {
             const SizedBox(height: 35),
             _buildSectionHeader('MATCH ACHIEVEMENTS'),
             const SizedBox(height: 15),
-            _buildAchievementItem('Clean Sheet', 'v Mohun Bagan'),
-            _buildAchievementItem('Goal Scored', 'v Kerala Blasters'),
+            _buildAchievementItem('Clean Sheet', 'v Mohun Bagan', 'assets/images/img3.jpeg'),
+            _buildAchievementItem('Goal Scored', 'v Kerala Blasters', 'assets/images/img4.jpeg'),
             
             const SizedBox(height: 35),
             _buildSectionHeader('ACADEMY RECRUITMENT'),
@@ -109,9 +109,13 @@ class ProfilePage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: surfaceColor,
                 borderRadius: BorderRadius.circular(25),
                 border: Border.all(color: goldColor.withOpacity(0.1)),
+                image: const DecorationImage(
+                  image: AssetImage('assets/images/img1.jpeg'),
+                  fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,9 +157,9 @@ class ProfilePage extends StatelessWidget {
             const SizedBox(height: 35),
             _buildSectionHeader('ACCOUNT & SETTINGS'),
             const SizedBox(height: 15),
-            _buildMenuOption(context, Icons.security, 'Privacy & Security', const PrivacySecurityPage()),
-            _buildMenuOption(context, Icons.notifications_active_outlined, 'Notifications', const NotificationsSettingsPage()),
-            _buildMenuOption(context, Icons.dark_mode_outlined, 'Display Theme', const DisplayThemePage()),
+            _buildMenuOption(context, Icons.security, 'Privacy & Security', const PrivacySecurityPage(), 'assets/images/img1.jpeg'),
+            _buildMenuOption(context, Icons.notifications_active_outlined, 'Notifications', const NotificationsSettingsPage(), 'assets/images/img2.jpeg'),
+            _buildMenuOption(context, Icons.dark_mode_outlined, 'Display Theme', const DisplayThemePage(), 'assets/images/img3.jpeg'),
             const SizedBox(height: 30),
             _buildLogoutButton(context),
             const SizedBox(height: 12),
@@ -198,21 +202,25 @@ class ProfilePage extends StatelessWidget {
       crossAxisSpacing: 12,
       mainAxisSpacing: 12,
       children: [
-        _buildStatCard('A+', 'TACTICAL', Icons.analytics, goldColor),
-        _buildStatCard('12', 'TROPHIES', Icons.emoji_events, Colors.blueAccent),
-        _buildStatCard('85%', 'WIN RATE', Icons.trending_up, Colors.greenAccent),
-        _buildStatCard('150', 'MANAGED', Icons.sports, Colors.orangeAccent),
+        _buildStatCard('A+', 'TACTICAL', Icons.analytics, goldColor, 'assets/images/img1.jpeg'),
+        _buildStatCard('12', 'TROPHIES', Icons.emoji_events, Colors.blueAccent, 'assets/images/img2.jpeg'),
+        _buildStatCard('85%', 'WIN RATE', Icons.trending_up, Colors.greenAccent, 'assets/images/img3.jpeg'),
+        _buildStatCard('150', 'MANAGED', Icons.sports, Colors.orangeAccent, 'assets/images/img4.jpeg'),
       ],
     );
   }
 
-  Widget _buildStatCard(String val, String label, IconData icon, Color color) {
+  Widget _buildStatCard(String val, String label, IconData icon, Color color, String imagePath) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: surfaceColor,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.1)),
+        border: Border.all(color: color.withOpacity(0.2)),
+        image: DecorationImage(
+          image: AssetImage(imagePath),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(Colors.black38, BlendMode.darken),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -247,19 +255,23 @@ class ProfilePage extends StatelessWidget {
       crossAxisSpacing: 12,
       mainAxisSpacing: 12,
       children: [
-        _buildInfoCard(Icons.badge, 'LICENSE', 'UEFA Pro'),
-        _buildInfoCard(Icons.sports_soccer, 'PREV', 'Bengal Warriors'),
+        _buildInfoCard(Icons.badge, 'LICENSE', 'UEFA Pro', 'assets/images/img1.jpeg'),
+        _buildInfoCard(Icons.sports_soccer, 'PREV', 'Bengal Warriors', 'assets/images/img2.jpeg'),
       ],
     );
   }
 
-  Widget _buildInfoCard(IconData icon, String label, String value) {
+  Widget _buildInfoCard(IconData icon, String label, String value, String imagePath) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: surfaceColor, 
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.white.withOpacity(0.02)),
+        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        image: DecorationImage(
+          image: AssetImage(imagePath),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
+        ),
       ),
       child: Row(
         children: [
@@ -280,13 +292,17 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildAchievementItem(String title, String subtitle) {
+  Widget _buildAchievementItem(String title, String subtitle, String imagePath) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: surfaceColor, 
         borderRadius: BorderRadius.circular(20),
+        image: DecorationImage(
+          image: AssetImage(imagePath),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(Colors.black38, BlendMode.darken),
+        ),
       ),
       child: Row(
         children: [
@@ -304,13 +320,20 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuOption(BuildContext context, IconData icon, String title, Widget targetPage) {
+  Widget _buildMenuOption(BuildContext context, IconData icon, String title, Widget targetPage, String imagePath) {
     return GestureDetector(
       onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => targetPage)),
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-        decoration: BoxDecoration(color: surfaceColor, borderRadius: BorderRadius.circular(20)),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          image: DecorationImage(
+            image: AssetImage(imagePath),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(Colors.black45, BlendMode.darken),
+          ),
+        ),
         child: Row(
           children: [
             Icon(icon, color: goldColor.withOpacity(0.7), size: 20),

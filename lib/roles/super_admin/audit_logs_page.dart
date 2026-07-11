@@ -9,7 +9,7 @@ class AuditLogsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Map<String, String>> _logs = [
-      {'action': 'Organizer Verified', 'user': 'Admin_01', 'target': 'Footlab DXB', 'time': '10:45 AM'},
+      {'action': 'Organiser Verified', 'user': 'Admin_01', 'target': 'Footlab DXB', 'time': '10:45 AM'},
       {'action': 'Club Logo Updated', 'user': 'Admin_02', 'target': 'Core FC', 'time': '09:30 AM'},
       {'action': 'Subscription Changed', 'user': 'System', 'target': 'Elite Academy', 'time': '08:15 AM'},
       {'action': 'Bulk Export', 'user': 'Super_Admin', 'target': 'Analytics DB', 'time': 'Yesterday'},

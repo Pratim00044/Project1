@@ -32,7 +32,7 @@ class PendingApprovalPage extends StatelessWidget {
               ),
               const SizedBox(height: 15),
               const Text(
-                'Your CDL organizer application is currently being reviewed by our Super Admin. This usually takes 24-48 hours.',
+                'Your CDL organiser application is currently being reviewed by our Super Admin. This usually takes 24-48 hours.',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white38, fontSize: 14, height: 1.5),
               ),

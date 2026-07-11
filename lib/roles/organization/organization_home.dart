@@ -14,18 +14,26 @@ const Color darkBg = Color(0xFF080808);
 const Color surfaceColor = Color(0xFF121212);
 const Color cardLightColor = Color(0xFFC0C0C0);
 
-class OrganizationHome extends StatefulWidget {
-  const OrganizationHome({super.key});
+class OrganisationHome extends StatefulWidget {
+  const OrganisationHome({super.key});
 
   @override
-  State<OrganizationHome> createState() => _OrganizationHomeState();
+  State<OrganisationHome> createState() => _OrganisationHomeState();
 }
 
-class _OrganizationHomeState extends State<OrganizationHome> {
+class _OrganisationHomeState extends State<OrganisationHome> {
   bool isApproved = true;
   DateTime _selectedDate = DateTime.parse('2024-06-10');
   String _selectedFilter = 'ALL';
   final ScrollController _dateScrollController = ScrollController();
+
+  final List<String> _cardImages = [
+    'assets/images/img1.jpeg',
+    'assets/images/img2.jpeg',
+    'assets/images/img3.jpeg',
+    'assets/images/img4.jpeg',
+    'assets/images/img_1.png',
+  ];
 
   @override
   void dispose() {
@@ -59,7 +67,7 @@ class _OrganizationHomeState extends State<OrganizationHome> {
                   const SliverToBoxAdapter(
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(20, 25, 20, 10),
-                      child: Text('SYSTEM OVERVIEW',
+                      child: Text('OVERVIEW',
                           style: TextStyle(
                               color: goldColor,
                               fontSize: 10,
@@ -92,17 +100,17 @@ class _OrganizationHomeState extends State<OrganizationHome> {
                   SliverToBoxAdapter(child: _buildFilterSection()),
                   SliverToBoxAdapter(
                     child: _buildCategorySection('MIXED', [
-                      _buildLeagueCard('7-A-SIDE', '1 FIXTURE', 'Zayed City', 'Jun 12', '69 AED', category: 'MIXED', colors: [const Color(0xFF007CFE), const Color(0xFF004A99)]),
-                      _buildLeagueCard('6-A-SIDE', '2 FIXTURES', 'Dubai Sports', 'Jun 14', '55 AED', category: 'MIXED', colors: [const Color(0xFF6A11CB), const Color(0xFF2575FC)]),
-                      _buildLeagueCard('4-A-SIDE', '3 FIXTURES', 'Al Barsha', 'Jun 15', '40 AED', category: 'MIXED', colors: [const Color(0xFF38EF7D), const Color(0xFF11998E)]),
+                      _buildLeagueCard('7-A-SIDE', '1 FIXTURE', 'Zayed City', 'Jun 12', '69 AED', category: 'MIXED', bgImage: _cardImages[0]),
+                      _buildLeagueCard('6-A-SIDE', '2 FIXTURES', 'Dubai Sports', 'Jun 14', '55 AED', category: 'MIXED', bgImage: _cardImages[1]),
+                      _buildLeagueCard('4-A-SIDE', '3 FIXTURES', 'Al Barsha', 'Jun 15', '40 AED', category: 'MIXED', bgImage: _cardImages[2]),
                     ]),
                   ),
                   SliverToBoxAdapter(
                     child: _buildCategorySection('MEN', [
-                      _buildLeagueCard('5-A-SIDE', '2 FIXTURES', 'Kite Beach', 'Jun 10', '45 AED', category: 'MEN', colors: [const Color(0xFFFFB75E), const Color(0xFFED8F03)]),
-                      _buildLeagueCard('11-A-SIDE', '0 FIXTURES', 'Main Stadium', 'Jun 20', '99 AED', category: 'MEN', colors: [const Color(0xFFEE0979), const Color(0xFFF12711)]),
-                      _buildLeagueCard('6-A-SIDE', '3 FIXTURES', 'JLT Pitch', 'Jun 18', '55 AED', category: 'MEN', colors: [const Color(0xFFF093FB), const Color(0xFFF5576C)]),
-                      _buildLeagueCard('5-A-SIDE', '1 FIXTURE', 'Dubai Hills', 'Jun 13', '45 AED', category: 'MEN', colors: [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)]),
+                      _buildLeagueCard('5-A-SIDE', '2 FIXTURES', 'Kite Beach', 'Jun 10', '45 AED', category: 'MEN', bgImage: _cardImages[3]),
+                      _buildLeagueCard('11-A-SIDE', '0 FIXTURES', 'Main Stadium', 'Jun 20', '99 AED', category: 'MEN', bgImage: _cardImages[4]),
+                      _buildLeagueCard('6-A-SIDE', '3 FIXTURES', 'JLT Pitch', 'Jun 18', '55 AED', category: 'MEN', bgImage: _cardImages[0]),
+                      _buildLeagueCard('5-A-SIDE', '1 FIXTURE', 'Dubai Hills', 'Jun 13', '45 AED', category: 'MEN', bgImage: _cardImages[1]),
                     ]),
                   ),
                   const SliverToBoxAdapter(
@@ -241,7 +249,7 @@ class _OrganizationHomeState extends State<OrganizationHome> {
               left: 10,
               child: _buildArrowButton(Icons.arrow_back_ios_new_rounded, () {
                 _dateScrollController.animateTo(_dateScrollController.offset - 100, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-              }),
+              }, isGreen: true),
             ),
             Positioned(
               right: 10,
@@ -355,23 +363,23 @@ class _OrganizationHomeState extends State<OrganizationHome> {
     );
   }
 
-  Widget _buildLeagueCard(String type, String fixtures, String location, String date, String price, {required String category, List<Color>? colors}) {
+  Widget _buildLeagueCard(String type, String fixtures, String location, String date, String price, {required String category, required String bgImage}) {
     return GestureDetector(
       onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PlayerInterestsPage(gameType: type))),
       child: Container(
         height: 140,
         margin: const EdgeInsets.only(left: 20, right: 20, bottom: 15),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: colors ?? [surfaceColor, const Color(0xFF1A1A1A)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
           borderRadius: BorderRadius.circular(25),
+          image: DecorationImage(
+            image: AssetImage(bgImage),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(Colors.black.withValues(alpha: 0.5), BlendMode.darken),
+          ),
           border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
           boxShadow: [
             BoxShadow(
-              color: (colors?.first ?? Colors.black).withValues(alpha: 0.2),
+              color: Colors.black.withValues(alpha: 0.4),
               blurRadius: 10,
               offset: const Offset(0, 5),
             ),
@@ -486,7 +494,7 @@ class _OrganizationHomeState extends State<OrganizationHome> {
                             fontWeight: FontWeight.w900,
                             letterSpacing: 0.5)),
                     const SizedBox(height: 5),
-                    const Text('SPECIAL ORGANIZATION FOOTBALL TEAMS',
+                    const Text('SPECIAL ORGANISATION FOOTBALL TEAMS',
                         style: TextStyle(
                             color: greenAccent,
                             fontSize: 9,

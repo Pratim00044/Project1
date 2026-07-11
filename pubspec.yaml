@@ -81,6 +81,8 @@ flutter:
     - assets/images/img3.jpeg
     - assets/images/img4.jpeg
     - assets/images/sunil.png
+    - assets/images/coach.png
+    - assets/images/manager.png
     - assets/images/Core FC Theme .jpeg
     - assets/images/Forward.png
     - assets/images/Attack.png
@@ -93,7 +95,8 @@ flutter:
     - assets/logo.png
     - assets/App Icon.png
     - assets/Video/Banner.mp4
-    - assets/Video/video1.mp4
+    - assets/Video/Banner.mp4
+    - assets/images/img_1.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

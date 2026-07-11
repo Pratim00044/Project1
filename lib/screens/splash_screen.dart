@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _videoController = VideoPlayerController.asset('assets/Video/video1.mp4')
+    _videoController = VideoPlayerController.asset('assets/Video/Banner.mp4')
       ..initialize().then((_) {
         if (mounted) {
           setState(() {
@@ -61,7 +61,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: _initialized
             ? SizedBox.expand(
                 child: FittedBox(
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                   child: SizedBox(
                     width: _videoController.value.size.width,
                     height: _videoController.value.size.height,

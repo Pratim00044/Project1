@@ -89,7 +89,7 @@ class SuperAdminHome extends StatelessWidget {
                           context,
                           Icons.sports_soccer_rounded, 
                           'CREATE NEW MATCH',
-                          'Schedule games (Organizer mode)', 
+                          'Schedule games (Organiser mode)', 
                           [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)],
                           () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminCreateMatchPage()))
                         ),
@@ -106,10 +106,10 @@ class SuperAdminHome extends StatelessWidget {
                         _buildAdminActionCard(
                           context,
                           Icons.how_to_reg_rounded, 
-                          'VERIFY ORGANIZERS/HOSTS',
+                          'VERIFY ORGANISERS/HOSTS',
                           '3 Pending Applications', 
                           [const Color(0xFF007CFE), const Color(0xFF004A99)],
-                          () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VerifyOrganizersPage()))
+                          () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VerifyOrganisersPage()))
                         ),
                         const SizedBox(height: 15),
                         _buildAdminActionCard(

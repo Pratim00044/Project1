@@ -59,7 +59,7 @@ class _PlayerProfilesManagementState extends State<PlayerProfilesManagement> {
               itemCount: _players.length,
               itemBuilder: (context, index) {
                 final player = _players[index];
-                final List<Color> cardColors = _getVibrantGradients(index);
+  List<Color> cardColors = _getAlternatingColors(index);
                 
                 return GestureDetector(
                   onTap: () {
@@ -86,7 +86,7 @@ class _PlayerProfilesManagementState extends State<PlayerProfilesManagement> {
                       ),
                       borderRadius: BorderRadius.circular(25),
                       boxShadow: [
-                        BoxShadow(color: cardColors.first.withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 4))
+                        BoxShadow(color: cardColors.first.withValues(alpha: 0.2), blurRadius: 8, offset: const Offset(0, 4))
                       ],
                     ),
                     child: Row(
@@ -108,21 +108,38 @@ class _PlayerProfilesManagementState extends State<PlayerProfilesManagement> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(player['name']!.toUpperCase(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 15)),
+                              Text(player['name']!.toUpperCase(), 
+                                style: const TextStyle(
+                                  color: Colors.black, 
+                                  fontWeight: FontWeight.w900, 
+                                  fontSize: 15
+                                )
+                              ),
                               const SizedBox(height: 4),
                               Row(
                                 children: [
-                                  Text(player['team']!, style: const TextStyle(color: Colors.white70, fontSize: 10, fontWeight: FontWeight.bold)),
+                                  Text(player['team']!, 
+                                    style: const TextStyle(
+                                      color: Colors.black87, 
+                                      fontSize: 10, 
+                                      fontWeight: FontWeight.bold
+                                    )
+                                  ),
                                   const SizedBox(width: 8),
-                                  const Icon(Icons.circle, size: 4, color: Colors.white24),
+                                  const Icon(Icons.circle, size: 4, color: Colors.black26),
                                   const SizedBox(width: 8),
-                                  Text(player['pos']!, style: const TextStyle(color: Colors.white60, fontSize: 10)),
+                                  Text(player['pos']!, 
+                                    style: const TextStyle(
+                                      color: Colors.black54, 
+                                      fontSize: 10
+                                    )
+                                  ),
                                 ],
                               ),
                             ],
                           ),
                         ),
-                        const Icon(Icons.chevron_right_rounded, color: Colors.white, size: 24),
+                        const Icon(Icons.chevron_right_rounded, color: Colors.black, size: 24),
                       ],
                     ),
                   ),
@@ -135,19 +152,13 @@ class _PlayerProfilesManagementState extends State<PlayerProfilesManagement> {
     );
   }
 
-  List<Color> _getVibrantGradients(int index) {
-    const gradients = [
-      [Color(0xFF007CFE), Color(0xFF004A99)],
-      [Color(0xFF38EF7D), Color(0xFF11998E)],
-      [Color(0xFFEE0979), Color(0xFFF12711)],
-      [Color(0xFF8E2DE2), Color(0xFF4A00E0)],
-      [Color(0xFFF093FB), Color(0xFFF5576C)],
-      [Color(0xFFFFB75E), Color(0xFFED8F03)],
-      [Color(0xFF00C6FF), Color(0xFF0072FF)],
-      [Color(0xFF56CCF2), Color(0xFF2F80ED)],
-      [Color(0xFFF2994A), Color(0xFFF2C94C)],
-      [Color(0xFFB3FFAB), Color(0xFF12FFF7)],
-    ];
-    return gradients[index % gradients.length];
+  List<Color> _getAlternatingColors(int index) {
+    if (index % 2 == 0) {
+      // Light Green
+      return [const Color(0xFFB9F6CA), const Color(0xFFA7FFEB)];
+    } else {
+      // Light Grey
+      return [const Color(0xFFE0E0E0), const Color(0xFFBDBDBD)];
+    }
   }
 }

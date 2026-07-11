@@ -20,7 +20,7 @@ class _CreateGamePageState extends State<CreateGamePage> {
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
 
-  final List<String> _categories = ['MEN', 'LADIES', 'MIXED', 'WEIGHT'];
+  final List<String> _categories = ['MEN', 'LADIES', 'MIXED', 'VETS'];
   final List<String> _myTeams = ['CORE FC', 'DUBAI LIONS', 'NATIONAL GULF FC'];
   final List<String> _opponents = ['Turan Dubai FC', 'National Paints FC', 'Street League FC', 'Eagle FC', 'United FC'];
   final List<String> _squadLimits = ['5', '7', '8', '11', '15', '20', '25'];

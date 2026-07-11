@@ -54,48 +54,53 @@ class RankingSection extends StatelessWidget {
 
   Widget _buildRankingColoredCard(int index, String label, String value, String sub, IconData icon, List<Color> colors) {
     return Container(
-      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            colors[0].withValues(alpha: 0.8),
-            colors[1].withValues(alpha: 0.8),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
         borderRadius: BorderRadius.circular(24),
         image: DecorationImage(
           image: AssetImage('assets/images/img${(index % 4) + 1}.jpeg'),
           fit: BoxFit.cover,
-          opacity: 0.4,
         ),
       ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), shape: BoxShape.circle),
-            child: Icon(icon, color: Colors.white, size: 24),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.black.withValues(alpha: 0.2),
+              Colors.black.withValues(alpha: 0.1),
+            ],
           ),
-          const SizedBox(width: 20),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(label, style: const TextStyle(color: Colors.white70, fontSize: 11)),
-                const SizedBox(height: 4),
-                Text(value, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 24)),
-              ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), shape: BoxShape.circle),
+              child: Icon(icon, color: Colors.white, size: 24),
             ),
-          ),
-          Text(sub, style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
-        ],
+            const SizedBox(width: 20),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(label, style: const TextStyle(color: Colors.white70, fontSize: 11)),
+                  const SizedBox(height: 4),
+                  Text(value, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 24)),
+                ],
+              ),
+            ),
+            Text(sub, style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildLeaderboardItem(BuildContext context, int rank, bool isTop, String name) {
+    bool isMessi = name == 'L. Messi';
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: GestureDetector(
@@ -114,16 +119,29 @@ class RankingSection extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: isTop ? Colors.white.withValues(alpha: 0.05) : const Color(0xFF121212),
+            color: isMessi ? goldColor.withValues(alpha: 0.1) : (isTop ? Colors.white.withValues(alpha: 0.05) : const Color(0xFF121212)),
             borderRadius: BorderRadius.circular(15),
+            border: isMessi ? Border.all(color: goldColor.withValues(alpha: 0.3)) : null,
           ),
           child: Row(
             children: [
-              Text('$rank', style: TextStyle(color: isTop ? goldColor : Colors.white24, fontWeight: FontWeight.bold)),
+              Text('$rank', style: TextStyle(color: (isMessi || isTop) ? goldColor : Colors.white24, fontWeight: FontWeight.bold)),
               const SizedBox(width: 15),
-              const CircleAvatar(radius: 15, backgroundColor: Colors.white10),
+              const CircleAvatar(
+                radius: 15, 
+                backgroundImage: AssetImage('assets/images/sunil.png'),
+              ),
               const SizedBox(width: 15),
-              Expanded(child: Text(name, style: const TextStyle(color: Colors.white, fontSize: 13))),
+              Expanded(
+                child: Text(
+                  name, 
+                  style: TextStyle(
+                    color: isMessi ? goldColor : Colors.white, 
+                    fontSize: 13,
+                    fontWeight: isMessi ? FontWeight.w900 : FontWeight.w500,
+                  )
+                )
+              ),
               const Text('120 Pts', style: TextStyle(color: Colors.white38, fontSize: 11)),
             ],
           ),

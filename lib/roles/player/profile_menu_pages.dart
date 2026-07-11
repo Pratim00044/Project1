@@ -49,7 +49,7 @@ class PlayerMatchesScreen extends StatelessWidget {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: const Color(0xFF0D0D0D),
-        title: const Text('MATCHES', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 2)),
+        title: const Text('MATCH HISTORY', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 2)),
         foregroundColor: goldColor,
         elevation: 0,
       ),
@@ -79,19 +79,10 @@ class PlayerMatchesScreen extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 25),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      gradientColors[0].withValues(alpha: 0.8),
-                      gradientColors[1].withValues(alpha: 0.8),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
                   borderRadius: BorderRadius.circular(20),
                   image: DecorationImage(
                     image: AssetImage('assets/images/img${(index % 4) + 1}.jpeg'),
                     fit: BoxFit.cover,
-                    opacity: 0.4,
                   ),
                   boxShadow: [
                     BoxShadow(
@@ -170,7 +161,7 @@ class PlayerStatsScreen extends StatelessWidget {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: const Color(0xFF0D0D0D),
-        title: const Text('STATS', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 2)),
+        title: const Text('PERFORMANCE STATS', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 2)),
         foregroundColor: goldColor,
         elevation: 0,
       ),
@@ -204,19 +195,11 @@ class PlayerStatsScreen extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12, left: 15, right: 15),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            colors[0].withValues(alpha: 0.8),
-            colors[1].withValues(alpha: 0.8),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
         borderRadius: BorderRadius.circular(20),
         image: DecorationImage(
           image: AssetImage(currentImage),
           fit: BoxFit.cover,
-          opacity: 0.4,
+          colorFilter: ColorFilter.mode(colors[0].withOpacity(0.2), BlendMode.darken),
         ),
         boxShadow: [
           BoxShadow(
@@ -238,7 +221,7 @@ class PlayerStatsScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
+                    color: Colors.black.withOpacity(0.3),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text('${(progress * 100).toInt()}% Proficiency', 
@@ -251,7 +234,7 @@ class PlayerStatsScreen extends StatelessWidget {
             children: List.generate(5, (index) {
               return Icon(
                 index < starCount ? Icons.star_rounded : Icons.star_outline_rounded,
-                color: index < starCount ? Colors.white : Colors.white.withValues(alpha: 0.3),
+                color: index < starCount ? goldColor : Colors.white.withValues(alpha: 0.3),
                 size: 20,
               );
             }),
@@ -299,21 +282,11 @@ class PlayerFeedbackScreen extends StatelessWidget {
               child: Container(
                 margin: const EdgeInsets.only(bottom: 15),
                 width: double.infinity,
-                padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      gradientColors[0].withValues(alpha: 0.8),
-                      gradientColors[1].withValues(alpha: 0.8),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
                   borderRadius: BorderRadius.circular(25),
                   image: DecorationImage(
                     image: AssetImage('assets/images/img${(index % 4) + 1}.jpeg'),
                     fit: BoxFit.cover,
-                    opacity: 0.4,
                   ),
                   boxShadow: [
                     BoxShadow(
@@ -323,33 +296,67 @@ class PlayerFeedbackScreen extends StatelessWidget {
                     )
                   ],
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text('MATCH PERFORMANCE', 
-                          style: TextStyle(color: goldColor, fontSize: 14, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
-                        const Icon(Icons.push_pin_outlined, color: Colors.white24, size: 14),
+                child: Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black.withValues(alpha: 0.2),
+                        Colors.black.withValues(alpha: 0.3),
                       ],
                     ),
-                    const SizedBox(height: 12),
-                    Text(
-                      noteText, 
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: Colors.white.withValues(alpha: 0.9), fontSize: 13, fontWeight: FontWeight.w500, height: 1.5)
-                    ),
-                    const SizedBox(height: 12),
-                    const Row(
-                      children: [
-                        Icon(Icons.access_time, color: Colors.white54, size: 10),
-                        SizedBox(width: 5),
-                        Text('3rd JULY 2026', style: TextStyle(color: Colors.white54, fontSize: 9, fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                  ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('MATCH PERFORMANCE', 
+                            style: TextStyle(
+                              color: goldColor, 
+                              fontSize: 14, 
+                              fontWeight: FontWeight.w900, 
+                              letterSpacing: 1.5,
+                              shadows: [Shadow(color: Colors.black, blurRadius: 4)],
+                            )
+                          ),
+                          const Icon(Icons.push_pin_outlined, color: Colors.white24, size: 14),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        noteText, 
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.white, 
+                          fontSize: 13, 
+                          fontWeight: FontWeight.w500, 
+                          height: 1.5,
+                          shadows: [Shadow(color: Colors.black, blurRadius: 8)],
+                        )
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          const Icon(Icons.access_time, color: Colors.white54, size: 10),
+                          const SizedBox(width: 5),
+                          Text('3rd JULY 2026', 
+                            style: TextStyle(
+                              color: Colors.white54, 
+                              fontSize: 9, 
+                              fontWeight: FontWeight.bold,
+                              shadows: [Shadow(color: Colors.black, blurRadius: 2)],
+                            )
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -459,7 +466,7 @@ class PlayerAttendanceScreen extends StatelessWidget {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: const Color(0xFF0D0D0D),
-        title: const Text('ATTENDANCE', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 2)),
+        title: const Text('ATTENDANCE HISTORY', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 2)),
         foregroundColor: goldColor,
         elevation: 0,
       ),
@@ -543,7 +550,6 @@ class PlayerAttendanceScreen extends StatelessWidget {
         image: DecorationImage(
           image: AssetImage(currentImage),
           fit: BoxFit.cover,
-          opacity: 0.5,
         ),
         boxShadow: [
           BoxShadow(

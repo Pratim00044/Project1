@@ -15,6 +15,21 @@ class SocialLeaguesPage extends StatefulWidget {
 class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
   DateTime _selectedDate = DateTime.now();
   String _selectedFilter = 'ALL';
+  final ScrollController _dateScrollController = ScrollController();
+
+  final List<String> _cardImages = [
+    'assets/images/img1.jpeg',
+    'assets/images/img2.jpeg',
+    'assets/images/img3.jpeg',
+    'assets/images/img4.jpeg',
+    'assets/images/img_1.png',
+  ];
+
+  @override
+  void dispose() {
+    _dateScrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,11 +83,11 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
             _buildPickADate(),
             _buildFilterSection(),
             _buildCategorySection('MIXED', [
-              _buildLeagueCard('7-A-SIDE', '1 FIXTURE', 'assets/images/login_background.jpeg', '7\$'),
+              _buildLeagueCard('7-A-SIDE', '1 FIXTURE', _cardImages[0], '7\$'),
             ]),
             _buildCategorySection('MEN', [
-              _buildLeagueCard('5-A-SIDE', '2 FIXTURES', 'assets/images/login_background.jpeg', '5\$'),
-              _buildLeagueCard('11-A-SIDE', '0 FIXTURES', 'assets/images/login_background.jpeg', '11\$'),
+              _buildLeagueCard('5-A-SIDE', '2 FIXTURES', _cardImages[1], '5\$'),
+              _buildLeagueCard('11-A-SIDE', '0 FIXTURES', _cardImages[2], '11\$'),
             ]),
             const SizedBox(height: 40),
           ],
@@ -90,39 +105,57 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
           child: Text('PICK A DATE', style: TextStyle(color: Colors.white38, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
         ),
         const SizedBox(height: 15),
-        SizedBox(
-          height: 90,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            itemCount: 14,
-            itemBuilder: (context, index) {
-              DateTime date = DateTime.now().add(Duration(days: index));
-              bool isSelected = date.day == _selectedDate.day && date.month == _selectedDate.month;
-              return GestureDetector(
-                onTap: () => setState(() => _selectedDate = date),
-                child: Container(
-                  width: 75,
-                  margin: const EdgeInsets.symmetric(horizontal: 5),
-                  decoration: BoxDecoration(
-                    color: isSelected ? Colors.transparent : surfaceColor,
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(color: isSelected ? greenAccent : Colors.white10, width: 1.5),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(index == 0 ? 'TODAY' : ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'][date.weekday - 1],
-                        style: TextStyle(color: isSelected ? greenAccent : Colors.white24, fontSize: 10, fontWeight: FontWeight.w900)),
-                      const SizedBox(height: 5),
-                      Text(date.day.toString(),
-                        style: TextStyle(color: isSelected ? Colors.white : Colors.white70, fontSize: 22, fontWeight: FontWeight.w900)),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            SizedBox(
+              height: 90,
+              child: ListView.builder(
+                controller: _dateScrollController,
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                itemCount: 14,
+                itemBuilder: (context, index) {
+                  DateTime date = DateTime.now().add(Duration(days: index));
+                  bool isSelected = date.day == _selectedDate.day && date.month == _selectedDate.month;
+                  return GestureDetector(
+                    onTap: () => setState(() => _selectedDate = date),
+                    child: Container(
+                      width: 75,
+                      margin: const EdgeInsets.symmetric(horizontal: 5),
+                      decoration: BoxDecoration(
+                        color: isSelected ? Colors.transparent : surfaceColor,
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(color: isSelected ? greenAccent : Colors.white10, width: 1.5),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(index == 0 ? 'TODAY' : ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'][date.weekday - 1],
+                            style: TextStyle(color: isSelected ? greenAccent : Colors.white24, fontSize: 10, fontWeight: FontWeight.w900)),
+                          const SizedBox(height: 5),
+                          Text(date.day.toString(),
+                            style: TextStyle(color: isSelected ? Colors.white : Colors.white70, fontSize: 22, fontWeight: FontWeight.w900)),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Positioned(
+              left: 10,
+              child: _buildArrowButton(Icons.arrow_back_ios_new_rounded, () {
+                _dateScrollController.animateTo(_dateScrollController.offset - 100, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+              }, isGreen: true),
+            ),
+            Positioned(
+              right: 10,
+              child: _buildArrowButton(Icons.arrow_forward_ios_rounded, () {
+                _dateScrollController.animateTo(_dateScrollController.offset + 100, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+              }, isGreen: true),
+            ),
+          ],
         ),
         const SizedBox(height: 15),
         Padding(
@@ -142,6 +175,23 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildArrowButton(IconData icon, VoidCallback onTap, {bool isGreen = false}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: isGreen ? greenAccent : surfaceColor.withValues(alpha: 0.8),
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 10)
+          ]
+        ),
+        child: Icon(icon, color: isGreen ? Colors.black : Colors.white38, size: 16),
+      ),
     );
   }
 

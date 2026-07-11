@@ -116,7 +116,7 @@ class _ManagerHomeState extends State<ManagerHome> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text('MANAGER XYZ',
+                              const Text('MANAGER Lionel Scaloni',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,

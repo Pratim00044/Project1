@@ -82,7 +82,6 @@ class AttendanceDetail extends StatelessWidget {
                       image: DecorationImage(
                         image: AssetImage(currentImage),
                         fit: BoxFit.cover,
-                        opacity: 0.5,
                       ),
                     ),
                     child: Column(

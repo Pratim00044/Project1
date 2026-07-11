@@ -24,56 +24,63 @@ class MyTeamsPage extends StatelessWidget {
         SliverToBoxAdapter(
             child: Container(
               margin: const EdgeInsets.all(20),
-              padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF1A1A1A), Color(0xFF000000)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
                 image: const DecorationImage(
                   image: AssetImage('assets/images/img2.jpeg'),
                   fit: BoxFit.cover,
-                  opacity: 0.15,
                 ),
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
               ),
-              child: Row(
-                children: [
-                  Container(
-                    height: 65,
-                    width: 65,
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: goldColor, width: 2),
-                    ),
-                    child: const Icon(Icons.shield, color: goldColor, size: 35),
-                  ),
-                  const SizedBox(width: 20),
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('CORE FC', 
-                        style: TextStyle(
-                          color: Colors.white, 
-                          fontSize: 22, 
-                          fontWeight: FontWeight.w900, 
-                          letterSpacing: 2
-                        )
-                      ),
-                      const SizedBox(height: 4),
-                      Text('Dubai | Pro League',
-                        style: TextStyle(
-                          color: goldColor, 
-                          fontSize: 12, 
-                          fontWeight: FontWeight.w700
-                        )
-                      ),
+              child: Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [
+                      Colors.black.withValues(alpha: 0.8),
+                      Colors.black.withValues(alpha: 0.2),
                     ],
                   ),
-                ],
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      height: 65,
+                      width: 65,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: goldColor, width: 2),
+                      ),
+                      child: const Icon(Icons.shield, color: goldColor, size: 35),
+                    ),
+                    const SizedBox(width: 20),
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('CORE FC', 
+                          style: TextStyle(
+                            color: Colors.white, 
+                            fontSize: 22, 
+                            fontWeight: FontWeight.w900, 
+                            letterSpacing: 2
+                          )
+                        ),
+                        const SizedBox(height: 4),
+                        Text('Dubai | Pro League',
+                          style: TextStyle(
+                            color: goldColor, 
+                            fontSize: 12, 
+                            fontWeight: FontWeight.w700
+                          )
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -126,21 +133,11 @@ class MyTeamsPage extends StatelessWidget {
                     },
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 15),
-                      padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            colors[0].withValues(alpha: 0.8),
-                            colors[1].withValues(alpha: 0.8),
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
                         borderRadius: BorderRadius.circular(25),
                         image: DecorationImage(
                           image: AssetImage('assets/images/img${(index % 4) + 1}.jpeg'),
                           fit: BoxFit.cover,
-                          opacity: 0.4,
                         ),
                         boxShadow: [
                           BoxShadow(
@@ -150,77 +147,91 @@ class MyTeamsPage extends StatelessWidget {
                           )
                         ],
                       ),
-                      child: Row(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Colors.white.withValues(alpha: 0.5), 
-                                width: 2.5
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              Colors.black.withValues(alpha: 0.7),
+                              Colors.black.withValues(alpha: 0.2),
+                            ],
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.5), 
+                                  width: 2.5
+                                ),
+                              ),
+                              child: const CircleAvatar(
+                                radius: 26,
+                                backgroundImage: AssetImage('assets/images/sunil.png'),
                               ),
                             ),
-                            child: const CircleAvatar(
-                              radius: 26,
-                              backgroundImage: AssetImage('assets/images/sunil.png'),
-                            ),
-                          ),
-                          const SizedBox(width: 18),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  member['name']!.toUpperCase(), 
-                                  style: const TextStyle(
-                                    color: Colors.white, 
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 16,
-                                    letterSpacing: 0.5,
-                                  ), 
-                                  overflow: TextOverflow.ellipsis
-                                ),
-                                const SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white.withValues(alpha: 0.2),
-                                        borderRadius: BorderRadius.circular(6),
+                            const SizedBox(width: 18),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    member['name']!.toUpperCase(), 
+                                    style: const TextStyle(
+                                      color: Colors.white, 
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 16,
+                                      letterSpacing: 0.5,
+                                    ), 
+                                    overflow: TextOverflow.ellipsis
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withValues(alpha: 0.2),
+                                          borderRadius: BorderRadius.circular(6),
+                                        ),
+                                        child: Text(
+                                          member['pos']!.toUpperCase(), 
+                                          style: const TextStyle(
+                                            color: Colors.white, 
+                                            fontSize: 9,
+                                            fontWeight: FontWeight.w900
+                                          )
+                                        ),
                                       ),
-                                      child: Text(
-                                        member['pos']!.toUpperCase(), 
+                                      const SizedBox(width: 10),
+                                      Text(
+                                        "#${member['no']!}", 
                                         style: const TextStyle(
-                                          color: Colors.white, 
-                                          fontSize: 9,
+                                          color: Colors.white70, 
+                                          fontSize: 12,
                                           fontWeight: FontWeight.w900
                                         )
                                       ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Text(
-                                      "#${member['no']!}", 
-                                      style: const TextStyle(
-                                        color: Colors.white70, 
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w900
-                                      )
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          if (isMe)
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
-                              child: Text('ME', style: TextStyle(color: colors[0], fontSize: 10, fontWeight: FontWeight.w900)),
-                            )
-                          else
-                            const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white38, size: 14),
-                        ],
+                            if (isMe)
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
+                                child: Text('ME', style: TextStyle(color: colors[0], fontSize: 10, fontWeight: FontWeight.w900)),
+                              )
+                            else
+                              const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white38, size: 14),
+                          ],
+                        ),
                       ),
                     ),
                   );

@@ -6,6 +6,7 @@ import 'player_profile.dart';
 import 'profile_details/security_detail.dart';
 import 'profile_details/help_center_detail.dart';
 import 'profile_details/notifications_page.dart';
+import 'profile_details/progress_page.dart';
 import 'drawer_pages.dart';
 import 'profile_menu_pages.dart';
 
@@ -130,6 +131,7 @@ class PlayerHomeState extends State<PlayerHome> {
                     child: Text('PLAYER MENU', style: TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
                   ),
                   _buildDrawerItem(Icons.auto_graph_rounded, 'Professional Pathway', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfessionalPathwayScreen()))),
+                  _buildDrawerItem(Icons.trending_up_rounded, 'Match Progress', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ProgressPage()))),
                   _buildDrawerItem(Icons.sports_soccer_rounded, 'Match History', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PlayerMatchesScreen()))),
                   _buildDrawerItem(Icons.analytics_outlined, 'Performance Stats', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PlayerStatsScreen()))),
                   _buildDrawerItem(Icons.how_to_reg_rounded, 'Attendance History', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PlayerAttendanceScreen()))),

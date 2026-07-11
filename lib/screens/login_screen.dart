@@ -26,9 +26,9 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _rememberMe = false;
 
   final List<Map<String, dynamic>> _roles = [
-    {'name': 'PLAYER', 'icon': Icons.directions_run_outlined, 'color': Colors.blueAccent},
-    {'name': 'ORGANISER/HOST', 'icon': Icons.groups_outlined, 'color': Colors.blueAccent},
-    {'name': 'COACH', 'icon': Icons.sports_outlined, 'color': Colors.orangeAccent},
+    {'name': 'PLAYER', 'icon': Icons.directions_run_outlined, 'color': goldColor},
+    {'name': 'ORGANISER/HOST', 'icon': Icons.groups_outlined, 'color': Colors.tealAccent},
+    {'name': 'COACH', 'icon': Icons.sports_outlined, 'color': Colors.grey},
     {'name': 'MANAGER', 'icon': Icons.manage_accounts_outlined, 'color': Colors.purpleAccent},
     {'name': 'SUPER ADMIN', 'icon': Icons.admin_panel_settings_outlined, 'color': goldColor},
   ];
@@ -62,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
         homePage = const SuperAdminHome();
         break;
       case 'ORGANISER/HOST':
-        homePage = const OrganizationHome();
+        homePage = const OrganisationHome();
         break;
       case 'PLAYER':
         homePage = const PlayerHome();
@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               Positioned.fill(
                 child: Image.asset(
-                  'assets/images/img.png',
+                  'assets/images/img_1.png',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -173,7 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   _rememberMe = value!;
                                                 });
                                               },
-                                              activeColor: goldColor,
+                                              activeColor: _roles[_currentIndex]['color'] as Color,
                                               checkColor: Colors.black,
                                               side: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
                                             ),
@@ -190,10 +190,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                       TextButton(
                                         onPressed: () {},
-                                        child: const Text(
+                                        child: Text(
                                           'Forgot Password?',
                                           style: TextStyle(
-                                            color: goldColor,
+                                            color: _roles[_currentIndex]['color'] as Color,
                                             fontSize: 13,
                                           ),
                                         ),
@@ -220,10 +220,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                             child: AnimatedScale(
                                               scale: _linkScale,
                                               duration: const Duration(milliseconds: 100),
-                                              child: const Text(
+                                              child: Text(
                                                 'REGISTER',
                                                 style: TextStyle(
-                                                  color: goldColor,
+                                                  color: _roles[_currentIndex]['color'] as Color,
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 13,
                                                 ),
@@ -320,66 +320,75 @@ class _LoginScreenState extends State<LoginScreen> {
                   bool isSelected = index == _currentIndex;
 
                   final roleColor = role['color'] as Color;
-                  return Center(
-                    child: Transform.translate(
-                      offset: Offset(0, yOffset),
-                      child: Transform.scale(
-                        scale: scale,
-                        child: Opacity(
-                          opacity: opacity,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
-                                padding: const EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: isSelected 
-                                      ? roleColor.withValues(alpha: 0.2) 
-                                      : Colors.black.withValues(alpha: 0.4),
-                                  border: Border.all(
-                                    color: isSelected ? roleColor : Colors.white.withValues(alpha: 0.3),
-                                    width: isSelected ? 3 : 1.5,
-                                  ),
-                                  boxShadow: isSelected ? [
-                                    BoxShadow(
-                                      color: roleColor.withValues(alpha: 0.5),
-                                      blurRadius: 25,
-                                      spreadRadius: 4,
-                                    )
-                                  ] : [
-                                    BoxShadow(
-                                      color: Colors.black.withValues(alpha: 0.3),
-                                      blurRadius: 10,
-                                      spreadRadius: 1,
-                                    )
-                                  ],
-                                ),
-                                child: Icon(
-                                  role['icon'],
-                                  color: isSelected ? roleColor : Colors.white.withValues(alpha: 0.7),
-                                  size: 32,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                role['name'],
-                                style: TextStyle(
-                                  color: isSelected ? roleColor : Colors.white.withValues(alpha: 0.7),
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 1.2,
-                                  shadows: [
-                                    Shadow(
-                                      color: Colors.black,
-                                      offset: const Offset(1, 1),
-                                      blurRadius: 3,
+                  return GestureDetector(
+                    onTap: () {
+                      _pageController.animateToPage(
+                        index,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
+                    },
+                    child: Center(
+                      child: Transform.translate(
+                        offset: Offset(0, yOffset),
+                        child: Transform.scale(
+                          scale: scale,
+                          child: Opacity(
+                            opacity: opacity,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                AnimatedContainer(
+                                  duration: const Duration(milliseconds: 300),
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: isSelected 
+                                        ? roleColor.withValues(alpha: 0.2)
+                                        : Colors.black.withValues(alpha: 0.4),
+                                    border: Border.all(
+                                      color: isSelected ? roleColor : Colors.white.withValues(alpha: 0.3),
+                                      width: isSelected ? 3 : 1.5,
                                     ),
-                                  ],
+                                    boxShadow: isSelected ? [
+                                      BoxShadow(
+                                        color: roleColor.withValues(alpha: 0.5),
+                                        blurRadius: 25,
+                                        spreadRadius: 4,
+                                      )
+                                    ] : [
+                                      BoxShadow(
+                                        color: Colors.black.withValues(alpha: 0.3),
+                                        blurRadius: 10,
+                                        spreadRadius: 1,
+                                      )
+                                    ],
+                                  ),
+                                  child: Icon(
+                                    role['icon'],
+                                    color: isSelected ? roleColor : Colors.white.withValues(alpha: 0.7),
+                                    size: 32,
+                                  ),
                                 ),
-                              ),
-                            ],
+                                const SizedBox(height: 10),
+                                Text(
+                                  role['name'],
+                                  style: TextStyle(
+                                    color: isSelected ? roleColor : Colors.white.withValues(alpha: 0.7),
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.2,
+                                    shadows: [
+                                      Shadow(
+                                        color: Colors.black,
+                                        offset: const Offset(1, 1),
+                                        blurRadius: 3,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -395,9 +404,10 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildLabel(String text, IconData icon) {
+    final roleColor = _roles[_currentIndex]['color'] as Color;
     return Row(
       children: [
-        Icon(icon, size: 18, color: goldColor),
+        Icon(icon, size: 18, color: roleColor),
         const SizedBox(width: 10),
         Text(
           text,
@@ -421,11 +431,19 @@ class _LoginScreenState extends State<LoginScreen> {
     TextInputType? keyboardType,
     List<TextInputFormatter>? inputFormatters,
   }) {
+    final roleColor = _roles[_currentIndex]['color'] as Color;
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFF1A1A1A),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        border: Border.all(color: roleColor.withValues(alpha: 0.5), width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: roleColor.withValues(alpha: 0.15),
+            blurRadius: 12,
+            spreadRadius: 2,
+          ),
+        ],
       ),
       child: TextFormField(
         controller: controller,
@@ -443,7 +461,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ? IconButton(
                   icon: Icon(
                     obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                    color: Colors.white.withValues(alpha: 0.3),
+                    color: roleColor.withValues(alpha: 0.7),
                     size: 22,
                   ),
                   onPressed: togglePassword,

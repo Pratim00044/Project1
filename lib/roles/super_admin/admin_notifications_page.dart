@@ -10,7 +10,7 @@ class AdminNotificationsPage extends StatelessWidget {
   final List<Map<String, dynamic>> notifications = const [
     {
       'title': 'NEW MATCH CREATED',
-      'message': 'Core FC vs Dubai Lions scheduled by Organizer Ahmed.',
+      'message': 'Core FC vs Dubai Lions scheduled by Organiser Ahmed.',
       'time': '2 mins ago',
       'icon': Icons.sports_soccer_rounded,
       'color': Color(0xFF8E2DE2),

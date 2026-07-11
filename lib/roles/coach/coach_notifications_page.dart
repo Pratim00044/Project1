@@ -13,42 +13,42 @@ class CoachNotificationsPage extends StatelessWidget {
       {
         'title': 'New Training Session Scheduled',
         'category': 'Training',
-        'day': 'Today',
         'time': '08:30 AM',
         'icon': Icons.fitness_center_rounded,
         'color': const Color(0xFF38EF7D),
+        'isNew': true,
       },
       {
         'title': 'Player Performance Report Ready',
         'category': 'Analysis',
-        'day': 'Today',
         'time': '11:15 AM',
         'icon': Icons.analytics_outlined,
         'color': const Color(0xFF007CFE),
+        'isNew': true,
       },
       {
         'title': 'Upcoming Match vs Tigers FC',
         'category': 'Match',
-        'day': 'Yesterday',
-        'time': '05:00 PM',
+        'time': 'Yesterday',
         'icon': Icons.sports_soccer_rounded,
         'color': goldColor,
+        'isNew': false,
       },
       {
         'title': 'New message from Team Manager',
         'category': 'Chat',
-        'day': 'Yesterday',
-        'time': '02:30 PM',
+        'time': 'Yesterday',
         'icon': Icons.chat_bubble_outline_rounded,
         'color': const Color(0xFFEE0979),
+        'isNew': false,
       },
       {
         'title': 'Squad Availability Updated',
         'category': 'Roster',
-        'day': '2 days ago',
-        'time': '09:00 AM',
+        'time': '2 days ago',
         'icon': Icons.people_outline_rounded,
         'color': Colors.orangeAccent,
+        'isNew': false,
       },
     ];
 
@@ -57,84 +57,138 @@ class CoachNotificationsPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: const Color(0xFF0D0D0D),
         elevation: 0,
+        centerTitle: true,
         title: const Text('NOTIFICATIONS',
             style: TextStyle(
                 color: goldColor,
-                fontSize: 14,
+                fontSize: 16,
                 fontWeight: FontWeight.w900,
-                letterSpacing: 2)),
-        centerTitle: true,
+                letterSpacing: 1.5)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.done_all_rounded, color: goldColor, size: 20),
+          TextButton(
             onPressed: () {},
+            child: const Text('Clear All', style: TextStyle(color: Colors.white38, fontSize: 12)),
           ),
         ],
       ),
       body: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        padding: const EdgeInsets.symmetric(vertical: 20),
         itemCount: notifications.length,
         itemBuilder: (context, index) {
-          final item = notifications[index];
-          return _buildNotificationItem(item);
-        },
-      ),
-    );
-  }
+          final notif = notifications[index];
+          final bool isNew = notif['isNew'] == true;
+          final bool isEven = index % 2 == 0;
+          final Color accentColor = notif['color'] as Color;
+          
+          final List<String> tileImages = [
+            'assets/images/img1.jpeg',
+            'assets/images/img2.jpeg',
+            'assets/images/img3.jpeg',
+            'assets/images/img4.jpeg',
+          ];
+          String currentImage = tileImages[index % tileImages.length];
 
-  Widget _buildNotificationItem(Map<String, dynamic> item) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 15),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: surfaceColor,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
+          Widget iconWidget = Container(
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: (item['color'] as Color).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(15),
+              color: isNew ? accentColor.withValues(alpha: 0.2) : Colors.black.withValues(alpha: 0.6),
+              shape: BoxShape.circle,
+              border: Border.all(color: isNew ? accentColor.withValues(alpha: 0.3) : Colors.white10),
             ),
-            child: Icon(item['icon'] as IconData, color: item['color'] as Color, size: 22),
-          ),
-          const SizedBox(width: 15),
-          Expanded(
+            child: Icon(
+              notif['icon'] as IconData,
+              color: isNew ? accentColor : Colors.white38,
+              size: 20,
+            ),
+          );
+
+          Widget contentWidget = Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: isEven ? CrossAxisAlignment.start : CrossAxisAlignment.end,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: isEven ? MainAxisAlignment.start : MainAxisAlignment.end,
                   children: [
-                    Text(item['category'].toString().toUpperCase(),
+                    if (!isEven && isNew)
+                      Container(
+                        margin: const EdgeInsets.only(right: 8),
+                        width: 6, height: 6,
+                        decoration: BoxDecoration(color: accentColor, shape: BoxShape.circle),
+                      ),
+                    Text(notif['category'].toString().toUpperCase(),
                         style: TextStyle(
-                            color: item['color'] as Color,
-                            fontSize: 10,
+                            color: isNew ? accentColor : Colors.white70,
+                            fontSize: 11,
                             fontWeight: FontWeight.w900,
-                            letterSpacing: 1)),
-                    Text('${item['day']} • ${item['time']}',
-                        style: const TextStyle(color: Colors.white24, fontSize: 10)),
+                            letterSpacing: 0.5,
+                            shadows: [Shadow(color: Colors.black, blurRadius: 4)])),
+                    if (isEven && isNew)
+                      Container(
+                        margin: const EdgeInsets.only(left: 8),
+                        width: 6, height: 6,
+                        decoration: BoxDecoration(color: accentColor, shape: BoxShape.circle),
+                      ),
                   ],
                 ),
                 const SizedBox(height: 6),
-                Text(item['title'],
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
+                Text(notif['title']!,
+                    textAlign: isEven ? TextAlign.left : TextAlign.right,
+                    style: TextStyle(
+                        color: isNew ? Colors.white : Colors.white70,
+                        fontSize: 13,
+                        height: 1.4,
                         fontWeight: FontWeight.bold,
-                        height: 1.3)),
+                        shadows: [Shadow(color: Colors.black, blurRadius: 8)])),
+                const SizedBox(height: 10),
+                Text(notif['time']!,
+                    style: const TextStyle(
+                      color: Colors.white38, 
+                      fontSize: 10, 
+                      fontWeight: FontWeight.bold,
+                      shadows: [Shadow(color: Colors.black, blurRadius: 2)],
+                    )),
               ],
             ),
-          ),
-        ],
+          );
+
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25),
+              image: DecorationImage(
+                image: AssetImage(currentImage),
+                fit: BoxFit.cover,
+              ),
+              boxShadow: [
+                BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 10, offset: const Offset(0, 4))
+              ],
+            ),
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                gradient: LinearGradient(
+                  begin: isEven ? Alignment.centerLeft : Alignment.centerRight,
+                  end: isEven ? Alignment.centerRight : Alignment.centerLeft,
+                  colors: [
+                    Colors.black.withValues(alpha: 0.4),
+                    Colors.black.withValues(alpha: 0.1),
+                  ],
+                ),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: isEven 
+                  ? [iconWidget, const SizedBox(width: 15), contentWidget]
+                  : [contentWidget, const SizedBox(width: 15), iconWidget],
+              ),
+            ),
+          );
+        },
       ),
     );
   }

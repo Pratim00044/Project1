@@ -77,19 +77,10 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
       width: double.infinity,
       height: 180,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            const Color(0xFFFFB75E).withValues(alpha: 0.8),
-            const Color(0xFFED8F03).withValues(alpha: 0.8),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
         borderRadius: BorderRadius.circular(30),
         image: const DecorationImage(
           image: AssetImage('assets/images/img2.jpeg'),
           fit: BoxFit.cover,
-          opacity: 0.4,
         ),
         boxShadow: [
           BoxShadow(
@@ -101,6 +92,19 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
       ),
       child: Stack(
         children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  Colors.black.withValues(alpha: 0.1),
+                  Colors.black.withValues(alpha: 0.8),
+                ],
+              ),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(25),
             child: Row(
@@ -111,7 +115,7 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white.withValues(alpha: 0.4),
+                    color: Colors.white,
                     border: Border.all(color: Colors.white.withValues(alpha: 0.6), width: 2.5),
                   ),
                   child: Container(
@@ -130,51 +134,73 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
+                      Text(
                         'Welcome back,',
                         style: TextStyle(
-                          color: Colors.black87,
+                          color: Colors.white.withValues(alpha: 0.9),
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 0.5,
+                          shadows: [
+                            Shadow(
+                              color: Colors.black.withValues(alpha: 0.5),
+                              blurRadius: 10,
+                              offset: const Offset(0, 2),
+                            )
+                          ],
                         ),
                       ),
-                      const Text(
+                      Text(
                         'LIONEL MESSI',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: goldColor,
                           fontSize: 26,
                           fontWeight: FontWeight.w900,
                           height: 1.0,
                           letterSpacing: -0.5,
+                          shadows: [
+                            Shadow(
+                              color: Colors.black.withValues(alpha: 0.5),
+                              blurRadius: 15,
+                              offset: const Offset(0, 4),
+                            )
+                          ],
                         ),
                       ),
                       const SizedBox(height: 2),
-                      const Text(
-                        'ACADEMY PLAYER',
+                      Text(
+                        'CLUB PLAYER',
                         style: TextStyle(
-                          color: Colors.black87,
+                          color: Colors.white70,
                           fontSize: 9,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.5,
+                          shadows: [
+                            Shadow(
+                              color: Colors.black.withValues(alpha: 0.5),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            )
+                          ],
                         ),
                       ),
                       const SizedBox(height: 12),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.1),
+                          color: Colors.black.withValues(alpha: 0.6),
                           borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: goldColor.withValues(alpha: 0.2)),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.shield, size: 12, color: Colors.black87),
+                            const Icon(Icons.shield, size: 12, color: goldColor),
                             const SizedBox(width: 6),
                             const Text(
                               'CORE FC',
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontSize: 10,
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: 0.5,

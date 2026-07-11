@@ -107,28 +107,38 @@ class _CoachHomeState extends State<CoachHome> {
                 children: [
                   Container(
                     padding: const EdgeInsets.fromLTRB(20, 60, 20, 30),
-                    decoration: const BoxDecoration(color: Color(0xFF0D0D0D)),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF0D0D0D),
+                      border: Border(bottom: BorderSide(color: Colors.white10, width: 0.5)),
+                    ),
                     child: Row(
                       children: [
                         const CircleAvatar(
-                          radius: 30,
-                          backgroundColor: goldColor,
-                          child: Text('CJ', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20)),
+                          radius: 35, 
+                          backgroundImage: AssetImage('assets/images/coach.png'),
                         ),
-                        const SizedBox(width: 15),
+                        const SizedBox(width: 20),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text('COACH JAMES',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16)),
-                              Text('Head Coach | CORE FC - U8',
-                                  style: TextStyle(
-                                      color: goldColor.withValues(alpha: 0.7),
-                                      fontSize: 11)),
+                              const Text(
+                                'LIONEL SCALONI',
+                                style: TextStyle(
+                                  color: goldColor, 
+                                  fontWeight: FontWeight.w900, 
+                                  fontSize: 20,
+                                  letterSpacing: 0.5,
+                                )
+                              ),
+                              Text(
+                                'Rank #1 | ACADEMY COACH', 
+                                style: TextStyle(
+                                  color: Colors.white.withValues(alpha: 0.5), 
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                )
+                              ),
                             ],
                           ),
                         ),

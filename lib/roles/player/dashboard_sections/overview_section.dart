@@ -18,7 +18,7 @@ class OverviewSection extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
           child: Row(
             children: [
-              _buildColoredSquareTile(0, Icons.history, '24 Years', 'Age', [const Color(0xFF007CFE), const Color(0xFF004A99)]),
+              _buildColoredSquareTile(0, Icons.cake_rounded, '24 Years', 'Age', [const Color(0xFF007CFE), const Color(0xFF004A99)]),
               const SizedBox(width: 8),
               _buildColoredSquareTile(1, Icons.sports_soccer, 'Center Forward', 'Position', [const Color(0xFF38EF7D), const Color(0xFF11998E)]),
               const SizedBox(width: 8),
@@ -169,33 +169,46 @@ class OverviewSection extends StatelessWidget {
         image: const DecorationImage(
           image: AssetImage('assets/images/img4.jpeg'),
           fit: BoxFit.cover,
-          opacity: 0.1,
         ),
         border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildStatItem(Icons.event_available, '48', 'MATCHES', const Color(0xFF2979FF)),
-              _buildStatItem(Icons.sports_soccer, '24', 'GOALS', goldColor),
-              _buildStatItem(Icons.assistant_navigation, '12', 'ASSISTS', const Color(0xFF00C853)),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.black.withValues(alpha: 0.1),
+              Colors.black.withValues(alpha: 0.3),
             ],
           ),
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(
-              color: goldColor.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(20),
+        ),
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildStatItem(Icons.event_available, '48', 'MATCHES', const Color(0xFF2979FF)),
+                _buildStatItem(Icons.sports_soccer, '24', 'GOALS', goldColor),
+                _buildStatItem(Icons.assistant_navigation, '12', 'ASSISTS', const Color(0xFF00C853)),
+              ],
             ),
-            child: const Text(
-              'VIEW DETAILED PERFORMANCE PROFILE',
-              style: TextStyle(color: goldColor, fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: goldColor.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Text(
+                'VIEW DETAILED PERFORMANCE PROFILE',
+                style: TextStyle(color: goldColor, fontSize: 8, fontWeight: FontWeight.w900, letterSpacing: 1),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -214,54 +227,48 @@ class OverviewSection extends StatelessWidget {
   Widget _buildColoredSquareTile(int index, IconData icon, String val, String label, List<Color> colors) {
     return Expanded(
       child: AspectRatio(
-        aspectRatio: 1.4,
+        aspectRatio: 1.8,
         child: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                colors[0].withValues(alpha: 0.8),
-                colors[1].withValues(alpha: 0.8),
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
             borderRadius: BorderRadius.circular(20),
             image: DecorationImage(
               image: AssetImage('assets/images/img${(index % 4) + 1}.jpeg'),
               fit: BoxFit.cover,
-              opacity: 0.4,
             ),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, color: Colors.white, size: 22),
-              const SizedBox(height: 4),
-              Text(
-                label.toUpperCase(),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 8,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 0.5,
-                ),
-                textAlign: TextAlign.center,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withValues(alpha: 0.1),
+                  Colors.black.withValues(alpha: 0.2),
+                ],
               ),
-              const SizedBox(height: 2),
-              FittedBox(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
-                    val,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w900,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, color: Colors.white, size: 24),
+                const SizedBox(height: 6),
+                FittedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text(
+                      val,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w900,
+                        shadows: [Shadow(color: Colors.black.withValues(alpha: 0.5), blurRadius: 4)],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -277,58 +284,80 @@ class OverviewSection extends StatelessWidget {
         image: const DecorationImage(
           image: AssetImage('assets/images/img3.jpeg'),
           fit: BoxFit.cover,
-          opacity: 0.1,
         ),
         border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.black.withValues(alpha: 0.4),
+              Colors.black.withValues(alpha: 0.6),
+            ],
+          ),
+        ),
+        padding: const EdgeInsets.all(25),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      _buildMatchTeam('CORE FC', true),
+                      const SizedBox(height: 16),
+                      _buildMatchTeam('DUBAI CITY FC', false),
+                    ],
+                  ),
+                ),
+                Container(
+                    height: 40,
+                    width: 1,
+                    color: Colors.white24,
+                    margin: const EdgeInsets.symmetric(horizontal: 20)),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    _buildMatchTeam('CORE FC', true),
-                    const SizedBox(height: 16),
-                    _buildMatchTeam('DUBAI CITY FC', false),
+                    const Text('FEB 02',
+                        style: TextStyle(
+                            color: goldColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w900,
+                            shadows: [Shadow(color: Colors.black, blurRadius: 8)])),
+                    const SizedBox(height: 4),
+                    Text('22:00 PM',
+                        style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.9),
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                            shadows: [Shadow(color: Colors.black, blurRadius: 4)])),
                   ],
                 ),
-              ),
-              Container(
-                  height: 40,
-                  width: 1,
-                  color: Colors.white10,
-                  margin: const EdgeInsets.symmetric(horizontal: 20)),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  const Text('FEB 02',
+              ],
+            ),
+            const SizedBox(height: 20),
+            Divider(color: Colors.white.withValues(alpha: 0.1), height: 1),
+            const SizedBox(height: 15),
+            Row(
+              children: [
+                const Icon(Icons.location_on_outlined, color: goldColor, size: 14),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text('Al Hamra Stadium, Ras Al Khaimah',
                       style: TextStyle(
-                          color: goldColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w900)),
-                  const SizedBox(height: 4),
-                  Text('22:00 PM',
-                      style: TextStyle(
-                          color: Colors.white38,
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold)),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Divider(color: Colors.white.withValues(alpha: 0.05), height: 1),
-          const SizedBox(height: 15),
-          Row(
-            children: [
-              const Icon(Icons.location_on_outlined, color: goldColor, size: 14),
-              const SizedBox(width: 8),
-              const Text('Al Hamra Stadium, Ras Al Khaimah',
-                  style: TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.w500)),
-            ],
-          ),
-        ],
+                        color: Colors.white.withValues(alpha: 0.9), 
+                        fontSize: 11, 
+                        fontWeight: FontWeight.w500,
+                        shadows: [Shadow(color: Colors.black, blurRadius: 4)],
+                      )),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -336,13 +365,20 @@ class OverviewSection extends StatelessWidget {
   Widget _buildMatchTeam(String name, bool highlight) {
     return Row(
       children: [
-        Icon(Icons.shield, color: highlight ? goldColor : Colors.white24, size: 18),
+        Icon(Icons.shield, 
+          color: highlight ? goldColor : Colors.white24, 
+          size: 18,
+          shadows: [const Shadow(color: Colors.black, blurRadius: 8)],
+        ),
         const SizedBox(width: 12),
-        Text(name,
-            style: const TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w600)),
+        Expanded(
+          child: Text(name,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  shadows: [Shadow(color: Colors.black, blurRadius: 8)])),
+        ),
       ],
     );
   }

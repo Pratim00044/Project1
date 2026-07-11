@@ -99,7 +99,7 @@ class SystemAnalyticsPage extends StatelessWidget {
   Widget _buildEventLog() {
     final events = [
       {'event': 'New Club Registered', 'time': '2 mins ago', 'desc': 'Dubai City Football Club joined the platform.'},
-      {'event': 'Organizer Approved', 'time': '1 hour ago', 'desc': 'John Doe was verified as organizer for CORE FC.'},
+      {'event': 'Organiser Approved', 'time': '1 hour ago', 'desc': 'John Doe was verified as organiser for CORE FC.'},
       {'event': 'System Update', 'time': '5 hours ago', 'desc': 'New evaluation metrics deployed to all coach dashboards.'},
     ];
 

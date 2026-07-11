@@ -103,60 +103,72 @@ class _SessionSectionState extends State<SessionSection> {
         ...data
       }),
       child: Container(
-        padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           color: surfaceColor,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: isConfirmed ? goldColor.withValues(alpha: 0.3) : Colors.white.withValues(alpha: 0.05)),
           image: DecorationImage(
-            image: AssetImage(currentImage),
+            image: AssetImage(tileImages[index % tileImages.length]),
             fit: BoxFit.cover,
-            opacity: 0.4,
           ),
         ),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: completed ? Colors.green.withValues(alpha: 0.1) : (isConfirmed ? goldColor.withValues(alpha: 0.2) : goldColor.withValues(alpha: 0.1)),
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: Icon(icon, color: completed ? Colors.green : goldColor, size: 22),
+        child: Container(
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                Colors.black.withValues(alpha: 0.2),
+                Colors.black.withValues(alpha: 0.1),
+              ],
             ),
-            const SizedBox(width: 18),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(title,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold)),
-                      if (isConfirmed && !completed) ...[
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(color: goldColor.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(4)),
-                          child: const Text('CONFIRMED', style: TextStyle(color: goldColor, fontSize: 8, fontWeight: FontWeight.bold)),
-                        ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: completed ? Colors.green.withValues(alpha: 0.1) : (isConfirmed ? goldColor.withValues(alpha: 0.2) : goldColor.withValues(alpha: 0.1)),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(icon, color: completed ? Colors.green : goldColor, size: 22),
+              ),
+              const SizedBox(width: 18),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(title,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold)),
+                        if (isConfirmed && !completed) ...[
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(color: goldColor.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(4)),
+                            child: const Text('CONFIRMED', style: TextStyle(color: goldColor, fontSize: 8, fontWeight: FontWeight.bold)),
+                          ),
+                        ],
                       ],
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text('$time • $location',
-                      style: const TextStyle(
-                          color: Colors.white38, fontSize: 11)),
-                ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text('$time • $location',
+                        style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.7), fontSize: 11)),
+                  ],
+                ),
               ),
-            ),
-            Icon(completed || isConfirmed ? Icons.verified : Icons.arrow_forward_ios,
-                color: completed ? Colors.green.withValues(alpha: 0.5) : (isConfirmed ? goldColor : Colors.white10),
-                size: 14),
-          ],
+              Icon(completed || isConfirmed ? Icons.verified : Icons.arrow_forward_ios,
+                  color: completed ? Colors.green.withValues(alpha: 0.5) : (isConfirmed ? goldColor : Colors.white.withValues(alpha: 0.3)),
+                  size: 14),
+            ],
+          ),
         ),
       ),
     );
