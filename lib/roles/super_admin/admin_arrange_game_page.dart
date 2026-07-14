@@ -17,8 +17,8 @@ class AdminArrangeGamePage extends StatelessWidget {
         title: const Text('ARRANGE GAME', 
           style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 2)),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: goldColor, size: 20), 
-          onPressed: () => Navigator.pop(context)
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: SingleChildScrollView(

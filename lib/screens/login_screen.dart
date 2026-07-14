@@ -65,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
         homePage = const OrganisationHome();
         break;
       case 'PLAYER':
-        homePage = const PlayerHome();
+        homePage = PlayerHome();
         break;
       case 'COACH':
         homePage = const CoachHome();
@@ -269,24 +269,6 @@ class _LoginScreenState extends State<LoginScreen> {
               width: isDesktop ? 600 : double.infinity,
               child: CustomPaint(
                 painter: ArcPainter(),
-              ),
-            ),
-            Positioned(
-              top: 5,
-              child: Container(
-                width: 10,
-                height: 10,
-                decoration: BoxDecoration(
-                  color: goldColor,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: goldColor.withValues(alpha: 0.8),
-                      blurRadius: 10,
-                      spreadRadius: 2,
-                    )
-                  ],
-                ),
               ),
             ),
           ],
@@ -507,7 +489,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Align(
                 alignment: Alignment.center,
                 child: Text(
-                  'LOGIN',
+                  'LOG IN',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 18,

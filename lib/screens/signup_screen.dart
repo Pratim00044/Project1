@@ -25,14 +25,6 @@ class _SignupScreenState extends State<SignupScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _clubCodeController = TextEditingController();
-  
-  final _heightController = TextEditingController();
-  final _weightController = TextEditingController();
-  final _dobController = TextEditingController();
-  final _parentEmailController = TextEditingController();
-  String? _selectedFoot;
-  String? _selectedPosition;
-  String? _selectedPlayerType;
 
   bool _obscurePassword = true;
   bool _isClubCodeStep = true;
@@ -83,42 +75,8 @@ class _SignupScreenState extends State<SignupScreen> {
     _mobileController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
-    _heightController.dispose();
-    _weightController.dispose();
-    _dobController.dispose();
-    _parentEmailController.dispose();
     _clubCodeController.dispose();
     super.dispose();
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now().subtract(const Duration(days: 365 * 18)),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.dark(
-              primary: goldColor,
-              onPrimary: Colors.black,
-              surface: const Color(0xFF1A1A1A),
-              onSurface: Colors.white,
-            ),
-            dialogTheme: const DialogThemeData(
-              backgroundColor: const Color(0xFF080808),
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-    if (picked != null) {
-      setState(() {
-        _dobController.text = "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
-      });
-    }
   }
 
   void _handleRegister() {
@@ -134,13 +92,6 @@ class _SignupScreenState extends State<SignupScreen> {
     }
 
     if (_formKey.currentState!.validate()) {
-      if (_selectedFoot == null || _selectedPosition == null || _heightController.text.trim().isEmpty || _weightController.text.trim().isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('All physical stats and field preferences are mandatory.')),
-        );
-        return;
-      }
-
       if (_passwordController.text != _confirmPasswordController.text) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Passwords do not match')),
@@ -148,7 +99,7 @@ class _SignupScreenState extends State<SignupScreen> {
         return;
       }
 
-      Widget homePage = const PlayerHome();
+      Widget homePage = PlayerHome();
 
       Navigator.pushReplacement(
         context,
@@ -303,91 +254,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                           ),
                                         ),
 
-                                        const SizedBox(height: 32),
-                                        _buildLabel('Player Category', Icons.category_outlined),
-                                        const SizedBox(height: 16),
-                                        _buildDropdown(
-                                          hint: 'Select Player Type',
-                                          value: _selectedPlayerType,
-                                          items: ['Academy Player', 'Social Player', 'Club Player'],
-                                          onChanged: (val) => setState(() => _selectedPlayerType = val),
-                                        ),
-                                        const SizedBox(height: 32),
-                                        const Divider(color: Colors.white10),
-                                        const SizedBox(height: 16),
-                                        _buildLabel('Personal Details', Icons.cake_outlined),
-                                        const SizedBox(height: 16),
-                                        _buildTextField(
-                                          controller: _dobController,
-                                          hint: 'Date of Birth (DD/MM/YYYY)',
-                                          readOnly: true,
-                                          onTap: () => _selectDate(context),
-                                          validator: (value) => value!.trim().isEmpty ? 'Required' : null,
-                                        ),
-                                        const SizedBox(height: 24),
-                                        _buildLabel('Parent/Guardian Contact', Icons.family_restroom_outlined),
-                                        const SizedBox(height: 16),
-                                        _buildTextField(
-                                          controller: _parentEmailController,
-                                          hint: 'Parent Email',
-                                          keyboardType: TextInputType.emailAddress,
-                                          validator: (value) {
-                                            if (value == null || value.trim().isEmpty) return 'Required';
-                                            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) return 'Invalid email';
-                                            return null;
-                                          },
-                                        ),
-                                        const SizedBox(height: 32),
-                                        _buildLabel('Physical Stats', Icons.fitness_center),
-                                        const SizedBox(height: 16),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: _buildTextField(
-                                                controller: _heightController,
-                                                hint: 'Height (cm)',
-                                                keyboardType: TextInputType.number,
-                                                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                                validator: (value) => value!.trim().isEmpty ? 'Required' : null,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 16),
-                                            Expanded(
-                                              child: _buildTextField(
-                                                controller: _weightController,
-                                                hint: 'Weight (kg)',
-                                                keyboardType: TextInputType.number,
-                                                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                                validator: (value) => value!.trim().isEmpty ? 'Required' : null,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 24),
-                                        _buildLabel('Field Preferences', Icons.settings_input_component),
-                                        const SizedBox(height: 16),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: _buildDropdown(
-                                                hint: 'Strong Foot',
-                                                value: _selectedFoot,
-                                                items: ['Right', 'Left', 'Both'],
-                                                onChanged: (val) => setState(() => _selectedFoot = val),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 16),
-                                            Expanded(
-                                              child: _buildDropdown(
-                                                hint: 'Position',
-                                                value: _selectedPosition,
-                                                items: ['Forward', 'Midfielder', 'Defender', 'Goalkeeper'],
-                                                onChanged: (val) => setState(() => _selectedPosition = val),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-
                                         const SizedBox(height: 24),
                                         _buildLabel('Password', Icons.lock),
                                         const SizedBox(height: 10),
@@ -444,7 +310,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 scale: _linkScale,
                                                 duration: const Duration(milliseconds: 100),
                                                 child: const Text(
-                                                  'LOGIN',
+                                                  'LOG IN',
                                                   style: TextStyle(
                                                     color: goldColor,
                                                     fontWeight: FontWeight.bold,
@@ -487,24 +353,6 @@ class _SignupScreenState extends State<SignupScreen> {
               width: isDesktop ? 600 : double.infinity,
               child: CustomPaint(
                 painter: ArcPainter(),
-              ),
-            ),
-            Positioned(
-              top: 5,
-              child: Container(
-                width: 10,
-                height: 10,
-                decoration: BoxDecoration(
-                  color: goldColor,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: goldColor.withValues(alpha: 0.8),
-                      blurRadius: 10,
-                      spreadRadius: 2,
-                    )
-                  ],
-                ),
               ),
             ),
           ],

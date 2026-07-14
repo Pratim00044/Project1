@@ -343,7 +343,10 @@ class _PlayerDetailPageState extends State<PlayerDetailPage> with SingleTickerPr
                 pinned: true,
                 backgroundColor: const Color(0xFF0D0D0D),
                 elevation: 0,
-                leading: IconButton(icon: const Icon(Icons.arrow_back, color: Colors.white), onPressed: () => Navigator.pop(context)),
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
+                  onPressed: () => Navigator.pop(context),
+                ),
                 actions: [
                   IconButton(
                     icon: const Icon(Icons.chat_bubble_outline, color: goldColor),

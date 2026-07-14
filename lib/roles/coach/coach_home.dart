@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dashboard_page.dart';
 import 'squad_page.dart';
 import 'games_page.dart';
-import 'more_page.dart';
+import '../organization/player_progress_dashboard.dart';
 import 'coach_notifications_page.dart';
 import 'profile_details/privacy_security.dart';
 
@@ -19,20 +19,18 @@ class CoachHome extends StatefulWidget {
 
 class _CoachHomeState extends State<CoachHome> {
   int _selectedIndex = 0;
-  final List<int> _history = [0];
 
   final List<Widget> _pages = [
     const DashboardPage(),
     const SquadPage(),
     const GamesPage(),
-    const MorePage(),
+    const PlayerProgressDashboard(),
   ];
 
   void _onItemTapped(int index) {
     if (_selectedIndex != index) {
       setState(() {
         _selectedIndex = index;
-        _history.add(index);
       });
     }
   }
@@ -41,57 +39,45 @@ class _CoachHomeState extends State<CoachHome> {
   Widget build(BuildContext context) {
     return Container(
       color: darkBg,
-      child: PopScope(
-        canPop: _selectedIndex == 0 && _history.length <= 1,
-        onPopInvokedWithResult: (didPop, result) {
-          if (didPop) return;
-          if (_history.length > 1) {
-            setState(() {
-              _history.removeLast();
-              _selectedIndex = _history.last;
-            });
-          }
-        },
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          endDrawer: _buildDrawer(context),
-          body: SafeArea(
-            bottom: false,
-            child: Column(
-              children: [
-                _buildHeader(context),
-                Expanded(child: _pages[_selectedIndex]),
-              ],
-            ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        endDrawer: _buildDrawer(context),
+        body: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
+              _buildHeader(context),
+              Expanded(child: _pages[_selectedIndex]),
+            ],
           ),
-          bottomNavigationBar: Container(
-            decoration: BoxDecoration(
-              border: Border(top: BorderSide(color: goldColor.withValues(alpha: 0.1), width: 0.5)),
-              color: const Color(0xFF0D0D0D),
-            ),
-            child: SafeArea(
-              child: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                selectedItemColor: goldColor,
-                unselectedItemColor: Colors.white24,
-                currentIndex: _selectedIndex,
-                onTap: _onItemTapped,
-                selectedFontSize: 9,
-                unselectedFontSize: 9,
-                showUnselectedLabels: true,
-                items: const [
-                  BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'DASHBOARD'),
-                  BottomNavigationBarItem(icon: Icon(Icons.shield_outlined), label: 'SQUAD'),
-                  BottomNavigationBarItem(icon: Icon(Icons.sports_soccer_outlined), label: 'GAME'),
-                  BottomNavigationBarItem(icon: Icon(Icons.more_horiz_rounded), label: 'MORE'),
-                ],
-              ),
-            ),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: goldColor.withValues(alpha: 0.1), width: 0.5)),
+          color: const Color(0xFF0D0D0D),
+        ),
+        child: SafeArea(
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            selectedItemColor: goldColor,
+            unselectedItemColor: Colors.white24,
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+            selectedFontSize: 9,
+            unselectedFontSize: 9,
+            showUnselectedLabels: true,
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'DASHBOARD'),
+              BottomNavigationBarItem(icon: Icon(Icons.shield_outlined), label: 'SQUAD'),
+              BottomNavigationBarItem(icon: Icon(Icons.calendar_today_rounded), label: 'GAMES'),
+              BottomNavigationBarItem(icon: Icon(Icons.auto_graph_rounded), label: 'PROGRESS'),
+            ],
           ),
         ),
       ),
+    ),
     );
   }
 
@@ -113,9 +99,10 @@ class _CoachHomeState extends State<CoachHome> {
                     ),
                     child: Row(
                       children: [
-                        const CircleAvatar(
+                        CircleAvatar(
                           radius: 35, 
-                          backgroundImage: AssetImage('assets/images/coach.png'),
+                          backgroundColor: goldColor.withValues(alpha: 0.1),
+                          child: const Text('LS', style: TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 24)),
                         ),
                         const SizedBox(width: 20),
                         Expanded(
@@ -159,17 +146,24 @@ class _CoachHomeState extends State<CoachHome> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => const CoachNotificationsPage())), badge: '3'),
-                  _buildDrawerItem(
-                      Icons.verified_user_outlined,
-                      'Privacy & Security',
-                      () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const PrivacySecurityPage()))),
+                  _buildDrawerItem(Icons.verified_user_outlined, 'Privacy & Security', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PrivacySecurityPage()))),
                   _buildDrawerItem(Icons.language_rounded, 'Language', () {}),
+                  
                   const Padding(
                     padding: EdgeInsets.fromLTRB(20, 25, 20, 10),
-                    child: Text('SUPPORT',
+                    child: Text('PERFORMANCE',
+                        style: TextStyle(
+                            color: Colors.white24,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 2)),
+                  ),
+                  _buildDrawerItem(Icons.trending_up_rounded, 'Past Performance', () {}),
+                  _buildDrawerItem(Icons.emoji_events_rounded, 'Trophy Cabinet', () {}),
+
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(20, 25, 20, 10),
+                    child: Text('SUPPORT & APP',
                         style: TextStyle(
                             color: Colors.white24,
                             fontSize: 10,
@@ -177,6 +171,7 @@ class _CoachHomeState extends State<CoachHome> {
                             letterSpacing: 2)),
                   ),
                   _buildDrawerItem(Icons.help_outline_rounded, 'Help Center', () {}),
+                  _buildDrawerItem(Icons.feedback_outlined, 'Send Feedback', () {}),
                   _buildDrawerItem(Icons.info_outline_rounded, 'About Statixa', () {}),
                 ],
               ),
@@ -286,27 +281,27 @@ class _CoachHomeState extends State<CoachHome> {
         children: [
           Image.asset('assets/logo.png', height: 65, fit: BoxFit.contain),
           const SizedBox(width: 20),
-          const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('CORE FC',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1.0)),
-              Text('COACH DASHBOARD',
-                  style: TextStyle(
-                      color: goldColor,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.5)),
-            ],
+          const Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Core FC',
+                    style: TextStyle(
+                        color: goldColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 0.5)),
+                Text('Coach Dashboard',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold)),
+              ],
+            ),
           ),
-          const Spacer(),
           Builder(
             builder: (context) => IconButton(
-              icon: const Icon(Icons.menu, color: goldColor),
+              icon: const Icon(Icons.menu, color: Colors.white),
               onPressed: () => Scaffold.of(context).openEndDrawer(),
             ),
           ),

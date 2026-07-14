@@ -206,18 +206,38 @@ class SuperAdminHome extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
+    const String title = 'ADMIN DASHBOARD';
+    const String subtitle = 'STATIXA';
+
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+      padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
       child: Row(
         children: [
-          Image.asset('assets/logo.png', height: 35, fit: BoxFit.contain),
-          const SizedBox(width: 10),
-          const Text('STATIXA ADMIN',
-              style: TextStyle(
-                  color: Color(0xFFC0C0C0),
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.5)),
+          Image.asset('assets/logo.png', height: 65, fit: BoxFit.contain),
+          const SizedBox(width: 20),
+          const Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(title,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.0)),
+                ),
+                Text(subtitle,
+                    style: TextStyle(
+                        color: goldColor,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.5)),
+              ],
+            ),
+          ),
           const Spacer(),
           IconButton(
             icon: const Icon(Icons.notifications_outlined, color: goldColor),

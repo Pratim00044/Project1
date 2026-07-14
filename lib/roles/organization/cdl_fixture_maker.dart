@@ -8,35 +8,25 @@ class CdlFixtureMaker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF080808),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0D0D0D),
-        elevation: 0,
-        centerTitle: true,
-        title: const Text('FIXTURE MAKER', style: TextStyle(color: goldColor, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
-        leading: IconButton(icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18), onPressed: () => Navigator.pop(context)),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('GENERATED SCHEDULE', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 0.5)),
-            const Text('Manage and fix upcoming league matches', style: TextStyle(color: Colors.white38, fontSize: 12)),
-            const SizedBox(height: 25),
-            _buildFixtureCard('Core FC', 'Dubai Lions', 'Sat, 12 Jul', '07:00 PM', 'Zayed Sports City', [const Color(0xFF007CFE), const Color(0xFF004A99)]),
-            _buildFixtureCard('Eagle FC', 'Turan Dubai', 'Sat, 12 Jul', '09:00 PM', 'Dubai Sports World', [const Color(0xFF38EF7D), const Color(0xFF11998E)]),
-            _buildFixtureCard('United FC', 'Emirates Club', 'Sun, 13 Jul', '06:00 PM', 'Al Barsha Pitch', [const Color(0xFFEE0979), const Color(0xFFF12711)]),
-            const SizedBox(height: 40),
-            _buildActionButton(
-              label: 'AUTO FIX',
-              icon: Icons.auto_awesome_rounded,
-              color: goldColor,
-              onTap: () {},
-            ),
-          ],
-        ),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('GENERATED SCHEDULE', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+          const Text('Manage and fix upcoming league matches', style: TextStyle(color: Colors.white38, fontSize: 12)),
+          const SizedBox(height: 25),
+          _buildFixtureCard('Core FC', 'Dubai Lions', 'Sat, 12 Jul', '07:00 PM', 'Zayed Sports City', [const Color(0xFF007CFE), const Color(0xFF004A99)]),
+          _buildFixtureCard('Eagle FC', 'Turan Dubai', 'Sat, 12 Jul', '09:00 PM', 'Dubai Sports World', [const Color(0xFF38EF7D), const Color(0xFF11998E)]),
+          _buildFixtureCard('United FC', 'Emirates Club', 'Sun, 13 Jul', '06:00 PM', 'Al Barsha Pitch', [const Color(0xFFEE0979), const Color(0xFFF12711)]),
+          const SizedBox(height: 40),
+          _buildActionButton(
+            label: 'AUTO FIX',
+            icon: Icons.auto_awesome_rounded,
+            color: goldColor,
+            onTap: () {},
+          ),
+        ],
       ),
     );
   }
@@ -67,15 +57,8 @@ class CdlFixtureMaker extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: colors,
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: colors[0],
         borderRadius: BorderRadius.circular(25),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 5))
-        ],
       ),
       child: Column(
         children: [
@@ -86,7 +69,7 @@ class CdlFixtureMaker extends StatelessWidget {
                 Expanded(child: Text(t1.toUpperCase(), textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14))),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(10)),
+                  decoration: BoxDecoration(color: Colors.black.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
                   child: const Text('VS', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 12)),
                 ),
                 Expanded(child: Text(t2.toUpperCase(), textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14))),
@@ -96,7 +79,7 @@ class CdlFixtureMaker extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(15),
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: Colors.black.withOpacity(0.1),
               borderRadius: const BorderRadius.vertical(bottom: Radius.circular(25)),
             ),
             child: Row(

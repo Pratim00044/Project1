@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 import 'dashboard_sections/overview_section.dart';
 import 'dashboard_sections/stats_section.dart';
 
@@ -17,14 +18,23 @@ class PlayerDashboard extends StatefulWidget {
 class _PlayerDashboardState extends State<PlayerDashboard> {
   String _activeTab = 'Overview';
   final List<String> _tabHistory = ['Overview'];
+  late VideoPlayerController _videoController;
 
   @override
   void initState() {
     super.initState();
+    _videoController = VideoPlayerController.asset('assets/Video/Banner.mp4')
+      ..initialize().then((_) {
+        setState(() {});
+        _videoController.setLooping(true);
+        _videoController.setVolume(0);
+        _videoController.play();
+      });
   }
 
   @override
   void dispose() {
+    _videoController.dispose();
     super.dispose();
   }
 
@@ -75,13 +85,10 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
   Widget _buildUniqueHeroCard() {
     return Container(
       width: double.infinity,
-      height: 180,
+      height: 220,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        image: const DecorationImage(
-          image: AssetImage('assets/images/img2.jpeg'),
-          fit: BoxFit.cover,
-        ),
+        color: Colors.black,
         boxShadow: [
           BoxShadow(
             color: const Color(0xFFED8F03).withValues(alpha: 0.3),
@@ -92,6 +99,20 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
       ),
       child: Stack(
         children: [
+          if (_videoController.value.isInitialized)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: SizedBox.expand(
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: SizedBox(
+                    width: _videoController.value.size.width,
+                    height: _videoController.value.size.height,
+                    child: VideoPlayer(_videoController),
+                  ),
+                ),
+              ),
+            ),
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
@@ -99,7 +120,7 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: [
-                  Colors.black.withValues(alpha: 0.1),
+                  Colors.black.withValues(alpha: 0.4),
                   Colors.black.withValues(alpha: 0.8),
                 ],
               ),
@@ -107,16 +128,18 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
           ),
           Padding(
             padding: const EdgeInsets.all(25),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: 95,
-                  height: 95,
-                  padding: const EdgeInsets.all(4),
+                  width: 80,
+                  height: 80,
+                  padding: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.white,
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.6), width: 2.5),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.6), width: 2.0),
                   ),
                   child: Container(
                     decoration: const BoxDecoration(
@@ -128,87 +151,21 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Welcome back,',
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.9),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.5,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black.withValues(alpha: 0.5),
-                              blurRadius: 10,
-                              offset: const Offset(0, 2),
-                            )
-                          ],
-                        ),
-                      ),
-                      Text(
-                        'LIONEL MESSI',
-                        style: TextStyle(
-                          color: goldColor,
-                          fontSize: 26,
-                          fontWeight: FontWeight.w900,
-                          height: 1.0,
-                          letterSpacing: -0.5,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black.withValues(alpha: 0.5),
-                              blurRadius: 15,
-                              offset: const Offset(0, 4),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        'CLUB PLAYER',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 9,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 1.5,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black.withValues(alpha: 0.5),
-                              blurRadius: 8,
-                              offset: const Offset(0, 2),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.6),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: goldColor.withValues(alpha: 0.2)),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.shield, size: 12, color: goldColor),
-                            const SizedBox(width: 6),
-                            const Text(
-                              'CORE FC',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w900,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                const SizedBox(height: 12),
+                Text(
+                  'LIONEL MESSI',
+                  style: TextStyle(
+                    color: goldColor,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                    height: 1.0,
+                    letterSpacing: -0.5,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black.withValues(alpha: 0.5),
+                        blurRadius: 15,
+                        offset: const Offset(0, 4),
+                      )
                     ],
                   ),
                 ),

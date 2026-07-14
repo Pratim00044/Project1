@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'player_home.dart';
 import 'professional_pathway.dart';
 import 'profile_details/attendance_detail.dart';
 
@@ -18,6 +19,10 @@ class ProfessionalPathwayScreen extends StatelessWidget {
         title: const Text('PROFESSIONAL PATHWAY', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 2)),
         foregroundColor: goldColor,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: const ProfessionalPathwayPage(),
     );
@@ -52,6 +57,10 @@ class PlayerMatchesScreen extends StatelessWidget {
         title: const Text('MATCH HISTORY', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 2)),
         foregroundColor: goldColor,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: ListView.builder(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
@@ -79,11 +88,8 @@ class PlayerMatchesScreen extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 25),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 decoration: BoxDecoration(
+                  color: gradientColors[0],
                   borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/img${(index % 4) + 1}.jpeg'),
-                    fit: BoxFit.cover,
-                  ),
                   boxShadow: [
                     BoxShadow(
                       color: gradientColors[0].withValues(alpha: 0.2),
@@ -164,6 +170,10 @@ class PlayerStatsScreen extends StatelessWidget {
         title: const Text('PERFORMANCE STATS', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 2)),
         foregroundColor: goldColor,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 25),
@@ -195,12 +205,8 @@ class PlayerStatsScreen extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12, left: 15, right: 15),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       decoration: BoxDecoration(
+        color: colors[0],
         borderRadius: BorderRadius.circular(20),
-        image: DecorationImage(
-          image: AssetImage(currentImage),
-          fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(colors[0].withOpacity(0.2), BlendMode.darken),
-        ),
         boxShadow: [
           BoxShadow(
             color: colors[0].withValues(alpha: 0.2),
@@ -221,7 +227,7 @@ class PlayerStatsScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text('${(progress * 100).toInt()}% Proficiency', 
@@ -266,6 +272,10 @@ class PlayerFeedbackScreen extends StatelessWidget {
         title: const Text('COACH FEEDBACK', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 2)),
         foregroundColor: goldColor,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -282,12 +292,10 @@ class PlayerFeedbackScreen extends StatelessWidget {
               child: Container(
                 margin: const EdgeInsets.only(bottom: 15),
                 width: double.infinity,
+                padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
+                  color: gradientColors[0],
                   borderRadius: BorderRadius.circular(25),
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/img${(index % 4) + 1}.jpeg'),
-                    fit: BoxFit.cover,
-                  ),
                   boxShadow: [
                     BoxShadow(
                       color: gradientColors[0].withValues(alpha: 0.1),
@@ -296,67 +304,50 @@ class PlayerFeedbackScreen extends StatelessWidget {
                     )
                   ],
                 ),
-                child: Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.black.withValues(alpha: 0.2),
-                        Colors.black.withValues(alpha: 0.3),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('MATCH PERFORMANCE', 
+                          style: const TextStyle(
+                            color: Colors.white, 
+                            fontSize: 14, 
+                            fontWeight: FontWeight.w900, 
+                            letterSpacing: 1.5,
+                          )
+                        ),
+                        const Icon(Icons.push_pin_outlined, color: Colors.white24, size: 14),
                       ],
                     ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('MATCH PERFORMANCE', 
-                            style: TextStyle(
-                              color: goldColor, 
-                              fontSize: 14, 
-                              fontWeight: FontWeight.w900, 
-                              letterSpacing: 1.5,
-                              shadows: [Shadow(color: Colors.black, blurRadius: 4)],
-                            )
-                          ),
-                          const Icon(Icons.push_pin_outlined, color: Colors.white24, size: 14),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        noteText, 
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.white, 
-                          fontSize: 13, 
-                          fontWeight: FontWeight.w500, 
-                          height: 1.5,
-                          shadows: [Shadow(color: Colors.black, blurRadius: 8)],
-                        )
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          const Icon(Icons.access_time, color: Colors.white54, size: 10),
-                          const SizedBox(width: 5),
-                          Text('3rd JULY 2026', 
-                            style: TextStyle(
-                              color: Colors.white54, 
-                              fontSize: 9, 
-                              fontWeight: FontWeight.bold,
-                              shadows: [Shadow(color: Colors.black, blurRadius: 2)],
-                            )
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                    const SizedBox(height: 12),
+                    Text(
+                      noteText, 
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Colors.white, 
+                        fontSize: 13, 
+                        fontWeight: FontWeight.w500, 
+                        height: 1.5,
+                      )
+                    ),
+                    const SizedBox(height: 12),
+                    const Row(
+                      children: [
+                        Icon(Icons.access_time, color: Colors.white54, size: 10),
+                        SizedBox(width: 5),
+                        Text('3rd JULY 2026', 
+                          style: TextStyle(
+                            color: Colors.white54, 
+                            fontSize: 9, 
+                            fontWeight: FontWeight.bold,
+                          )
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             );
@@ -469,6 +460,10 @@ class PlayerAttendanceScreen extends StatelessWidget {
         title: const Text('ATTENDANCE HISTORY', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 2)),
         foregroundColor: goldColor,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -533,24 +528,12 @@ class PlayerAttendanceScreen extends StatelessWidget {
   }
 
   Widget _buildAttendanceRecord(int index, String title, String date, String status, List<Color> colors) {
-    final List<String> tileImages = [
-      'assets/images/img1.jpeg',
-      'assets/images/img2.jpeg',
-      'assets/images/img3.jpeg',
-      'assets/images/img4.jpeg',
-    ];
-    String currentImage = tileImages[index % tileImages.length];
-
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.transparent,
+        color: colors[0],
         borderRadius: BorderRadius.circular(20),
-        image: DecorationImage(
-          image: AssetImage(currentImage),
-          fit: BoxFit.cover,
-        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.3),

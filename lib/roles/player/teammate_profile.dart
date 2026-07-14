@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'player_home.dart';
 import 'custom_painters.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
@@ -62,21 +63,12 @@ class _TeammateProfileState extends State<TeammateProfile> with SingleTickerProv
                   fit: StackFit.expand,
                   children: [
                     Container(color: darkBg),
-                    Image.asset('assets/images/img1.jpeg',
-                      fit: BoxFit.cover,
-                      opacity: const AlwaysStoppedAnimation(0.4),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            darkBg.withValues(alpha: 0.1), 
-                            darkBg.withValues(alpha: 0.2), 
-                            darkBg
-                          ],
-                        ),
+                    Positioned(
+                      top: 40,
+                      left: 15,
+                      child: IconButton(
+                        icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 22),
+                        onPressed: () => Navigator.pop(context),
                       ),
                     ),
                     Column(
@@ -109,8 +101,6 @@ class _TeammateProfileState extends State<TeammateProfile> with SingleTickerProv
                         _buildHeaderPill(displaySub),
                         const SizedBox(height: 6),
                         Text('CLUB PLAYER', style: TextStyle(color: goldColor.withValues(alpha: 0.8), fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1)),
-                        const SizedBox(height: 4),
-                        const Text('CORE FC', style: TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
                         const SizedBox(height: 10),
                       ],
                     ),
@@ -315,16 +305,14 @@ class _TeammateProfileState extends State<TeammateProfile> with SingleTickerProv
   }
 
   Widget _buildModernTile(int index, String val, String label, IconData icon, List<Color> colors, {String? emoji}) {
+    final bgColor = colors[0];
     return Container(
       decoration: BoxDecoration(
+        color: bgColor,
         borderRadius: BorderRadius.circular(15),
-        image: DecorationImage(
-          image: AssetImage('assets/images/img${(index % 4) + 1}.jpeg'),
-          fit: BoxFit.cover,
-        ),
         boxShadow: [
           BoxShadow(
-            color: colors[0].withValues(alpha: 0.2),
+            color: bgColor.withValues(alpha: 0.2),
             blurRadius: 8,
             offset: const Offset(0, 4),
           )
@@ -332,21 +320,10 @@ class _TeammateProfileState extends State<TeammateProfile> with SingleTickerProv
       ),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.black.withValues(alpha: 0.1),
-              Colors.black.withValues(alpha: 0.2),
-            ],
-          ),
-        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: Colors.white.withValues(alpha: 0.7), size: 16),
+            Icon(icon, color: Colors.white, size: 16),
             const SizedBox(height: 6),
             FittedBox(
               child: Row(
@@ -357,7 +334,7 @@ class _TeammateProfileState extends State<TeammateProfile> with SingleTickerProv
               ),
             ),
             const SizedBox(height: 2),
-            Text(label.toUpperCase(), style: const TextStyle(color: Colors.white70, fontSize: 8, fontWeight: FontWeight.bold)),
+            Text(label.toUpperCase(), style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 8, fontWeight: FontWeight.bold)),
           ],
         ),
       ),
@@ -406,12 +383,10 @@ class _TeammateProfileState extends State<TeammateProfile> with SingleTickerProv
             ),
             Container(
               margin: const EdgeInsets.only(bottom: 25),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
               decoration: BoxDecoration(
+                color: gradientColors[0],
                 borderRadius: BorderRadius.circular(20),
-                image: DecorationImage(
-                  image: AssetImage('assets/images/img${(index % 4) + 1}.jpeg'),
-                  fit: BoxFit.cover,
-                ),
                 boxShadow: [
                   BoxShadow(
                     color: gradientColors[0].withValues(alpha: 0.2),
@@ -420,20 +395,7 @@ class _TeammateProfileState extends State<TeammateProfile> with SingleTickerProv
                   )
                 ],
               ),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [
-                      Colors.black.withValues(alpha: 0.2),
-                      Colors.black.withValues(alpha: 0.1),
-                    ],
-                  ),
-                ),
-                child: Row(
+              child: Row(
                   children: [
                     Container(
                       height: 40, width: 40,
@@ -473,7 +435,6 @@ class _TeammateProfileState extends State<TeammateProfile> with SingleTickerProv
                   ],
                 ),
               ),
-            ),
           ],
         );
       },
@@ -519,12 +480,10 @@ class _TeammateProfileState extends State<TeammateProfile> with SingleTickerProv
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12, left: 15, right: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       decoration: BoxDecoration(
+        color: colors[0],
         borderRadius: BorderRadius.circular(20),
-        image: DecorationImage(
-          image: AssetImage(currentImage),
-          fit: BoxFit.cover,
-        ),
         boxShadow: [
           BoxShadow(
             color: colors[0].withValues(alpha: 0.2),
@@ -533,20 +492,7 @@ class _TeammateProfileState extends State<TeammateProfile> with SingleTickerProv
           )
         ],
       ),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-            colors: [
-              Colors.black.withValues(alpha: 0.2),
-              Colors.black.withValues(alpha: 0.1),
-            ],
-          ),
-        ),
-        child: Row(
+      child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
@@ -578,7 +524,6 @@ class _TeammateProfileState extends State<TeammateProfile> with SingleTickerProv
             ),
           ],
         ),
-      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../player_home.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
@@ -86,34 +87,18 @@ class SecurityDetail extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
+      padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(20),
-        image: DecorationImage(
-          image: AssetImage(currentImage),
-          fit: BoxFit.cover,
-        ),
         boxShadow: [
           BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 10, offset: const Offset(0, 4))
         ],
       ),
-      child: Container(
-        padding: const EdgeInsets.all(22),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: LinearGradient(
-            begin: isEven ? Alignment.centerLeft : Alignment.centerRight,
-            end: isEven ? Alignment.centerRight : Alignment.centerLeft,
-            colors: [
-              Colors.black.withValues(alpha: 0.7),
-              Colors.black.withValues(alpha: 0.2),
-            ],
-          ),
-        ),
-        child: Row(
-          children: isEven 
-            ? [iconWidget, const SizedBox(width: 20), contentWidget, const Icon(Icons.arrow_forward_ios, color: Colors.white24, size: 12)]
-            : [const Icon(Icons.arrow_back_ios, color: Colors.white24, size: 12), contentWidget, const SizedBox(width: 20), iconWidget],
-        ),
+      child: Row(
+        children: isEven 
+          ? [iconWidget, const SizedBox(width: 20), contentWidget, const Icon(Icons.arrow_forward_ios, color: Colors.white24, size: 12)]
+          : [const Icon(Icons.arrow_back_ios, color: Colors.white24, size: 12), contentWidget, const SizedBox(width: 20), iconWidget],
       ),
     );
   }

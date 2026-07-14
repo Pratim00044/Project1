@@ -121,7 +121,7 @@ class _StatsTrackerPageState extends State<StatsTrackerPage> {
             onPressed: () => Navigator.pop(context),
           ),
           const SizedBox(width: 10),
-          Image.asset('assets/logo.png', height: 35, fit: BoxFit.contain),
+          Image.asset('assets/images/footlab.png', height: 35, fit: BoxFit.contain),
           const SizedBox(width: 10),
           const Text('STATIXA',
               style: TextStyle(

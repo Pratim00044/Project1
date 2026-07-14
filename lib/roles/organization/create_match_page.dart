@@ -103,7 +103,7 @@ class _CreateMatchPageState extends State<CreateMatchPage> {
         backgroundColor: Colors.black,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: goldColor),
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(

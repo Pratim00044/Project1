@@ -85,7 +85,7 @@ class ManagerBudgetPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
                 border: Border.all(color: Colors.white.withOpacity(0.05)),
               ),
-              child: const Icon(Icons.arrow_back_ios_new_rounded, color: goldColor, size: 20),
+              child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
             ),
           ),
           const Column(

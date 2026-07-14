@@ -22,44 +22,34 @@ class _LeagueTablesPageState extends State<LeagueTablesPage> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF080808),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF0D0D0D),
-        elevation: 0,
-        centerTitle: true,
-        title: const Text('LEAGUE TABLES', style: TextStyle(color: goldColor, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
-          onPressed: () => Navigator.pop(context),
-        ),
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: goldColor,
-          labelColor: goldColor,
-          unselectedLabelColor: Colors.white38,
-          labelStyle: const TextStyle(fontWeight: FontWeight.w900, fontSize: 12, letterSpacing: 1),
-          tabs: const [
-            Tab(text: 'TEAMS'),
-            Tab(text: 'PLAYERS'),
-          ],
-        ),
-      ),
-      body: Column(
-        children: [
-          const SizedBox(height: 15),
-          _buildGameTypeFilter(),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                _buildTeamTable(context),
-                _buildPlayerTable(context),
-              ],
-            ),
+    return Column(
+      children: [
+        Container(
+          color: const Color(0xFF0D0D0D),
+          child: TabBar(
+            controller: _tabController,
+            indicatorColor: goldColor,
+            labelColor: goldColor,
+            unselectedLabelColor: Colors.white38,
+            labelStyle: const TextStyle(fontWeight: FontWeight.w900, fontSize: 12, letterSpacing: 1),
+            tabs: const [
+              Tab(text: 'TEAMS'),
+              Tab(text: 'PLAYERS'),
+            ],
           ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 15),
+        _buildGameTypeFilter(),
+        Expanded(
+          child: TabBarView(
+            controller: _tabController,
+            children: [
+              _buildTeamTable(context),
+              _buildPlayerTable(context),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

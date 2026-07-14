@@ -103,7 +103,7 @@ class _CreateGamePageState extends State<CreateGamePage> {
         backgroundColor: Colors.black,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: goldColor),
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
@@ -225,8 +225,7 @@ class _CreateGamePageState extends State<CreateGamePage> {
           margin: const EdgeInsets.symmetric(horizontal: 4),
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            gradient: isSelected ? const LinearGradient(colors: [goldColor, Color(0xFFB8860B)]) : null,
-            color: isSelected ? null : surfaceColor,
+            color: isSelected ? goldColor : surfaceColor,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: isSelected ? Colors.transparent : Colors.white.withOpacity(0.05)),
           ),
@@ -260,11 +259,7 @@ class _CreateGamePageState extends State<CreateGamePage> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [surfaceColor, const Color(0xFF1A1A1A)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+            color: const Color(0xFF1A1A1A),
             borderRadius: BorderRadius.circular(15),
             border: Border.all(color: Colors.white.withOpacity(0.05)),
           ),
@@ -346,11 +341,7 @@ class _CreateGamePageState extends State<CreateGamePage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [surfaceColor, const Color(0xFF1A1A1A)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: const Color(0xFF1A1A1A),
         borderRadius: BorderRadius.circular(15),
         border: Border.all(color: Colors.white.withOpacity(0.05)),
       ),
@@ -419,11 +410,7 @@ class _CreateGamePageState extends State<CreateGamePage> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 18),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [surfaceColor, const Color(0xFF1A1A1A)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+            color: const Color(0xFF1A1A1A),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: Colors.white.withOpacity(0.05)),
           ),
@@ -456,11 +443,7 @@ class _CreateGamePageState extends State<CreateGamePage> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [surfaceColor, const Color(0xFF1A1A1A)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+            color: const Color(0xFF1A1A1A),
             borderRadius: BorderRadius.circular(15),
             border: Border.all(color: Colors.white.withOpacity(0.05)),
           ),
@@ -499,11 +482,7 @@ class _CreateGamePageState extends State<CreateGamePage> {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF007CFE), Color(0xFF004A99)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: const Color(0xFF007CFE),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -580,11 +559,7 @@ class _CreateGamePageState extends State<CreateGamePage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [surfaceColor, const Color(0xFF1A1A1A)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: const Color(0xFF1A1A1A),
         borderRadius: BorderRadius.circular(15),
         border: Border.all(color: Colors.white.withOpacity(0.05)),
       ),
@@ -608,11 +583,7 @@ class _CreateGamePageState extends State<CreateGamePage> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [surfaceColor, const Color(0xFF1A1A1A)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              color: const Color(0xFF1A1A1A),
               borderRadius: BorderRadius.circular(15),
               border: Border.all(color: Colors.white.withOpacity(0.05)),
             ),
@@ -634,9 +605,6 @@ class _CreateGamePageState extends State<CreateGamePage> {
           decoration: BoxDecoration(
             color: goldColor,
             borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(color: goldColor.withOpacity(0.2), blurRadius: 10, offset: const Offset(0, 4))
-            ],
           ),
           child: const Text(
             'INVITE',

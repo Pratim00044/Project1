@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../player_home.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color surfaceColor = Color(0xFF121212);
@@ -97,34 +98,18 @@ class ProgressPage extends StatelessWidget {
 
           return Container(
             margin: const EdgeInsets.only(bottom: 15),
+            padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
+              color: surfaceColor,
               borderRadius: BorderRadius.circular(25),
-              image: DecorationImage(
-                image: AssetImage(currentImage),
-                fit: BoxFit.cover,
-              ),
               boxShadow: [
                 BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 4))
               ],
             ),
-            child: Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                gradient: LinearGradient(
-                  begin: isEven ? Alignment.centerLeft : Alignment.centerRight,
-                  end: isEven ? Alignment.centerRight : Alignment.centerLeft,
-                  colors: [
-                    Colors.black.withValues(alpha: 0.8),
-                    Colors.black.withValues(alpha: 0.2),
-                  ],
-                ),
-              ),
-              child: Row(
-                children: isEven 
-                  ? [iconWidget, const SizedBox(width: 20), contentWidget]
-                  : [contentWidget, const SizedBox(width: 20), iconWidget],
-              ),
+            child: Row(
+              children: isEven 
+                ? [iconWidget, const SizedBox(width: 20), contentWidget]
+                : [contentWidget, const SizedBox(width: 20), iconWidget],
             ),
           );
         },

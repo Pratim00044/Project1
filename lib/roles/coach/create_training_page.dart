@@ -50,61 +50,49 @@ class _CreateTrainingPageState extends State<CreateTrainingPage> {
             backgroundColor: const Color(0xFF0D0D0D),
             automaticallyImplyLeading: false,
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: goldColor),
+              icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
               onPressed: () => Navigator.pop(context),
             ),
             flexibleSpace: FlexibleSpaceBar(
-              background: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.transparent, Colors.black.withOpacity(0.9)],
+              background: Container(
+                color: const Color(0xFF0D0D0D),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 30),
+                    GestureDetector(
+                      onTap: _pickLogo,
+                      child: Stack(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: goldColor.withOpacity(0.5), width: 2),
+                            ),
+                            child: const CircleAvatar(
+                              radius: 45,
+                              backgroundColor: Color(0xFF1A1A1A),
+                              child: Icon(Icons.fitness_center_rounded, color: goldColor, size: 40),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: const BoxDecoration(color: goldColor, shape: BoxShape.circle),
+                              child: const Icon(Icons.camera_alt, color: Colors.black, size: 14),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 30),
-                      GestureDetector(
-                        onTap: _pickLogo,
-                        child: Stack(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(color: goldColor.withOpacity(0.5), width: 2),
-                                boxShadow: [BoxShadow(color: goldColor.withOpacity(0.1), blurRadius: 20)],
-                              ),
-                              child: CircleAvatar(
-                              radius: 45,
-                              backgroundColor: const Color(0xFF1A1A1A),
-                              backgroundImage: const AssetImage('assets/logo.png'),
-                            ),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                padding: const EdgeInsets.all(6),
-                                decoration: const BoxDecoration(color: goldColor, shape: BoxShape.circle),
-                                child: const Icon(Icons.camera_alt, color: Colors.black, size: 14),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      const Text('NEW SESSION', 
-                        style: TextStyle(color: goldColor, fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: 2)),
-                    ],
-                  ),
-                ],
+                    const SizedBox(height: 20),
+                    const Text('NEW SESSION', 
+                      style: TextStyle(color: goldColor, fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: 2)),
+                  ],
+                ),
               ),
             ),
           ),

@@ -12,8 +12,14 @@ class SystemAnalyticsPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: darkBg,
       appBar: AppBar(
+        backgroundColor: const Color(0xFF0D0D0D),
+        elevation: 0,
+        centerTitle: true,
         title: const Text('SYSTEM ANALYTICS', style: TextStyle(color: goldColor, fontSize: 14, fontWeight: FontWeight.bold, letterSpacing: 1.5)),
-        leading: IconButton(icon: const Icon(Icons.arrow_back, color: Colors.white), onPressed: () => Navigator.pop(context)),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(25),

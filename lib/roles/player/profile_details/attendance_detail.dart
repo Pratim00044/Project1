@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../player_home.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
@@ -76,13 +77,9 @@ class AttendanceDetail extends StatelessWidget {
                     width: double.infinity,
                     padding: const EdgeInsets.all(18),
                     decoration: BoxDecoration(
-                      color: Colors.transparent,
+                      color: surfaceColor,
                       borderRadius: BorderRadius.circular(24),
                       border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-                      image: DecorationImage(
-                        image: AssetImage(currentImage),
-                        fit: BoxFit.cover,
-                      ),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

@@ -35,103 +35,97 @@ class _PlayerProfileState extends State<PlayerProfile> {
 
     return Scaffold(
       backgroundColor: darkBg,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            expandedHeight: 320,
-            pinned: false,
-            toolbarHeight: 0,
-            backgroundColor: darkBg,
-            elevation: 0,
-            automaticallyImplyLeading: false,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Container(color: darkBg),
-                  Image.asset('assets/images/img1.jpeg',
-                    fit: BoxFit.cover,
-                    opacity: const AlwaysStoppedAnimation(0.4),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          darkBg.withValues(alpha: 0.1), 
-                          darkBg.withValues(alpha: 0.2), 
-                          darkBg
-                        ],
-                      ),
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+      body: Stack(
+        children: [
+          CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                expandedHeight: 320,
+                pinned: false,
+                toolbarHeight: 0,
+                backgroundColor: darkBg,
+                elevation: 0,
+                automaticallyImplyLeading: false,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Stack(
+                    fit: StackFit.expand,
                     children: [
-                      const SizedBox(height: 40),
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: goldColor, width: 2),
-                          boxShadow: [BoxShadow(color: goldColor.withValues(alpha: 0.2), blurRadius: 20)],
-                        ),
-                        child: const CircleAvatar(
-                          radius: 55,
-                          backgroundImage: AssetImage('assets/images/sunil.png'),
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(displayName.toUpperCase(),
-                            maxLines: 1,
-                            style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900, letterSpacing: 1)),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
+                      Container(color: darkBg),
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(width: 32),
-                          Column(
-                            children: [
-                              _buildHeaderPill(displaySub),
-                              const SizedBox(height: 8),
-                              Text('CLUB PLAYER', style: TextStyle(color: goldColor.withValues(alpha: 0.8), fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1)),
-                              const SizedBox(height: 5),
-                              const Text('CORE FC', style: TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
-                            ],
-                          ),
-                          const SizedBox(width: 10),
-                          if (!widget.isReadOnly)
-                          GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              padding: const EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                color: goldColor.withValues(alpha: 0.1),
-                                shape: BoxShape.circle,
-                                border: Border.all(color: goldColor.withValues(alpha: 0.2)),
-                              ),
-                              child: const Icon(Icons.edit, color: goldColor, size: 12),
+                          const SizedBox(height: 40),
+                          Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: goldColor, width: 2),
+                              boxShadow: [BoxShadow(color: goldColor.withValues(alpha: 0.2), blurRadius: 20)],
+                            ),
+                            child: const CircleAvatar(
+                              radius: 55,
+                              backgroundImage: AssetImage('assets/images/sunil.png'),
                             ),
                           ),
+                          const SizedBox(height: 15),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(displayName.toUpperCase(),
+                                maxLines: 1,
+                                style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(width: 32),
+                              Column(
+                                children: [
+                                  _buildHeaderPill(displaySub),
+                                  const SizedBox(height: 8),
+                                  Text('CLUB PLAYER', style: TextStyle(color: goldColor.withValues(alpha: 0.8), fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1)),
+                                ],
+                              ),
+                              const SizedBox(width: 10),
+                              if (!widget.isReadOnly)
+                              GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    color: goldColor.withValues(alpha: 0.1),
+                                    shape: BoxShape.circle,
+                                    border: Border.all(color: goldColor.withValues(alpha: 0.2)),
+                                  ),
+                                  child: const Icon(Icons.edit, color: goldColor, size: 12),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 15),
                         ],
                       ),
-                      const SizedBox(height: 15),
                     ],
                   ),
-                ],
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: _buildProfileContent(),
+              ),
+            ],
+          ),
+          if (widget.isReadOnly)
+            Positioned(
+              top: 40,
+              left: 20,
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 22),
+                onPressed: () => Navigator.pop(context),
               ),
             ),
-          ),
-          SliverToBoxAdapter(
-            child: _buildProfileContent(),
-          ),
         ],
       ),
     );
@@ -187,53 +181,6 @@ class _PlayerProfileState extends State<PlayerProfile> {
               _buildModernTile(4, 'Right', 'Foot', Icons.directions_run_rounded, [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)]),
               _buildModernTile(5, '#14', 'Rank', Icons.stars_rounded, [const Color(0xFFEE0979), const Color(0xFFF12711)]),
             ],
-          ),
-          
-          const SizedBox(height: 25),
-          const Padding(
-            padding: EdgeInsets.only(left: 8, bottom: 15),
-            child: Text('FINANCIAL STATUS', 
-              style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              image: const DecorationImage(
-                image: AssetImage('assets/images/img3.jpeg'),
-                fit: BoxFit.cover,
-              ),
-              borderRadius: BorderRadius.circular(25),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
-            ),
-            child: Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.black.withValues(alpha: 0.1),
-                    Colors.black.withValues(alpha: 0.2),
-                  ],
-                ),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _buildWalletStat('525 AED', 'Total Wallet'),
-                      Container(width: 1, height: 40, color: Colors.white10),
-                      _buildWalletStat('65 AED', 'Remaining', isWarning: true),
-                    ],
-                  ),
-                  const SizedBox(height: 25),
-                  const Divider(color: Colors.white10, height: 1),
-                  const SizedBox(height: 25),
-                  _buildModernTileValue('₹1.4B', 'Estimated Market Value', Icons.trending_up_rounded, Colors.greenAccent),
-                ],
-              ),
-            ),
           ),
 
           const SizedBox(height: 25),
@@ -344,16 +291,14 @@ class _PlayerProfileState extends State<PlayerProfile> {
   }
 
   Widget _buildModernTile(int index, String val, String label, IconData icon, List<Color> colors, {String? emoji}) {
+    final bgColor = colors[0];
     return Container(
       decoration: BoxDecoration(
+        color: bgColor,
         borderRadius: BorderRadius.circular(15),
-        image: DecorationImage(
-          image: AssetImage('assets/images/img${(index % 4) + 1}.jpeg'),
-          fit: BoxFit.cover,
-        ),
         boxShadow: [
           BoxShadow(
-            color: colors[0].withValues(alpha: 0.2),
+            color: bgColor.withValues(alpha: 0.2),
             blurRadius: 8,
             offset: const Offset(0, 4),
           )
@@ -361,21 +306,10 @@ class _PlayerProfileState extends State<PlayerProfile> {
       ),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.black.withValues(alpha: 0.1),
-              Colors.black.withValues(alpha: 0.2),
-            ],
-          ),
-        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: Colors.white.withValues(alpha: 0.7), size: 16),
+            Icon(icon, color: Colors.white, size: 16),
             const SizedBox(height: 6),
             FittedBox(
               child: Row(
@@ -386,41 +320,10 @@ class _PlayerProfileState extends State<PlayerProfile> {
               ),
             ),
             const SizedBox(height: 2),
-            Text(label.toUpperCase(), style: const TextStyle(color: Colors.white70, fontSize: 8, fontWeight: FontWeight.bold)),
+            Text(label.toUpperCase(), style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 8, fontWeight: FontWeight.bold)),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildModernTileValue(String val, String label, IconData icon, Color color) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, color: color, size: 20),
-        const SizedBox(width: 12),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(val, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 22)),
-            Text(label, style: const TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildWalletStat(String val, String label, {bool isWarning = false}) {
-    return Column(
-      children: [
-        Text(val, style: TextStyle(color: isWarning ? Colors.orangeAccent : Colors.greenAccent, fontWeight: FontWeight.bold, fontSize: 16)),
-        Text(label, style: const TextStyle(color: Colors.white38, fontSize: 10)),
-        if (isWarning)
-          const Padding(
-            padding: EdgeInsets.only(top: 4),
-            child: Text('LOW BALANCE!', style: TextStyle(color: Colors.redAccent, fontSize: 8, fontWeight: FontWeight.bold)),
-          ),
-      ],
     );
   }
 }

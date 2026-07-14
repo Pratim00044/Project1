@@ -34,6 +34,10 @@ class _SocialLeagueDetailsPageState extends State<SocialLeagueDetailsPage> with 
       appBar: AppBar(
         backgroundColor: const Color(0xFF0D0D0D),
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: Text(widget.leagueName.toUpperCase(), style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 1)),
         bottom: TabBar(
           controller: _tabController,

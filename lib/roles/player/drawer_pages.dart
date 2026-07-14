@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'player_home.dart';
 import 'dashboard_sections/news_section.dart';
 import 'dashboard_sections/session_section.dart';
 import 'dashboard_sections/ranking_section.dart';
@@ -20,6 +21,10 @@ class VideosPage extends StatelessWidget {
         title: const Text('HIGHLIGHT VIDEOS', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 2)),
         foregroundColor: goldColor,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -77,10 +82,6 @@ class VideosPage extends StatelessWidget {
                     color: surfaceColor,
                     borderRadius: BorderRadius.circular(15),
                     border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
-                    image: DecorationImage(
-                      image: AssetImage(currentImage),
-                      fit: BoxFit.cover,
-                    ),
                   ),
                   child: Stack(
                     children: [
@@ -88,10 +89,10 @@ class VideosPage extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: Colors.black.withValues(alpha: 0.5),
+                            color: goldColor.withValues(alpha: 0.1),
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(Icons.play_arrow, color: Colors.white, size: 30),
+                          child: const Icon(Icons.play_arrow, color: goldColor, size: 30),
                         ),
                       ),
                       Positioned(
@@ -130,6 +131,10 @@ class NewsPage extends StatelessWidget {
         title: const Text('LATEST NEWS', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 2)),
         foregroundColor: goldColor,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: const SingleChildScrollView(child: NewsSection()),
     );
@@ -148,6 +153,10 @@ class SessionsPage extends StatelessWidget {
         title: const Text('ACADEMY SESSIONS', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 2)),
         foregroundColor: goldColor,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: const SessionSection(),
     );
@@ -166,6 +175,10 @@ class RankingsPage extends StatelessWidget {
         title: const Text('GLOBAL RANKINGS', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 2)),
         foregroundColor: goldColor,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: const SingleChildScrollView(child: RankingSection()),
     );

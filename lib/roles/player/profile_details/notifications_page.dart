@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../player_home.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color surfaceColor = Color(0xFF121212);
@@ -150,35 +151,19 @@ class NotificationsPage extends StatelessWidget {
 
           return Container(
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
+              color: isNew ? goldColor : surfaceColor,
               borderRadius: BorderRadius.circular(25),
-              image: DecorationImage(
-                image: AssetImage(currentImage),
-                fit: BoxFit.cover,
-              ),
               boxShadow: [
                 BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 10, offset: const Offset(0, 4))
               ],
             ),
-            child: Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                gradient: LinearGradient(
-                  begin: isEven ? Alignment.centerLeft : Alignment.centerRight,
-                  end: isEven ? Alignment.centerRight : Alignment.centerLeft,
-                  colors: [
-                    Colors.black.withValues(alpha: 0.7),
-                    Colors.black.withValues(alpha: 0.2),
-                  ],
-                ),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: isEven 
-                  ? [iconWidget, const SizedBox(width: 15), contentWidget]
-                  : [contentWidget, const SizedBox(width: 15), iconWidget],
-              ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: isEven 
+                ? [iconWidget, const SizedBox(width: 15), contentWidget]
+                : [contentWidget, const SizedBox(width: 15), iconWidget],
             ),
           );
         },

@@ -19,8 +19,13 @@ class ManagerApprovalsPage extends StatelessWidget {
       backgroundColor: const Color(0xFF080808),
       appBar: AppBar(
         backgroundColor: const Color(0xFF0D0D0D),
+        elevation: 0,
+        centerTitle: true,
         title: const Text('PENDING APPROVALS', style: TextStyle(color: goldColor, fontSize: 14, fontWeight: FontWeight.bold, letterSpacing: 2)),
-        leading: IconButton(icon: const Icon(Icons.arrow_back, color: Colors.white), onPressed: () => Navigator.pop(context)),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(20),

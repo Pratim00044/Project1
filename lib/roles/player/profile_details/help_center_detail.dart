@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../player_home.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
@@ -11,10 +12,7 @@ class HelpCenterDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/Core FC Theme .jpeg'),
-          fit: BoxFit.cover,
-        ),
+        color: Colors.black,
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -82,10 +80,6 @@ class HelpCenterDetail extends StatelessWidget {
         color: surfaceColor,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
-        image: const DecorationImage(
-          image: AssetImage('assets/images/img2.jpeg'),
-          fit: BoxFit.cover,
-        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

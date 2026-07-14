@@ -25,26 +25,19 @@ class MyTeamsPage extends StatelessWidget {
             child: Container(
               margin: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                image: const DecorationImage(
-                  image: AssetImage('assets/images/img2.jpeg'),
-                  fit: BoxFit.cover,
-                ),
+                color: const Color(0xFF1E1E1E),
                 borderRadius: BorderRadius.circular(30),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.3),
+                    blurRadius: 15,
+                    offset: const Offset(0, 8),
+                  )
+                ],
               ),
               child: Container(
                 padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [
-                      Colors.black.withValues(alpha: 0.8),
-                      Colors.black.withValues(alpha: 0.2),
-                    ],
-                  ),
-                ),
                 child: Row(
                   children: [
                     Container(
@@ -134,14 +127,11 @@ class MyTeamsPage extends StatelessWidget {
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 15),
                       decoration: BoxDecoration(
+                        color: colors[0],
                         borderRadius: BorderRadius.circular(25),
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/img${(index % 4) + 1}.jpeg'),
-                          fit: BoxFit.cover,
-                        ),
                         boxShadow: [
                           BoxShadow(
-                            color: colors[0].withValues(alpha: 0.1),
+                            color: colors[0].withValues(alpha: 0.3),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           )
@@ -149,17 +139,6 @@ class MyTeamsPage extends StatelessWidget {
                       ),
                       child: Container(
                         padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25),
-                          gradient: LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [
-                              Colors.black.withValues(alpha: 0.7),
-                              Colors.black.withValues(alpha: 0.2),
-                            ],
-                          ),
-                        ),
                         child: Row(
                           children: [
                             Container(
@@ -196,7 +175,7 @@ class MyTeamsPage extends StatelessWidget {
                                       Container(
                                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                                         decoration: BoxDecoration(
-                                          color: Colors.white.withValues(alpha: 0.2),
+                                          color: Colors.black26,
                                           borderRadius: BorderRadius.circular(6),
                                         ),
                                         child: Text(
@@ -212,7 +191,7 @@ class MyTeamsPage extends StatelessWidget {
                                       Text(
                                         "#${member['no']!}", 
                                         style: const TextStyle(
-                                          color: Colors.white70, 
+                                          color: Colors.white, 
                                           fontSize: 12,
                                           fontWeight: FontWeight.w900
                                         )
@@ -225,11 +204,14 @@ class MyTeamsPage extends StatelessWidget {
                             if (isMe)
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.9), 
+                                  borderRadius: BorderRadius.circular(8)
+                                ),
                                 child: Text('ME', style: TextStyle(color: colors[0], fontSize: 10, fontWeight: FontWeight.w900)),
                               )
                             else
-                              const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white38, size: 14),
+                              const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white, size: 14),
                           ],
                         ),
                       ),

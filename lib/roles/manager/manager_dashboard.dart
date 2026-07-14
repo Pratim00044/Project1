@@ -148,14 +148,6 @@ class ManagerDashboard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        'Welcome back,',
-                        style: TextStyle(
-                          color: Colors.white60,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const Text(
                         'DORIVAL JÚNIOR',
                         style: TextStyle(
                           color: Colors.white,

@@ -14,12 +14,10 @@ class ProfessionalPathwayPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
+            padding: const EdgeInsets.all(25),
             decoration: BoxDecoration(
+              color: surfaceColor,
               borderRadius: BorderRadius.circular(24),
-              image: const DecorationImage(
-                image: AssetImage('assets/images/img2.jpeg'),
-                fit: BoxFit.cover,
-              ),
               boxShadow: [
                 BoxShadow(
                   color: const Color(0xFF007CFE).withValues(alpha: 0.2),
@@ -28,45 +26,31 @@ class ProfessionalPathwayPage extends StatelessWidget {
                 )
               ],
             ),
-            child: Container(
-              padding: const EdgeInsets.all(25),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.black.withValues(alpha: 0.1),
-                    Colors.black.withValues(alpha: 0.2),
-                  ],
-                ),
-              ),
-              child: Column(
-                children: [
-                  const Icon(Icons.stars_rounded, color: Colors.white, size: 48),
-                  const SizedBox(height: 15),
-                  const Text('PROFESSIONAL PATHWAY',
-                      style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 1)),
-                  const SizedBox(height: 10),
-                  const Text('Step into the professional world. Get scouted by top clubs like Core FC, Dubai Lions FC, and Eagle FC.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white70, fontSize: 12, height: 1.5)),
-                  const SizedBox(height: 25),
-                  ElevatedButton(
-                    onPressed: () => _showRegistrationDialog(context),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      minimumSize: const Size(double.infinity, 55),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                    ),
-                    child: const Text('JOIN AS TRIALIST',
-                        style: TextStyle(color: Color(0xFF004A99), fontWeight: FontWeight.w900, fontSize: 14)),
+            child: Column(
+              children: [
+                const Icon(Icons.stars_rounded, color: goldColor, size: 48),
+                const SizedBox(height: 15),
+                const Text('PROFESSIONAL PATHWAY',
+                    style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                const SizedBox(height: 10),
+                const Text('Step into the professional world. Get scouted by top clubs like Core FC, Dubai Lions FC, and Eagle FC.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white70, fontSize: 12, height: 1.5)),
+                const SizedBox(height: 25),
+                ElevatedButton(
+                  onPressed: () => _showRegistrationDialog(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: goldColor,
+                    minimumSize: const Size(double.infinity, 55),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                   ),
-                  const SizedBox(height: 12),
-                  const Text('Next Trials: July 15th - Zayed Sports City',
-                      style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
-                ],
-              ),
+                  child: const Text('JOIN AS TRIALIST',
+                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 14)),
+                ),
+                const SizedBox(height: 12),
+                const Text('Next Trials: July 15th - Zayed Sports City',
+                    style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
+              ],
             ),
           ),
           
@@ -146,12 +130,10 @@ class ProfessionalPathwayPage extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
+          color: colors[0],
           borderRadius: BorderRadius.circular(20),
-          image: const DecorationImage(
-            image: AssetImage('assets/images/img3.jpeg'),
-            fit: BoxFit.cover,
-          ),
           boxShadow: [
             BoxShadow(
               color: colors[0].withValues(alpha: 0.2),
@@ -160,43 +142,29 @@ class ProfessionalPathwayPage extends StatelessWidget {
             )
           ],
         ),
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [
-                Colors.black.withValues(alpha: 0.2),
-                Colors.black.withValues(alpha: 0.1),
-              ],
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: Colors.white, size: 24),
             ),
-          ),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(icon, color: Colors.white, size: 24),
+            const SizedBox(width: 20),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 4),
+                  Text(desc, style: const TextStyle(color: Colors.white70, fontSize: 11, height: 1.4)),
+                ],
               ),
-              const SizedBox(width: 20),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 4),
-                    Text(desc, style: const TextStyle(color: Colors.white70, fontSize: 11, height: 1.4)),
-                  ],
-                ),
-              ),
-              const Icon(Icons.chevron_right, color: Colors.white38),
-            ],
-          ),
+            ),
+            const Icon(Icons.chevron_right, color: Colors.white38),
+          ],
         ),
       ),
     );

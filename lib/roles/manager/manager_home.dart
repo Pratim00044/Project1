@@ -18,7 +18,6 @@ class ManagerHome extends StatefulWidget {
 
 class _ManagerHomeState extends State<ManagerHome> {
   int _selectedIndex = 0;
-  final List<int> _history = [0];
 
   final List<Widget> _pages = [
     const ManagerDashboard(),
@@ -31,60 +30,47 @@ class _ManagerHomeState extends State<ManagerHome> {
     if (_selectedIndex != index) {
       setState(() {
         _selectedIndex = index;
-        _history.add(index);
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: _selectedIndex == 0 && _history.length <= 1,
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop) return;
-        if (_history.length > 1) {
-          setState(() {
-            _history.removeLast();
-            _selectedIndex = _history.last;
-          });
-        }
-      },
-      child: Scaffold(
-        backgroundColor: darkBg,
-        endDrawer: _buildDrawer(context),
-        body: SafeArea(
-          bottom: false,
-          child: Column(
-            children: [
-              _buildHeader(context),
-              Expanded(child: _pages[_selectedIndex]),
-            ],
-          ),
+    return Scaffold(
+      backgroundColor: darkBg,
+      endDrawer: _buildDrawer(context),
+      body: SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            _buildHeader(context),
+            Expanded(child: _pages[_selectedIndex]),
+          ],
         ),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            border: Border(top: BorderSide(color: goldColor.withValues(alpha: 0.1), width: 0.5)),
-            color: const Color(0xFF0D0D0D),
-          ),
-          child: SafeArea(
-            child: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              selectedItemColor: goldColor,
-              unselectedItemColor: Colors.white24,
-              currentIndex: _selectedIndex,
-              onTap: _onItemTapped,
-              selectedFontSize: 9,
-              unselectedFontSize: 9,
-              showUnselectedLabels: true,
-              items: const [
-                BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'DASHBOARD'),
-                BottomNavigationBarItem(icon: Icon(Icons.groups_rounded), label: 'TEAMS'),
-                BottomNavigationBarItem(icon: Icon(Icons.account_balance_wallet_rounded), label: 'BUDGET'),
-                BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: 'SETTINGS'),
-              ],
-            ),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: goldColor.withValues(alpha: 0.1), width: 0.5)),
+          color: const Color(0xFF0D0D0D),
+        ),
+        child: SafeArea(
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            selectedItemColor: goldColor,
+            unselectedItemColor: Colors.white24,
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+            selectedFontSize: 9,
+            unselectedFontSize: 9,
+            showUnselectedLabels: true,
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'DASHBOARD'),
+              BottomNavigationBarItem(icon: Icon(Icons.groups_rounded), label: 'TEAMS'),
+              BottomNavigationBarItem(icon: Icon(Icons.account_balance_wallet_rounded), label: 'BUDGET'),
+              BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: 'SETTINGS'),
+            ],
           ),
         ),
       ),
@@ -204,28 +190,37 @@ class _ManagerHomeState extends State<ManagerHome> {
   }
 
   Widget _buildHeader(BuildContext context) {
+    const String title = 'MANAGER DASHBOARD';
+    const String subtitle = 'STATIXA';
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
       child: Row(
         children: [
           Image.asset('assets/logo.png', height: 65, fit: BoxFit.contain),
           const SizedBox(width: 20),
-          const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('CORE FC',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1.0)),
-              Text('MANAGER DASHBOARD',
-                  style: TextStyle(
-                      color: goldColor,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.5)),
-            ],
+          const Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(title,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.0)),
+                ),
+                Text(subtitle,
+                    style: TextStyle(
+                        color: goldColor,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.5)),
+              ],
+            ),
           ),
           const Spacer(),
           Builder(

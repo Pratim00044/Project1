@@ -6,6 +6,7 @@ import 'player_profile.dart';
 import 'profile_details/security_detail.dart';
 import 'profile_details/help_center_detail.dart';
 import 'profile_details/notifications_page.dart';
+import '../organization/player_performance_detail.dart';
 import 'profile_details/progress_page.dart';
 import 'drawer_pages.dart';
 import 'profile_menu_pages.dart';
@@ -15,21 +16,26 @@ const Color darkBg = Color(0xFF080808);
 const Color surfaceColor = Color(0xFF121212);
 
 class PlayerHome extends StatefulWidget {
-  const PlayerHome({super.key});
+  final int initialIndex;
+  const PlayerHome({super.key, this.initialIndex = 0});
 
   @override
   State<PlayerHome> createState() => PlayerHomeState();
 }
 
 class PlayerHomeState extends State<PlayerHome> {
-  int _selectedIndex = 0;
-  final List<int> _history = [0];
+  late int _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex;
+  }
 
   void changeTab(int index) {
     if (_selectedIndex != index) {
       setState(() {
         _selectedIndex = index;
-        _history.add(index);
       });
     }
   }
@@ -43,54 +49,42 @@ class PlayerHomeState extends State<PlayerHome> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: _selectedIndex == 0 && _history.length <= 1,
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop) return;
-        if (_history.length > 1) {
-          setState(() {
-            _history.removeLast();
-            _selectedIndex = _history.last;
-          });
-        }
-      },
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        appBar: null,
-        endDrawer: _buildDrawer(context),
-        body: SafeArea(
-          bottom: false,
-          child: Column(
-            children: [
-              _buildHeader(context),
-              Expanded(child: _pages[_selectedIndex]),
-            ],
-          ),
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: null,
+      endDrawer: _buildDrawer(context),
+      body: SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            _buildHeader(context),
+            Expanded(child: _pages[_selectedIndex]),
+          ],
         ),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            border: Border(top: BorderSide(color: goldColor.withValues(alpha: 0.1), width: 0.5)),
-            color: const Color(0xFF0D0D0D),
-          ),
-          child: SafeArea(
-            child: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              selectedItemColor: goldColor,
-              unselectedItemColor: Colors.white24,
-              currentIndex: _selectedIndex,
-              onTap: changeTab,
-              selectedFontSize: 10,
-              unselectedFontSize: 10,
-              showUnselectedLabels: true,
-              items: const [
-                BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'DASHBOARD'),
-                BottomNavigationBarItem(icon: Icon(Icons.groups_rounded), label: 'TEAM'),
-                BottomNavigationBarItem(icon: Icon(Icons.calendar_today_rounded), label: 'GAMES'),
-                BottomNavigationBarItem(icon: Icon(Icons.person_outline_rounded), label: 'PROFILE'),
-              ],
-            ),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: goldColor.withValues(alpha: 0.1), width: 0.5)),
+          color: const Color(0xFF0D0D0D),
+        ),
+        child: SafeArea(
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            selectedItemColor: goldColor,
+            unselectedItemColor: Colors.white24,
+            currentIndex: _selectedIndex,
+            onTap: changeTab,
+            selectedFontSize: 10,
+            unselectedFontSize: 10,
+            showUnselectedLabels: true,
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'DASHBOARD'),
+              BottomNavigationBarItem(icon: Icon(Icons.groups_rounded), label: 'TEAM'),
+              BottomNavigationBarItem(icon: Icon(Icons.calendar_today_rounded), label: 'GAMES'),
+              BottomNavigationBarItem(icon: Icon(Icons.person_outline_rounded), label: 'PROFILE'),
+            ],
           ),
         ),
       ),
@@ -132,6 +126,7 @@ class PlayerHomeState extends State<PlayerHome> {
                   ),
                   _buildDrawerItem(Icons.auto_graph_rounded, 'Professional Pathway', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfessionalPathwayScreen()))),
                   _buildDrawerItem(Icons.trending_up_rounded, 'Match Progress', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ProgressPage()))),
+                  _buildDrawerItem(Icons.analytics_rounded, 'Player Progress', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PlayerPerformanceDetail(name: 'Lionel Messi', pos: 'Forward', rating: 4.8)))),
                   _buildDrawerItem(Icons.sports_soccer_rounded, 'Match History', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PlayerMatchesScreen()))),
                   _buildDrawerItem(Icons.analytics_outlined, 'Performance Stats', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PlayerStatsScreen()))),
                   _buildDrawerItem(Icons.how_to_reg_rounded, 'Attendance History', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PlayerAttendanceScreen()))),
@@ -214,30 +209,31 @@ class PlayerHomeState extends State<PlayerHome> {
   }
 
   Widget _buildHeader(BuildContext context) {
+    const String title = 'PLAYER DASHBOARD';
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
       child: Row(
         children: [
           Image.asset('assets/logo.png', height: 65, fit: BoxFit.contain),
           const SizedBox(width: 20),
-          const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('CORE FC',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1.0)),
-              Text('PLAYER DASHBOARD',
-                  style: TextStyle(
-                      color: goldColor,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.5)),
-            ],
+          const Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(title,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.0)),
+                ),
+              ],
+            ),
           ),
-          const Spacer(),
           Builder(
             builder: (context) => IconButton(
               icon: const Icon(Icons.menu, color: goldColor),
