@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../organization/pitch_rating_view.dart';
+import '../player/player_profile.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
@@ -26,18 +27,95 @@ class SessionAttendancePage extends StatefulWidget {
 
 class _SessionAttendancePageState extends State<SessionAttendancePage> {
   final List<Map<String, dynamic>> _players = [
-    {'name': 'James Doe', 'pos': 'MF', 'ratio': '8/10', 'status': null},
-    {'name': 'Marcus Reid', 'pos': 'FW', 'ratio': '10/10', 'status': null},
-    {'name': 'Lena Shah', 'pos': 'GK', 'ratio': '7/10', 'status': null},
-    {'name': 'Omar Patel', 'pos': 'DF', 'ratio': '5/10', 'status': null},
-    {'name': 'Sam Khan', 'pos': 'MF', 'ratio': '9/10', 'status': null},
-    {'name': 'Leo Messi', 'pos': 'FW', 'ratio': '10/10', 'status': 'Present'},
-    {'name': 'Cristiano R.', 'pos': 'FW', 'ratio': '9/10', 'status': 'Absent'},
+    {'name': 'James Doe', 'ratio': '8/10', 'status': null, 'image': 'assets/images/sunil.png'},
+    {'name': 'Marcus Reid', 'ratio': '10/10', 'status': null, 'image': 'assets/images/sunil.png'},
+    {'name': 'Lena Shah', 'ratio': '7/10', 'status': null, 'image': 'assets/images/sunil.png'},
+    {'name': 'Omar Patel', 'ratio': '5/10', 'status': null, 'image': 'assets/images/sunil.png'},
+    {'name': 'Sam Khan', 'ratio': '9/10', 'status': null, 'image': 'assets/images/sunil.png'},
+    {'name': 'Leo Messi', 'ratio': '10/10', 'status': 'Present', 'image': 'assets/images/sunil.png'},
+    {'name': 'Cristiano R.', 'ratio': '9/10', 'status': 'Absent', 'image': 'assets/images/sunil.png'},
   ];
 
   int get presentCount => _players.where((p) => p['status'] == 'Present').length;
   int get absentCount => _players.where((p) => p['status'] == 'Absent').length;
   int get unmarkedCount => _players.where((p) => p['status'] == null).length;
+
+  void _showPlayerOptions(int index) {
+    final player = _players[index];
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => Container(
+        padding: const EdgeInsets.fromLTRB(25, 20, 25, 30),
+        decoration: const BoxDecoration(
+          color: Color(0xFF0D0D0D),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(35)),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.white10, borderRadius: BorderRadius.circular(2))),
+              const SizedBox(height: 25),
+              CircleAvatar(
+                radius: 40,
+                backgroundColor: goldColor.withOpacity(0.1),
+                backgroundImage: player['image'] != null ? AssetImage(player['image']) : null,
+                child: player['image'] == null ? Text(player['name'].split(' ').map((e) => e[0]).join(), style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 24)) : null,
+              ),
+              const SizedBox(height: 15),
+              Text(player['name'].toUpperCase(), 
+                  style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 1)),
+              const SizedBox(height: 30),
+              _buildOptionItem(Icons.auto_graph_rounded, 'View Progress & Records', () {
+                Navigator.pop(context);
+                // Navigate to Progress
+              }),
+              _buildOptionItem(Icons.star_outline_rounded, 'Rate Performance', () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => PitchRatingView(
+                  title: widget.sessionTitle,
+                  date: widget.date,
+                  time: widget.time,
+                )));
+              }),
+              _buildOptionItem(Icons.person_search_rounded, 'Full Player Profile', () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => PlayerProfile(
+                  playerName: player['name'],
+                  playerNumber: '10',
+                  isReadOnly: true,
+                )));
+              }),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOptionItem(IconData icon, String title, VoidCallback onTap) {
+    bool isProgress = title == 'View Progress & Records';
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 15),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: isProgress ? Colors.white.withOpacity(0.03) : Colors.transparent,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: isProgress ? goldColor : goldColor, size: 24),
+            const SizedBox(width: 20),
+            Text(title, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+          ],
+        ),
+      ),
+    );
+  }
 
   void _markAllPresent() {
     setState(() {
@@ -86,7 +164,7 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(_players[index]['name'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                            Text('${_players[index]['pos']} • ${_players[index]['ratio']} sessions attended', style: const TextStyle(color: Colors.white38, fontSize: 11)),
+                            Text('${_players[index]['ratio']} sessions attended', style: const TextStyle(color: Colors.white38, fontSize: 11)),
                           ],
                         ),
                       ),
@@ -257,12 +335,13 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: ListTile(
+                    onTap: () => _showPlayerOptions(index),
                     leading: CircleAvatar(
                       backgroundColor: _getStatusColor(player['status']).withOpacity(0.1),
                       child: Text(player['name'].split(' ').map((e) => e[0]).join(), style: TextStyle(color: _getStatusColor(player['status']), fontSize: 12, fontWeight: FontWeight.bold)),
                     ),
                     title: Text(player['name'], style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
-                    subtitle: Text('${player['pos']} • Attended ${player['ratio']} sessions', style: const TextStyle(color: Colors.white38, fontSize: 11)),
+                    subtitle: Text('Attended ${player['ratio']} sessions', style: const TextStyle(color: Colors.white38, fontSize: 11)),
                     trailing: player['status'] == null
                         ? Row(
                             mainAxisSize: MainAxisSize.min,

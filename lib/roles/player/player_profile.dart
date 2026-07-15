@@ -7,7 +7,6 @@ const Color surfaceColor = Color(0xFF121212);
 
 class PlayerProfile extends StatefulWidget {
   final String? playerName;
-  final String? playerPosition;
   final String? playerNumber;
   final Map<String, dynamic>? playerStats;
   final bool isReadOnly;
@@ -15,7 +14,6 @@ class PlayerProfile extends StatefulWidget {
   const PlayerProfile({
     super.key,
     this.playerName,
-    this.playerPosition,
     this.playerNumber,
     this.playerStats,
     this.isReadOnly = false,
@@ -29,9 +27,9 @@ class _PlayerProfileState extends State<PlayerProfile> {
   @override
   Widget build(BuildContext context) {
     final String displayName = widget.playerName ?? 'LIONEL MESSI';
-    final String displaySub = widget.playerPosition != null && widget.playerNumber != null 
-        ? '${widget.playerPosition} | #${widget.playerNumber}' 
-        : 'FORWARD | #11';
+    final String displaySub = widget.playerNumber != null 
+        ? '#${widget.playerNumber}' 
+        : '#11';
 
     return Scaffold(
       backgroundColor: darkBg,
@@ -239,54 +237,68 @@ class _PlayerProfileState extends State<PlayerProfile> {
             ),
           ),
 
-          const SizedBox(height: 25),
-          const Padding(
-            padding: EdgeInsets.only(left: 8, bottom: 15),
-            child: Text('POSITION', 
-              style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
-          ),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(25),
-            decoration: BoxDecoration(
-              color: surfaceColor,
-              borderRadius: BorderRadius.circular(30),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Primary', style: TextStyle(color: Color(0xFFE91E63), fontSize: 12, fontWeight: FontWeight.bold)),
-                      Text(widget.playerPosition ?? 'Striker', style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 25),
-                      const Text('Others', style: TextStyle(color: Colors.white38, fontSize: 12, fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 8),
-                      const Text('Attacking Midfielder', style: TextStyle(color: Colors.white, fontSize: 14)),
-                      const Text('Right Winger', style: TextStyle(color: Colors.white, fontSize: 14)),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  width: 140,
-                  height: 180,
-                  child: CustomPaint(
-                    painter: SoccerFieldPainter(positions: [
-                      {'pos': 'ST', 'x': 0.5, 'y': 0.15, 'primary': true},
-                      {'pos': 'AM', 'x': 0.5, 'y': 0.45, 'primary': false},
-                      {'pos': 'RW', 'x': 0.8, 'y': 0.4, 'primary': false},
-                    ]),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          const SizedBox(height: 30),
+          _buildPositionSection(),
+
           const SizedBox(height: 50),
         ],
       ),
+    );
+  }
+
+  Widget _buildPositionSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(left: 8, bottom: 15),
+          child: Text('POSITION', 
+            style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
+        ),
+        Container(
+          padding: const EdgeInsets.all(25),
+          decoration: BoxDecoration(
+            color: surfaceColor,
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Primary', style: TextStyle(color: Color(0xFFE91E63), fontSize: 12, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 5),
+                    const Text('Striker', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900)),
+                    const SizedBox(height: 25),
+                    const Text('Others', style: TextStyle(color: Colors.white38, fontSize: 12, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 8),
+                    const Text('Attacking Midfielder', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+                    const SizedBox(height: 4),
+                    const Text('Right Winger', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 20),
+              SizedBox(
+                width: 140,
+                height: 180,
+                child: CustomPaint(
+                  painter: SoccerFieldPainter(
+                    positions: [
+                      {'pos': 'ST', 'x': 0.7, 'y': 0.15, 'primary': true},
+                      {'pos': 'AM', 'x': 0.65, 'y': 0.45, 'primary': false},
+                      {'pos': 'RW', 'x': 0.85, 'y': 0.35, 'primary': false},
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

@@ -7,6 +7,8 @@ import 'cdl_fixture_maker.dart';
 import 'social_leagues_page.dart';
 import 'create_match_page.dart';
 import 'organization_dashboard.dart';
+import '../chatbot_page.dart';
+import '../../widgets/animated_chatbot_fab.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color greenAccent = Color(0xFF2ECC71);
@@ -22,6 +24,7 @@ class OrganisationHome extends StatefulWidget {
 class OrganisationHomeState extends State<OrganisationHome> {
   bool isApproved = true;
   int _selectedIndex = 0;
+  final GlobalKey<CdlTeamsManagementState> _teamsKey = GlobalKey<CdlTeamsManagementState>();
 
   void changeTab(int index) {
     if (_selectedIndex != index) {
@@ -31,34 +34,63 @@ class OrganisationHomeState extends State<OrganisationHome> {
     }
   }
 
-  late final List<Widget> _pages;
-
-  @override
-  void initState() {
-    super.initState();
-    _pages = [
-      const OrganisationDashboard(),
-      const PlayerProfilesManagement(),
-      const CdlTeamsManagement(),
-      const CdlFixtureMaker(),
-      const LeagueTablesPage(),
-    ];
-  }
-
   @override
   Widget build(BuildContext context) {
     if (!isApproved) {
       return const PendingApprovalPage();
     }
+
+    final List<Widget> pages = [
+      const OrganisationDashboard(),
+      const PlayerProfilesManagement(),
+      CdlTeamsManagement(key: _selectedIndex == 2 ? _teamsKey : null),
+      const CdlFixtureMaker(),
+      const LeagueTablesPage(),
+    ];
+
     return Scaffold(
       backgroundColor: Colors.black,
       endDrawer: _buildDrawer(context),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            if (_selectedIndex == 2)
+              GestureDetector(
+                onTap: () => _teamsKey.currentState?.showAddTeamDialog(),
+                child: Container(
+                  height: 55,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: goldColor,
+                    borderRadius: BorderRadius.circular(30),
+                    boxShadow: [
+                      BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 4))
+                    ],
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(Icons.add, color: Colors.black, size: 22),
+                      SizedBox(width: 8),
+                      Text('ADD NEW',
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.w900, fontSize: 13, letterSpacing: 0.5)),
+                    ],
+                  ),
+                ),
+              ),
+            const SizedBox(width: 12),
+            const AnimatedChatBotFAB(),
+          ],
+        ),
+      ),
       body: SafeArea(
         bottom: false,
         child: Column(
           children: [
             _buildHeader(context),
-            Expanded(child: _pages[_selectedIndex]),
+            Expanded(child: pages[_selectedIndex]),
           ],
         ),
       ),

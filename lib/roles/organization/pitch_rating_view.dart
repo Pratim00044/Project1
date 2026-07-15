@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
@@ -23,12 +24,12 @@ class PitchRatingView extends StatefulWidget {
 
 class _PitchRatingViewState extends State<PitchRatingView> {
   final List<Map<String, dynamic>> _players = [
-    {'name': 'Lena', 'initials': 'LS', 'pos': 'ST', 'x': 0.5, 'y': 0.15, 'rated': true, 'absent': false},
-    {'name': 'James', 'initials': 'JD', 'pos': 'LM', 'x': 0.25, 'y': 0.4, 'rated': true, 'absent': false},
-    {'name': 'Marcus', 'initials': 'MR', 'pos': 'RM', 'x': 0.75, 'y': 0.4, 'rated': true, 'absent': false},
-    {'name': 'Sam', 'initials': 'SK', 'pos': 'CM', 'x': 0.5, 'y': 0.55, 'rated': false, 'absent': false},
-    {'name': 'Omar', 'initials': 'OP', 'pos': 'LB', 'x': 0.3, 'y': 0.75, 'rated': false, 'absent': true},
-    {'name': 'Ivan', 'initials': 'IV', 'pos': 'RB', 'x': 0.7, 'y': 0.75, 'rated': false, 'absent': true},
+    {'name': 'Lena', 'initials': 'LS', 'pos': 'ST', 'x': 0.5, 'y': 0.08, 'rated': true, 'absent': false, 'image': 'assets/images/sunil.png'},
+    {'name': 'James', 'initials': 'JD', 'pos': 'LM', 'x': 0.15, 'y': 0.32, 'rated': true, 'absent': false, 'image': 'assets/images/sunil.png'},
+    {'name': 'Marcus', 'initials': 'MR', 'pos': 'RM', 'x': 0.85, 'y': 0.32, 'rated': true, 'absent': false, 'image': 'assets/images/sunil.png'},
+    {'name': 'Sam', 'initials': 'SK', 'pos': 'CM', 'x': 0.5, 'y': 0.54, 'rated': false, 'absent': false, 'image': 'assets/images/sunil.png'},
+    {'name': 'Omar', 'initials': 'OP', 'pos': 'LB', 'x': 0.22, 'y': 0.82, 'rated': false, 'absent': true, 'image': 'assets/images/sunil.png'},
+    {'name': 'Ivan', 'initials': 'IV', 'pos': 'RB', 'x': 0.78, 'y': 0.82, 'rated': false, 'absent': true, 'image': 'assets/images/sunil.png'},
   ];
 
   int get _ratedCount => _players.where((p) => p['rated'] && !p['absent']).length;
@@ -76,15 +77,16 @@ class _PitchRatingViewState extends State<PitchRatingView> {
               ],
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 5), // Reduced from 20 to give more space to the pitch
           _buildScoreBoard(),
-          const SizedBox(height: 20),
+          const SizedBox(height: 5), // Reduced from 20 to give more space to the pitch
           Expanded(
+            flex: 6, // Increased from 3 to make ground height significantly longer
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
-                color: const Color(0xFF1B2414),
+                color: const Color(0xFF90EE90), // Light green ground color
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(30),
@@ -94,7 +96,10 @@ class _PitchRatingViewState extends State<PitchRatingView> {
                       size: Size.infinite,
                       painter: PitchPainter(),
                     ),
-                    ..._players.map((p) => _buildPitchPlayer(p)),
+                    // Draw absent players first so they are in the background
+                    ..._players.where((p) => p['absent']).map((p) => _buildPitchPlayer(p)),
+                    // Draw active players
+                    ..._players.where((p) => !p['absent']).map((p) => _buildPitchPlayer(p)),
                   ],
                 ),
               ),
@@ -106,9 +111,9 @@ class _PitchRatingViewState extends State<PitchRatingView> {
             child: ElevatedButton(
               onPressed: () => Navigator.pop(context),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF1B2414),
+                backgroundColor: const Color(0xFF0D1409), // Darker than pitch for contrast
                 minimumSize: const Size(double.infinity, 60),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15), side: const BorderSide(color: greenAccent, width: 0.5)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15), side: const BorderSide(color: greenAccent, width: 1.0)),
               ),
               child: const Text('Save all ratings', style: TextStyle(color: greenAccent, fontWeight: FontWeight.bold, fontSize: 16)),
             ),
@@ -160,33 +165,62 @@ class _PitchRatingViewState extends State<PitchRatingView> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (!isRated && !isAbsent)
-              Container(
-                margin: const EdgeInsets.only(bottom: 5),
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(color: goldColor, borderRadius: BorderRadius.circular(6)),
-                child: const Text('Tap to rate', style: TextStyle(color: Colors.black, fontSize: 8, fontWeight: FontWeight.bold)),
-              ),
             Container(
-              width: 45,
-              height: 45,
+              width: 52, // Slightly smaller to create more visual gap
+              height: 52,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: isAbsent ? Colors.transparent : goldColor.withValues(alpha: 0.2),
-                border: Border.all(color: isAbsent ? Colors.white24 : goldColor, width: 2, style: isAbsent ? BorderStyle.solid : BorderStyle.solid),
+                color: isAbsent ? Colors.transparent : Colors.black26,
+                border: Border.all(
+                  color: isAbsent ? Colors.white24 : goldColor, 
+                  width: 2.0
+                ),
               ),
-              child: Center(
-                child: Text(p['initials'], style: TextStyle(color: isAbsent ? Colors.white24 : Colors.white, fontWeight: FontWeight.bold)),
+              child: ClipOval(
+                child: Stack(
+                  children: [
+                    if (!isAbsent)
+                      Image.asset(
+                        p['image'],
+                        fit: BoxFit.cover,
+                        width: 52,
+                        height: 52,
+                      ),
+                    // Apply blur to absent players or darken unrated ones
+                    if (isAbsent)
+                      Positioned.fill(
+                        child: ImageFiltered(
+                          imageFilter: ColorFilter.mode(Colors.black.withValues(alpha: 0.4), BlendMode.darken),
+                          child: Image.asset(p['image'], fit: BoxFit.cover, width: 52, height: 52),
+                        ),
+                      ),
+                    if (isAbsent)
+                      Positioned.fill(
+                        child: Container(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          child: BackdropFilter(
+                            filter: ui.ImageFilter.blur(sigmaX: 5, sigmaY: 5), // Stronger blur
+                            child: Container(color: Colors.transparent),
+                          ),
+                        ),
+                      ),
+                    if (isAbsent)
+                      Center(
+                        child: Text(p['initials'], 
+                          style: const TextStyle(color: Colors.white24, fontWeight: FontWeight.bold, fontSize: 14)
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 4),
-            Text(p['name'], style: TextStyle(color: isAbsent ? Colors.white24 : Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
-            if (isRated)
-              Container(
-                margin: const EdgeInsets.only(top: 2),
-                width: 4, height: 4,
-                decoration: const BoxDecoration(color: goldColor, shape: BoxShape.circle),
-              ),
+            const SizedBox(height: 6), // More space between circle and name
+            Text(p['name'], style: TextStyle(
+              color: isAbsent ? Colors.black26 : Colors.black87, 
+              fontSize: 10.5, 
+              fontWeight: FontWeight.w900,
+              shadows: const [Shadow(color: Colors.white24, blurRadius: 2, offset: Offset(0, 1))]
+            )),
           ],
         ),
       ),
@@ -274,7 +308,7 @@ class _RatingSheetState extends State<_RatingSheet> {
                 CircleAvatar(
                   radius: 25,
                   backgroundColor: goldColor.withValues(alpha: 0.1),
-                  child: Text(widget.player['initials'], style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold)),
+                  backgroundImage: AssetImage(widget.player['image']),
                 ),
                 const SizedBox(width: 15),
                 Expanded(
@@ -282,7 +316,7 @@ class _RatingSheetState extends State<_RatingSheet> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(widget.player['name'] + ' Khan', style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                      const Text('Midfielder • Thu Apr 16', style: TextStyle(color: Colors.white38, fontSize: 12)),
+                      const Text('Thu Apr 16', style: TextStyle(color: Colors.white38, fontSize: 12)),
                     ],
                   ),
                 ),
@@ -402,17 +436,31 @@ class PitchPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final Paint paint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.1)
+      ..color = Colors.black.withValues(alpha: 0.15) // Darker lines for light ground
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
+      ..strokeWidth = 1.2;
 
+    // Outer boundary
     canvas.drawRect(Rect.fromLTWH(10, 10, size.width - 20, size.height - 20), paint);
-    canvas.drawLine(Offset(10, size.height / 2), Offset(size.width - 10, size.height / 2), paint);
-    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 40, paint);
     
-    // Penalty boxes
-    canvas.drawRect(Rect.fromLTWH(size.width * 0.25, 10, size.width * 0.5, 50), paint);
-    canvas.drawRect(Rect.fromLTWH(size.width * 0.25, size.height - 60, size.width * 0.5, 50), paint);
+    // Halfway line
+    canvas.drawLine(Offset(10, size.height / 2), Offset(size.width - 10, size.height / 2), paint);
+    
+    // Center circle
+    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 50, paint);
+    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 2, paint); // Center spot
+    
+    // Penalty boxes (top and bottom)
+    double boxWidth = size.width * 0.6;
+    double boxHeight = 70;
+    canvas.drawRect(Rect.fromLTWH((size.width - boxWidth) / 2, 10, boxWidth, boxHeight), paint);
+    canvas.drawRect(Rect.fromLTWH((size.width - boxWidth) / 2, size.height - 10 - boxHeight, boxWidth, boxHeight), paint);
+    
+    // Goal areas
+    double goalWidth = size.width * 0.3;
+    double goalHeight = 25;
+    canvas.drawRect(Rect.fromLTWH((size.width - goalWidth) / 2, 10, goalWidth, goalHeight), paint);
+    canvas.drawRect(Rect.fromLTWH((size.width - goalWidth) / 2, size.height - 10 - goalHeight, goalWidth, goalHeight), paint);
   }
 
   @override

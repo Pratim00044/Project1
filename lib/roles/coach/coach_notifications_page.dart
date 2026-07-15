@@ -32,7 +32,7 @@ class CoachNotificationsPage extends StatelessWidget {
         'time': 'Yesterday',
         'icon': Icons.sports_soccer_rounded,
         'color': goldColor,
-        'isNew': false,
+        'isNew': true,
       },
       {
         'title': 'New message from Team Manager',
@@ -40,15 +40,15 @@ class CoachNotificationsPage extends StatelessWidget {
         'time': 'Yesterday',
         'icon': Icons.chat_bubble_outline_rounded,
         'color': const Color(0xFFEE0979),
-        'isNew': false,
+        'isNew': true,
       },
       {
         'title': 'Squad Availability Updated',
         'category': 'Roster',
         'time': '2 days ago',
         'icon': Icons.people_outline_rounded,
-        'color': Colors.orangeAccent,
-        'isNew': false,
+        'color': Colors.deepPurpleAccent,
+        'isNew': true,
       },
     ];
 
@@ -58,12 +58,19 @@ class CoachNotificationsPage extends StatelessWidget {
         backgroundColor: const Color(0xFF0D0D0D),
         elevation: 0,
         centerTitle: true,
-        title: const Text('NOTIFICATIONS',
-            style: TextStyle(
-                color: goldColor,
-                fontSize: 16,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1.5)),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset('assets/images/footlab.png', height: 30),
+            const SizedBox(width: 10),
+            const Text('NOTIFICATIONS',
+                style: TextStyle(
+                    color: goldColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.5)),
+          ],
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
           onPressed: () => Navigator.pop(context),
@@ -84,24 +91,16 @@ class CoachNotificationsPage extends StatelessWidget {
           final bool isEven = index % 2 == 0;
           final Color accentColor = notif['color'] as Color;
           
-          final List<String> tileImages = [
-            'assets/images/img1.jpeg',
-            'assets/images/img2.jpeg',
-            'assets/images/img3.jpeg',
-            'assets/images/img4.jpeg',
-          ];
-          String currentImage = tileImages[index % tileImages.length];
-
           Widget iconWidget = Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: isNew ? accentColor.withValues(alpha: 0.2) : Colors.black.withValues(alpha: 0.6),
+              color: isNew ? Colors.black.withValues(alpha: 0.1) : Colors.black.withValues(alpha: 0.6),
               shape: BoxShape.circle,
-              border: Border.all(color: isNew ? accentColor.withValues(alpha: 0.3) : Colors.white10),
+              border: Border.all(color: isNew ? Colors.black.withValues(alpha: 0.1) : Colors.white10),
             ),
             child: Icon(
               notif['icon'] as IconData,
-              color: isNew ? accentColor : Colors.white38,
+              color: isNew ? Colors.black.withValues(alpha: 0.5) : accentColor,
               size: 20,
             ),
           );
@@ -117,20 +116,19 @@ class CoachNotificationsPage extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.only(right: 8),
                         width: 6, height: 6,
-                        decoration: BoxDecoration(color: accentColor, shape: BoxShape.circle),
+                        decoration: const BoxDecoration(color: Colors.black26, shape: BoxShape.circle),
                       ),
                     Text(notif['category'].toString().toUpperCase(),
                         style: TextStyle(
-                            color: isNew ? accentColor : Colors.white70,
+                            color: isNew ? Colors.black.withValues(alpha: 0.5) : accentColor,
                             fontSize: 11,
                             fontWeight: FontWeight.w900,
-                            letterSpacing: 0.5,
-                            shadows: [Shadow(color: Colors.black, blurRadius: 4)])),
+                            letterSpacing: 0.5)),
                     if (isEven && isNew)
                       Container(
                         margin: const EdgeInsets.only(left: 8),
                         width: 6, height: 6,
-                        decoration: BoxDecoration(color: accentColor, shape: BoxShape.circle),
+                        decoration: const BoxDecoration(color: Colors.black26, shape: BoxShape.circle),
                       ),
                   ],
                 ),
@@ -138,18 +136,16 @@ class CoachNotificationsPage extends StatelessWidget {
                 Text(notif['title']!,
                     textAlign: isEven ? TextAlign.left : TextAlign.right,
                     style: TextStyle(
-                        color: isNew ? Colors.white : Colors.white70,
+                        color: isNew ? Colors.black87 : Colors.white.withValues(alpha: 0.9),
                         fontSize: 13,
                         height: 1.4,
-                        fontWeight: FontWeight.bold,
-                        shadows: [Shadow(color: Colors.black, blurRadius: 8)])),
+                        fontWeight: FontWeight.bold)),
                 const SizedBox(height: 10),
                 Text(notif['time']!,
-                    style: const TextStyle(
-                      color: Colors.white38, 
+                    style: TextStyle(
+                      color: isNew ? Colors.black.withValues(alpha: 0.4) : Colors.white38, 
                       fontSize: 10, 
                       fontWeight: FontWeight.bold,
-                      shadows: [Shadow(color: Colors.black, blurRadius: 2)],
                     )),
               ],
             ),
@@ -158,11 +154,8 @@ class CoachNotificationsPage extends StatelessWidget {
           return Container(
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             decoration: BoxDecoration(
+              color: isNew ? accentColor : surfaceColor,
               borderRadius: BorderRadius.circular(25),
-              image: DecorationImage(
-                image: AssetImage(currentImage),
-                fit: BoxFit.cover,
-              ),
               boxShadow: [
                 BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 10, offset: const Offset(0, 4))
               ],
@@ -171,14 +164,7 @@ class CoachNotificationsPage extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(25),
-                gradient: LinearGradient(
-                  begin: isEven ? Alignment.centerLeft : Alignment.centerRight,
-                  end: isEven ? Alignment.centerRight : Alignment.centerLeft,
-                  colors: [
-                    Colors.black.withValues(alpha: 0.4),
-                    Colors.black.withValues(alpha: 0.1),
-                  ],
-                ),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,

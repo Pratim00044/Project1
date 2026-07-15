@@ -153,6 +153,7 @@ class _DashboardPageState extends State<DashboardPage> {
               height: 80,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
+                color: Colors.white,
                 image: DecorationImage(
                   image: AssetImage('assets/images/coach.png'),
                   fit: BoxFit.cover,
@@ -161,7 +162,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             const SizedBox(height: 15),
             const Text('LIONEL SCALONI',
-              style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900, letterSpacing: 1)),
+              style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.w900, letterSpacing: 1)),
           ],
         ),
       ),
@@ -391,18 +392,18 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
           child: Row(
             children: [
-              const Icon(Icons.emoji_events_outlined, color: Colors.white, size: 20),
+              const Icon(Icons.emoji_events_outlined, color: Colors.black, size: 20),
               const SizedBox(width: 15),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(l['name'].toString(), style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w900)),
-                    Text(l['match'].toString(), style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                    Text(l['name'].toString(), style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w900)),
+                    Text(l['match'].toString(), style: const TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold)),
                   ],
                 ),
               ),
-              Text(l['time'].toString(), style: const TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.bold)),
+              Text(l['time'].toString(), style: const TextStyle(color: Colors.black87, fontSize: 12, fontWeight: FontWeight.bold)),
             ],
           ),
         );
@@ -423,8 +424,8 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget _buildRankingSection() {
     return Column(
       children: [
-        _buildRankingItem('TOP GK', 'MANUEL NEUER', '98% Save Rate', const Color(0xFF38EF7D)),
-        _buildRankingItem('TOP DEFENDER', 'SERGIO RAMOS', '45 Tackles', const Color(0xFF007CFE)),
+        _buildRankingItem('TOP PERFORMER', 'MANUEL NEUER', '98% Save Rate', const Color(0xFF38EF7D)),
+        _buildRankingItem('TOP PERFORMER', 'SERGIO RAMOS', '45 Tackles', const Color(0xFF007CFE)),
       ],
     );
   }
@@ -442,19 +443,19 @@ class _DashboardPageState extends State<DashboardPage> {
           Container(
             width: 35, height: 35,
             decoration: BoxDecoration(color: Colors.black.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
-            child: const Icon(Icons.person, color: Colors.white, size: 18),
+            child: const Icon(Icons.person, color: Colors.black, size: 18),
           ),
           const SizedBox(width: 15),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(category, style: const TextStyle(color: Colors.white70, fontSize: 9, fontWeight: FontWeight.bold)),
-                Text(name, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                Text(category, style: const TextStyle(color: Colors.black87, fontSize: 9, fontWeight: FontWeight.bold)),
+                Text(name, style: const TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold)),
               ],
             ),
           ),
-          Text(stat, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
+          Text(stat, style: const TextStyle(color: Colors.black, fontSize: 11, fontWeight: FontWeight.bold)),
         ],
       ),
     );

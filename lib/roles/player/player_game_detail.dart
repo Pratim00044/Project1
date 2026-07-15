@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'player_payment_page.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
@@ -119,7 +120,19 @@ class PlayerGameDetail extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PlayerPaymentPage(
+                            title: title,
+                            date: date,
+                            time: time,
+                            location: location,
+                          ),
+                        ),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: goldColor,
                       minimumSize: const Size(double.infinity, 65),
@@ -160,7 +173,7 @@ class PlayerGameDetail extends StatelessWidget {
                     ),
                   ),
                   title: Text(p['name']!, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                  subtitle: Text('${p['pos']} • ★ ${p['rating']}', style: const TextStyle(color: Colors.white38, fontSize: 12)),
+                  subtitle: Text('★ ${p['rating']}', style: const TextStyle(color: Colors.white38, fontSize: 12)),
                   trailing: _buildStatusPill(p['status']!),
                 );
               },

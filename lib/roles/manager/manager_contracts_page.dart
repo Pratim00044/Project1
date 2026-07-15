@@ -9,9 +9,9 @@ class ManagerContractsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> contracts = [
-      {'name': 'Sunil Chhetri', 'role': 'Senior Forward', 'expiry': '15 Aug 2024', 'type': 'Pro'},
-      {'name': 'Sandesh Jhingan', 'role': 'Senior Defender', 'expiry': '01 Sep 2024', 'type': 'Pro'},
-      {'name': 'Sahal Samad', 'role': 'Midfielder', 'expiry': '22 Jul 2024', 'type': 'Academy'},
+      {'name': 'Sunil Chhetri', 'role': 'Senior Player', 'expiry': '15 Aug 2024', 'type': 'Pro'},
+      {'name': 'Sandesh Jhingan', 'role': 'Senior Player', 'expiry': '01 Sep 2024', 'type': 'Pro'},
+      {'name': 'Sahal Samad', 'role': 'Academy Player', 'expiry': '22 Jul 2024', 'type': 'Academy'},
     ];
 
     return Scaffold(

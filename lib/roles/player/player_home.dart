@@ -10,6 +10,8 @@ import '../organization/player_performance_detail.dart';
 import 'profile_details/progress_page.dart';
 import 'drawer_pages.dart';
 import 'profile_menu_pages.dart';
+import '../chatbot_page.dart';
+import '../../widgets/animated_chatbot_fab.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
@@ -53,6 +55,7 @@ class PlayerHomeState extends State<PlayerHome> {
       backgroundColor: Colors.black,
       appBar: null,
       endDrawer: _buildDrawer(context),
+      floatingActionButton: const AnimatedChatBotFAB(),
       body: SafeArea(
         bottom: false,
         child: Column(

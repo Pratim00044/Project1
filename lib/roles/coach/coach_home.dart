@@ -5,6 +5,8 @@ import 'games_page.dart';
 import '../organization/player_progress_dashboard.dart';
 import 'coach_notifications_page.dart';
 import 'profile_details/privacy_security.dart';
+import '../chatbot_page.dart';
+import '../../widgets/animated_chatbot_fab.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
@@ -42,6 +44,7 @@ class _CoachHomeState extends State<CoachHome> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         endDrawer: _buildDrawer(context),
+        floatingActionButton: const AnimatedChatBotFAB(),
         body: SafeArea(
           bottom: false,
           child: Column(

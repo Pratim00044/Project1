@@ -20,7 +20,7 @@ class OverviewSection extends StatelessWidget {
             children: [
               _buildColoredSquareTile(0, Icons.cake_rounded, '24 Years', 'Age', [const Color(0xFF007CFE), const Color(0xFF004A99)]),
               const SizedBox(width: 8),
-              _buildColoredSquareTile(1, Icons.sports_soccer, 'Center Forward', 'Position', [const Color(0xFF38EF7D), const Color(0xFF11998E)]),
+              _buildColoredSquareTile(1, Icons.auto_graph_rounded, '92%', 'Skill', [const Color(0xFF38EF7D), const Color(0xFF11998E)]),
               const SizedBox(width: 8),
               _buildColoredSquareTile(2, Icons.directions_run, 'Right Foot', 'Leg', [const Color(0xFFEE0979), const Color(0xFFF12711)]),
             ],

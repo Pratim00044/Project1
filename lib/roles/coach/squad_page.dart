@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../organization/player_performance_detail.dart';
+import '../organization/pitch_rating_view.dart';
+import '../player/player_profile.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color surfaceColor = Color(0xFF121212);
@@ -23,48 +25,43 @@ class _SquadPageState extends State<SquadPage> {
   final List<Map<String, dynamic>> _squad = [
     {
       'name': 'ALISSON BECKER',
-      'pos': 'GK',
       'location': 'TOWN SQUARE',
       'phone': '+971 50 123 4567',
       'initials': 'AB',
-      'category': 'GOALKEEPERS',
-      'color': Color(0xFF1E3A8A)
+      'color': Color(0xFF1E3A8A),
+      'image': 'assets/images/sunil.png'
     },
     {
       'name': 'THIBAUT COURTOIS',
-      'pos': 'GK',
       'location': 'TOWN SQUARE',
       'phone': '+971 50 123 4567',
       'initials': 'TC',
-      'category': 'GOALKEEPERS',
-      'color': Color(0xFF3730A3)
+      'color': Color(0xFF3730A3),
+      'image': 'assets/images/sunil.png'
     },
     {
       'name': 'VIRGIL VAN DIJK',
-      'pos': 'CB',
       'location': 'TOWN SQUARE',
       'phone': '+971 50 123 4567',
       'initials': 'VD',
-      'category': 'DEFENDERS',
-      'color': Color(0xFF5B21B6)
+      'color': Color(0xFF5B21B6),
+      'image': 'assets/images/sunil.png'
     },
     {
       'name': 'KEVIN DE BRUYNE',
-      'pos': 'CM',
       'location': 'TOWN SQUARE',
       'phone': '+971 50 123 4567',
       'initials': 'KD',
-      'category': 'MIDFIELDERS',
-      'color': Color(0xFF7C3AED)
+      'color': Color(0xFF7C3AED),
+      'image': 'assets/images/sunil.png'
     },
     {
       'name': 'LIONEL MESSI',
-      'pos': 'RW',
       'location': 'TOWN SQUARE',
       'phone': '+971 50 123 4567',
       'initials': 'LM',
-      'category': 'FORWARDS',
-      'color': Color(0xFF9D174D)
+      'color': Color(0xFF9D174D),
+      'image': 'assets/images/sunil.png'
     },
   ];
 
@@ -104,7 +101,7 @@ class _SquadPageState extends State<SquadPage> {
           SliverToBoxAdapter(
             child: _buildSearchBar(),
           ),
-          ..._buildCategorizedList(),
+          ..._buildFlatList(),
           const SliverToBoxAdapter(child: SizedBox(height: 50)),
         ],
       ),
@@ -209,36 +206,25 @@ class _SquadPageState extends State<SquadPage> {
     );
   }
 
-  List<Widget> _buildCategorizedList() {
-    Map<String, List<Map<String, dynamic>>> categorized = {};
-    for (var player in _squad) {
-      categorized.putIfAbsent(player['category'], () => []).add(player);
-    }
-
-    List<Widget> sections = [];
-    categorized.forEach((category, players) {
-      sections.add(
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(25, 35, 25, 15),
-            child: Text(category,
-                style: const TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
+  List<Widget> _buildFlatList() {
+    return [
+      const SliverToBoxAdapter(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(25, 35, 25, 15),
+          child: Text('ALL PLAYERS',
+              style: TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
+        ),
+      ),
+      SliverPadding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        sliver: SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) => _buildPlayerCard(_squad[index]),
+            childCount: _squad.length,
           ),
         ),
-      );
-      sections.add(
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) => _buildPlayerCard(players[index]),
-              childCount: players.length,
-            ),
-          ),
-        ),
-      );
-    });
-    return sections;
+      ),
+    ];
   }
 
   Widget _buildPlayerCard(Map<String, dynamic> player) {
@@ -256,8 +242,10 @@ class _SquadPageState extends State<SquadPage> {
             CircleAvatar(
               radius: 35,
               backgroundColor: Colors.black.withOpacity(0.2),
-              child: Text(player['initials'],
-                  style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+              backgroundImage: player['image'] != null ? AssetImage(player['image']) : null,
+              child: player['image'] == null 
+                  ? Text(player['initials'], style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold))
+                  : null,
             ),
             const SizedBox(width: 20),
             Expanded(
@@ -269,8 +257,6 @@ class _SquadPageState extends State<SquadPage> {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      Text(player['pos'], style: const TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w900)),
-                      const SizedBox(width: 10),
                       Text(player['location'], style: const TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.bold)),
                     ],
                   ),
@@ -300,41 +286,79 @@ class _SquadPageState extends State<SquadPage> {
   void _showPlayerOptions(Map<String, dynamic> player) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: const Color(0xFF0D0D0D),
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
       builder: (context) => Container(
-        padding: const EdgeInsets.all(30),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(player['name'], style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 25),
-            _buildOptionItem(Icons.auto_graph_rounded, 'View Progress & Records', () {
-              Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => PlayerPerformanceDetail(
-                name: player['name'],
-                pos: player['pos'],
-                rating: 4.8,
-              )));
-            }),
-            _buildOptionItem(Icons.star_outline_rounded, 'Rate Performance', () {
-              Navigator.pop(context);
-            }),
-            _buildOptionItem(Icons.person_search_rounded, 'Full Player Profile', () {
-              Navigator.pop(context);
-            }),
-            const SizedBox(height: 20),
-          ],
+        padding: const EdgeInsets.fromLTRB(25, 20, 25, 30),
+        decoration: const BoxDecoration(
+          color: Color(0xFF0D0D0D),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(35)),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.white10, borderRadius: BorderRadius.circular(2))),
+              const SizedBox(height: 25),
+              CircleAvatar(
+                radius: 40,
+                backgroundColor: goldColor.withOpacity(0.1),
+                backgroundImage: player['image'] != null ? AssetImage(player['image']) : null,
+                child: player['image'] == null ? Text(player['initials'], style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 24)) : null,
+              ),
+              const SizedBox(height: 15),
+              Text(player['name'].toUpperCase(), 
+                  style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 1)),
+              const SizedBox(height: 30),
+              _buildOptionItem(Icons.auto_graph_rounded, 'View Progress & Records', () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => PlayerPerformanceDetail(
+                  name: player['name'],
+                  rating: 4.8,
+                )));
+              }),
+              _buildOptionItem(Icons.star_outline_rounded, 'Rate Performance', () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => PitchRatingView(
+                  title: 'Training Session',
+                  date: 'Jul 12',
+                  time: '11:00 AM',
+                )));
+              }),
+              _buildOptionItem(Icons.person_search_rounded, 'Full Player Profile', () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => PlayerProfile(
+                  playerName: player['name'],
+                  playerNumber: '10',
+                  isReadOnly: true,
+                )));
+              }),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildOptionItem(IconData icon, String label, VoidCallback onTap) {
-    return ListTile(
-      leading: Icon(icon, color: goldColor),
-      title: Text(label, style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.bold)),
+  Widget _buildOptionItem(IconData icon, String title, VoidCallback onTap) {
+    bool isProgress = title == 'View Progress & Records';
+    return GestureDetector(
       onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 15),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: isProgress ? Colors.white.withOpacity(0.03) : Colors.transparent,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: goldColor, size: 24),
+            const SizedBox(width: 20),
+            Text(title, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -69,12 +69,14 @@ class _OrganisationDashboardState extends State<OrganisationDashboard> {
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Row(
-              children: [
-                Expanded(child: _buildCreateMatchSection(context)),
-                const SizedBox(width: 12),
-                Expanded(child: _buildProgressSection(context)),
-              ],
+            child: IntrinsicHeight(
+              child: Row(
+                children: [
+                  Expanded(child: _buildCreateMatchSection(context)),
+                  const SizedBox(width: 12),
+                  Expanded(child: _buildProgressSection(context)),
+                ],
+              ),
             ),
           ),
         ),
@@ -298,18 +300,36 @@ class _OrganisationDashboardState extends State<OrganisationDashboard> {
             ),
             Positioned(
               left: 10,
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: const BoxDecoration(color: greenAccent, shape: BoxShape.circle),
-                child: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black, size: 16),
+              child: GestureDetector(
+                onTap: () {
+                  _dateScrollController.animateTo(
+                    (_dateScrollController.offset - 101).clamp(0, _dateScrollController.position.maxScrollExtent),
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: const BoxDecoration(color: greenAccent, shape: BoxShape.circle),
+                  child: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black, size: 16),
+                ),
               ),
             ),
             Positioned(
               right: 10,
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: const BoxDecoration(color: greenAccent, shape: BoxShape.circle),
-                child: const Icon(Icons.arrow_forward_ios_rounded, color: Colors.black, size: 16),
+              child: GestureDetector(
+                onTap: () {
+                  _dateScrollController.animateTo(
+                    (_dateScrollController.offset + 101).clamp(0, _dateScrollController.position.maxScrollExtent),
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: const BoxDecoration(color: greenAccent, shape: BoxShape.circle),
+                  child: const Icon(Icons.arrow_forward_ios_rounded, color: Colors.black, size: 16),
+                ),
               ),
             ),
           ],

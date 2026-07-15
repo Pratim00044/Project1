@@ -7,16 +7,20 @@ class CdlTeamsManagement extends StatefulWidget {
   const CdlTeamsManagement({super.key});
 
   @override
-  State<CdlTeamsManagement> createState() => _CdlTeamsManagementState();
+  State<CdlTeamsManagement> createState() => CdlTeamsManagementState();
 }
 
-class _CdlTeamsManagementState extends State<CdlTeamsManagement> {
+class CdlTeamsManagementState extends State<CdlTeamsManagement> {
   final List<Map<String, dynamic>> _teams = [
     {'name': 'Core FC', 'logo': 'C', 'city': 'Dubai', 'founded': '2015', 'color': Color(0xFF1E3A8A)},
     {'name': 'Dubai Lions', 'logo': 'D', 'city': 'Abu Dhabi', 'founded': '2018', 'color': Color(0xFF3730A3)},
     {'name': 'Eagle FC', 'logo': 'E', 'city': 'Sharjah', 'founded': '2020', 'color': Color(0xFF5B21B6)},
     {'name': 'Turan Dubai', 'logo': 'T', 'city': 'Dubai', 'founded': '2022', 'color': Color(0xFF7C3AED)},
   ];
+
+  void showAddTeamDialog() {
+    _showAddTeamDialog();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +29,6 @@ class _CdlTeamsManagementState extends State<CdlTeamsManagement> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(25, 20, 25, 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('REGISTERED TEAMS', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900)),
-                Text('Manage club identities and branding', style: TextStyle(color: Colors.white38, fontSize: 12)),
-              ],
-            ),
-          ),
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -56,11 +50,12 @@ class _CdlTeamsManagementState extends State<CdlTeamsManagement> {
                         height: 60,
                         width: 60,
                         decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.white.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(18),
                         ),
-                        child: Center(
-                          child: Text(team['logo']!, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 24)),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(18),
+                          child: Image.asset('assets/images/footlab.png', fit: BoxFit.cover),
                         ),
                       ),
                       const SizedBox(width: 20),
@@ -106,13 +101,6 @@ class _CdlTeamsManagementState extends State<CdlTeamsManagement> {
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: goldColor,
-        elevation: 10,
-        onPressed: () => _showAddTeamDialog(),
-        icon: const Icon(Icons.add, color: Colors.black),
-        label: const Text('ADD NEW TEAM', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 12)),
       ),
     );
   }

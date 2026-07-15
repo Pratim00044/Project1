@@ -110,7 +110,6 @@ class RankingSection extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => TeammateProfile(
                 playerName: name,
-                playerPosition: 'Player',
                 playerNumber: rank.toString(),
               ),
             ),

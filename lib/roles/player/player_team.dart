@@ -91,13 +91,13 @@ class MyTeamsPage extends StatelessWidget {
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   final teammates = [
-                    {'name': 'E. Martinez', 'pos': 'Goalkeeper', 'no': '1', 'shooting': '15', 'passing': '82', 'dribbling': '45', 'defending': '90', 'physical': '95', 'saving': '98', 'speed': '65', 'stamina': '88'},
-                    {'name': 'Ruben Dias', 'pos': 'Defender', 'no': '5', 'shooting': '40', 'passing': '75', 'dribbling': '55', 'defending': '95', 'physical': '98', 'saving': '10', 'speed': '72', 'stamina': '92'},
-                    {'name': 'Lionel Messi', 'pos': 'Forward', 'no': '10', 'shooting': '98', 'passing': '88', 'dribbling': '92', 'defending': '45', 'physical': '85', 'saving': '10', 'speed': '88', 'stamina': '94'},
-                    {'name': 'K. Mbappe', 'pos': 'Winger', 'no': '7', 'shooting': '85', 'passing': '80', 'dribbling': '96', 'defending': '40', 'physical': '78', 'saving': '10', 'speed': '95', 'stamina': '90'},
-                    {'name': 'J. Bellingham', 'pos': 'Midfielder', 'no': '10', 'shooting': '82', 'passing': '95', 'dribbling': '94', 'defending': '65', 'physical': '75', 'saving': '10', 'speed': '82', 'stamina': '88'},
-                    {'name': 'Kevin De Bruyne', 'pos': 'Midfielder', 'no': '17', 'shooting': '78', 'passing': '92', 'dribbling': '85', 'defending': '75', 'physical': '82', 'saving': '10', 'speed': '80', 'stamina': '95'},
-                    {'name': 'T. Hernandez', 'pos': 'Defender', 'no': '3', 'shooting': '45', 'passing': '78', 'dribbling': '65', 'defending': '88', 'physical': '90', 'saving': '10', 'speed': '78', 'stamina': '92'},
+                    {'name': 'E. Martinez', 'no': '1', 'shooting': '15', 'passing': '82', 'dribbling': '45', 'defending': '90', 'physical': '95', 'saving': '98', 'speed': '65', 'stamina': '88'},
+                    {'name': 'Ruben Dias', 'no': '5', 'shooting': '40', 'passing': '75', 'dribbling': '55', 'defending': '95', 'physical': '98', 'saving': '10', 'speed': '72', 'stamina': '92'},
+                    {'name': 'Lionel Messi', 'no': '10', 'shooting': '98', 'passing': '88', 'dribbling': '92', 'defending': '45', 'physical': '85', 'saving': '10', 'speed': '88', 'stamina': '94'},
+                    {'name': 'K. Mbappe', 'no': '7', 'shooting': '85', 'passing': '80', 'dribbling': '96', 'defending': '40', 'physical': '78', 'saving': '10', 'speed': '95', 'stamina': '90'},
+                    {'name': 'J. Bellingham', 'no': '10', 'shooting': '82', 'passing': '95', 'dribbling': '94', 'defending': '65', 'physical': '75', 'saving': '10', 'speed': '82', 'stamina': '88'},
+                    {'name': 'Kevin De Bruyne', 'no': '17', 'shooting': '78', 'passing': '92', 'dribbling': '85', 'defending': '75', 'physical': '82', 'saving': '10', 'speed': '80', 'stamina': '95'},
+                    {'name': 'T. Hernandez', 'no': '3', 'shooting': '45', 'passing': '78', 'dribbling': '65', 'defending': '88', 'physical': '90', 'saving': '10', 'speed': '78', 'stamina': '92'},
                   ];
                   final member = teammates[index];
                   bool isMe = member['name'] == 'Lionel Messi';
@@ -116,7 +116,6 @@ class MyTeamsPage extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) => TeammateProfile(
                               playerName: member['name'],
-                              playerPosition: member['pos'],
                               playerNumber: member['no'],
                               playerStats: member,
                             ),
@@ -172,22 +171,6 @@ class MyTeamsPage extends StatelessWidget {
                                   const SizedBox(height: 4),
                                   Row(
                                     children: [
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                        decoration: BoxDecoration(
-                                          color: Colors.black26,
-                                          borderRadius: BorderRadius.circular(6),
-                                        ),
-                                        child: Text(
-                                          member['pos']!.toUpperCase(), 
-                                          style: const TextStyle(
-                                            color: Colors.white, 
-                                            fontSize: 9,
-                                            fontWeight: FontWeight.w900
-                                          )
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
                                       Text(
                                         "#${member['no']!}", 
                                         style: const TextStyle(

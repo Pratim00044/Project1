@@ -18,11 +18,12 @@ class ProgressPage extends StatelessWidget {
       {'label': 'YEARLY', 'value': '151', 'desc': 'Total matches this year'},
     ];
 
-    final List<String> tileImages = [
-      'assets/images/img1.jpeg',
-      'assets/images/img2.jpeg',
-      'assets/images/img3.jpeg',
-      'assets/images/img4.jpeg',
+    final List<Color> accentColors = [
+      const Color(0xFF007CFE),
+      const Color(0xFF38EF7D),
+      const Color(0xFFFFB75E),
+      const Color(0xFFEE0979),
+      const Color(0xFF8E2DE2),
     ];
 
     return Scaffold(
@@ -48,16 +49,16 @@ class ProgressPage extends StatelessWidget {
         itemBuilder: (context, index) {
           final data = progressData[index];
           final bool isEven = index % 2 == 0;
-          String currentImage = tileImages[index % tileImages.length];
+          final accentColor = accentColors[index % accentColors.length];
 
           Widget iconWidget = Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: goldColor.withValues(alpha: 0.1),
+              color: accentColor.withValues(alpha: 0.1),
               shape: BoxShape.circle,
-              border: Border.all(color: goldColor.withValues(alpha: 0.3)),
+              border: Border.all(color: accentColor.withValues(alpha: 0.3)),
             ),
-            child: const Icon(Icons.show_chart_rounded, color: goldColor, size: 24),
+            child: Icon(Icons.show_chart_rounded, color: accentColor, size: 24),
           );
 
           Widget contentWidget = Expanded(
@@ -65,12 +66,12 @@ class ProgressPage extends StatelessWidget {
               crossAxisAlignment: isEven ? CrossAxisAlignment.start : CrossAxisAlignment.end,
               children: [
                 Text(data['label']!,
-                    style: const TextStyle(
-                        color: goldColor,
+                    style: TextStyle(
+                        color: accentColor,
                         fontSize: 11,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1.5,
-                        shadows: [Shadow(color: Colors.black, blurRadius: 4)])),
+                        shadows: const [Shadow(color: Colors.black, blurRadius: 4)])),
                 const SizedBox(height: 4),
                 Text(data['value']!,
                     style: const TextStyle(
@@ -89,21 +90,34 @@ class ProgressPage extends StatelessWidget {
                 Text(data['desc']!,
                     textAlign: isEven ? TextAlign.left : TextAlign.right,
                     style: const TextStyle(
-                        color: Colors.white70,
+                        color: Colors.white,
                         fontSize: 12,
+                        fontWeight: FontWeight.w500,
                         shadows: [Shadow(color: Colors.black, blurRadius: 4)])),
               ],
             ),
           );
 
           return Container(
-            margin: const EdgeInsets.only(bottom: 15),
+            margin: const EdgeInsets.only(bottom: 20),
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: surfaceColor,
-              borderRadius: BorderRadius.circular(25),
+              gradient: LinearGradient(
+                colors: [
+                  accentColor.withValues(alpha: 0.15),
+                  surfaceColor,
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(28),
+              border: Border.all(color: accentColor.withValues(alpha: 0.2), width: 1),
               boxShadow: [
-                BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 4))
+                BoxShadow(
+                  color: accentColor.withValues(alpha: 0.1),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                )
               ],
             ),
             child: Row(

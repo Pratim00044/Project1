@@ -13,11 +13,11 @@ class PlayerProfilesManagement extends StatefulWidget {
 
 class _PlayerProfilesManagementState extends State<PlayerProfilesManagement> {
   final List<Map<String, String>> _players = [
-    {'name': 'Lionel Messi', 'team': 'Core FC', 'pos': 'FORWARD', 'no': '10'},
-    {'name': 'Ryan Cooper', 'team': 'Street League FC', 'pos': 'FORWARD', 'no': '09'},
-    {'name': 'Kevin De Bruyne', 'team': 'National Gulf FC', 'pos': 'MIDFIELDER', 'no': '08'},
-    {'name': 'Carlos Silva', 'team': 'National Paints FC', 'pos': 'DEFENDER', 'no': '04'},
-    {'name': 'Cristiano Ronaldo', 'team': 'Core FC', 'pos': 'FORWARD', 'no': '07'},
+    {'name': 'Lionel Messi', 'team': 'Core FC', 'no': '10'},
+    {'name': 'Ryan Cooper', 'team': 'Street League FC', 'no': '09'},
+    {'name': 'Kevin De Bruyne', 'team': 'National Gulf FC', 'no': '08'},
+    {'name': 'Carlos Silva', 'team': 'National Paints FC', 'no': '04'},
+    {'name': 'Cristiano Ronaldo', 'team': 'Core FC', 'no': '07'},
   ];
 
   @override
@@ -57,7 +57,6 @@ class _PlayerProfilesManagementState extends State<PlayerProfilesManagement> {
                       MaterialPageRoute(
                         builder: (context) => PlayerProfile(
                           playerName: player['name'],
-                          playerPosition: player['pos'],
                           playerNumber: player['no'],
                           isReadOnly: true,
                         ),
@@ -113,7 +112,7 @@ class _PlayerProfilesManagementState extends State<PlayerProfilesManagement> {
                                   const SizedBox(width: 8),
                                   const Icon(Icons.circle, size: 4, color: Colors.white24),
                                   const SizedBox(width: 8),
-                                  Text(player['pos']!, 
+                                  Text('#${player['no']!}',
                                     style: const TextStyle(
                                       color: Colors.white60, 
                                       fontSize: 10

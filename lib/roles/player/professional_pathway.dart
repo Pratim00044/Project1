@@ -13,117 +13,117 @@ class ProfessionalPathwayPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: const EdgeInsets.all(25),
-            decoration: BoxDecoration(
-              color: surfaceColor,
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF007CFE).withValues(alpha: 0.2),
-                  blurRadius: 15,
-                  offset: const Offset(0, 8),
-                )
-              ],
-            ),
-            child: Column(
-              children: [
-                const Icon(Icons.stars_rounded, color: goldColor, size: 48),
-                const SizedBox(height: 15),
-                const Text('PROFESSIONAL PATHWAY',
-                    style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 1)),
-                const SizedBox(height: 10),
-                const Text('Step into the professional world. Get scouted by top clubs like Core FC, Dubai Lions FC, and Eagle FC.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 12, height: 1.5)),
-                const SizedBox(height: 25),
-                ElevatedButton(
-                  onPressed: () => _showRegistrationDialog(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: goldColor,
-                    minimumSize: const Size(double.infinity, 55),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            Container(
+              padding: const EdgeInsets.all(25),
+              decoration: BoxDecoration(
+                color: surfaceColor,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF007CFE).withValues(alpha: 0.2),
+                    blurRadius: 15,
+                    offset: const Offset(0, 8),
+                  )
+                ],
+              ),
+              child: Column(
+                children: [
+                  const Icon(Icons.stars_rounded, color: goldColor, size: 48),
+                  const SizedBox(height: 15),
+                  const Text('PROFESSIONAL PATHWAY',
+                      style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                  const SizedBox(height: 10),
+                  const Text('Step into the professional world. Get scouted by top clubs like Core FC, Dubai Lions FC, and Eagle FC.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white70, fontSize: 12, height: 1.5)),
+                  const SizedBox(height: 25),
+                  ElevatedButton(
+                    onPressed: () => _showRegistrationDialog(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: goldColor,
+                      minimumSize: const Size(double.infinity, 55),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                    ),
+                    child: const Text('JOIN AS TRIALIST',
+                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 14)),
                   ),
-                  child: const Text('JOIN AS TRIALIST',
-                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 14)),
-                ),
-                const SizedBox(height: 12),
-                const Text('Next Trials: July 15th - Zayed Sports City',
-                    style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
-              ],
+                  const SizedBox(height: 12),
+                  const Text('Next Trials: July 15th - Zayed Sports City',
+                      style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
+                ],
+              ),
             ),
-          ),
-          
-          const SizedBox(height: 35),
-          const Text('UPCOMING OPPORTUNITIES', 
-              style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
-          const SizedBox(height: 15),
-          
-          _buildActionCard(
-            context,
-            Icons.explore,
-            'DUBAI CITY FC TRIALS',
-            'Open trials for U23 squad. Registration closing on July 10th.',
-            [const Color(0xFF38EF7D), const Color(0xFF11998E)],
-            () {},
-          ),
-          const SizedBox(height: 15),
-          _buildActionCard(
-            context,
-            Icons.explore,
-            'SHARJAH ELITE ACADEMY',
-            'Scouting event for defensive midfielders. Minimum age 16.',
-            [const Color(0xFFEE0979), const Color(0xFFF12711)],
-            () {},
-          ),
-          const SizedBox(height: 35),
-          const Text('FOR POTENTIAL PROS', 
-              style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
-          const SizedBox(height: 15),
-          
-          _buildActionCard(
-            context,
-            Icons.description_outlined,
-            'CREATE DIGITAL CV',
-            'Upload your technical data, match highlights, and career history for club managers.',
-            [const Color(0xFFFFB75E), const Color(0xFFED8F03)],
-            () {},
-          ),
-          const SizedBox(height: 15),
-          _buildActionCard(
-            context,
-            Icons.visibility_outlined,
-            'CLUB VISIBILITY',
-            'Top clubs like Core FC pay to access trialist data. Get your profile in front of decision makers.',
-            [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)],
-            () {},
-          ),
-          
-          const SizedBox(height: 40),
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: surfaceColor,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+            
+            const SizedBox(height: 35),
+            const Text('UPCOMING OPPORTUNITIES', 
+                style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
+            const SizedBox(height: 15),
+            
+            _buildActionCard(
+              context,
+              Icons.explore,
+              'DUBAI CITY FC TRIALS',
+              'Open trials for U23 squad. Registration closing on July 10th.',
+              [const Color(0xFF38EF7D), const Color(0xFF11998E)],
+              () {},
             ),
-            child: const Row(
-              children: [
-                Icon(Icons.info_outline, color: goldColor, size: 20),
-                const SizedBox(width: 15),
-                Expanded(
-                  child: Text(
-                    'Note: A finders fee applies upon successful club placement.',
-                    style: TextStyle(color: Colors.white54, fontSize: 11, height: 1.4),
+            const SizedBox(height: 15),
+            _buildActionCard(
+              context,
+              Icons.explore,
+              'SHARJAH ELITE ACADEMY',
+              'Scouting event for defensive midfielders. Minimum age 16.',
+              [const Color(0xFFEE0979), const Color(0xFFF12711)],
+              () {},
+            ),
+            const SizedBox(height: 35),
+            const Text('FOR POTENTIAL PROS', 
+                style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
+            const SizedBox(height: 15),
+            
+            _buildActionCard(
+              context,
+              Icons.description_outlined,
+              'CREATE DIGITAL CV',
+              'Upload your technical data, match highlights, and career history for club managers.',
+              [const Color(0xFFFFB75E), const Color(0xFFED8F03)],
+              () {},
+            ),
+            const SizedBox(height: 15),
+            _buildActionCard(
+              context,
+              Icons.visibility_outlined,
+              'CLUB VISIBILITY',
+              'Top clubs like Core FC pay to access trialist data. Get your profile in front of decision makers.',
+              [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)],
+              () {},
+            ),
+            
+            const SizedBox(height: 40),
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: surfaceColor,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.info_outline, color: goldColor, size: 20),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: Text(
+                      'Note: A finders fee applies upon successful club placement.',
+                      style: TextStyle(color: Colors.white54, fontSize: 11, height: 1.4),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 50),
-        ],
-      ),
-    );
+            const SizedBox(height: 50),
+          ],
+        ),
+      );
   }
 
   Widget _buildActionCard(BuildContext context, IconData icon, String title, String desc, List<Color> colors, VoidCallback onTap) {

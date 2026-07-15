@@ -7,14 +7,14 @@ const Color greenAccent = Color(0xFF2ECC71);
 
 class PlayerPerformanceDetail extends StatelessWidget {
   final String name;
-  final String pos;
+  final String? pos;
   final double rating;
   final bool isReadOnly;
 
   const PlayerPerformanceDetail({
     super.key,
     required this.name,
-    required this.pos,
+    this.pos,
     required this.rating,
     this.isReadOnly = true,
   });
@@ -46,7 +46,7 @@ class PlayerPerformanceDetail extends StatelessWidget {
                 CircleAvatar(
                   radius: 35,
                   backgroundColor: goldColor.withValues(alpha: 0.1),
-                  child: Text(name.split(' ').map((e) => e[0]).join(), style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 24)),
+                  backgroundImage: const AssetImage('assets/images/sunil.png'),
                 ),
                 const SizedBox(width: 20),
                 Expanded(
@@ -54,7 +54,7 @@ class PlayerPerformanceDetail extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(name, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
-                      Text('$pos • Core FC', style: const TextStyle(color: Colors.white38, fontSize: 13, fontWeight: FontWeight.bold)),
+                      Text(pos != null ? '$pos • Core FC' : 'Core FC', style: const TextStyle(color: Colors.white38, fontSize: 13, fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),
