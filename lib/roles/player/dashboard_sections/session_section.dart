@@ -85,13 +85,13 @@ class _SessionSectionState extends State<SessionSection> {
   Widget _buildSessionCard(int index, String title, String time, String location, IconData icon, Map<String, dynamic> data, {bool completed = false}) {
     bool isConfirmed = _confirmedSessions.contains(title);
     
-    final List<String> tileImages = [
-      'assets/images/img1.jpeg',
-      'assets/images/img2.jpeg',
-      'assets/images/img3.jpeg',
-      'assets/images/img4.jpeg',
+    final List<Color> accentColors = [
+      const Color(0xFF007CFE),
+      const Color(0xFF38EF7D),
+      const Color(0xFFFFB75E),
+      const Color(0xFFEE0979),
     ];
-    String currentImage = tileImages[index % tileImages.length];
+    final Color accentColor = completed ? Colors.green : accentColors[index % accentColors.length];
 
     return GestureDetector(
       onTap: () => setState(() => _selectedSession = {
@@ -106,34 +106,32 @@ class _SessionSectionState extends State<SessionSection> {
         decoration: BoxDecoration(
           color: surfaceColor,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: isConfirmed ? goldColor.withValues(alpha: 0.3) : Colors.white.withValues(alpha: 0.05)),
-          image: DecorationImage(
-            image: AssetImage(tileImages[index % tileImages.length]),
-            fit: BoxFit.cover,
+          border: Border.all(color: isConfirmed || completed ? accentColor.withValues(alpha: 0.3) : Colors.white.withValues(alpha: 0.05), width: 1.5),
+          gradient: LinearGradient(
+            colors: [accentColor.withValues(alpha: 0.1), Colors.transparent],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: accentColor.withValues(alpha: 0.05),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            )
+          ],
         ),
         child: Container(
-          padding: const EdgeInsets.all(18),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [
-                Colors.black.withValues(alpha: 0.2),
-                Colors.black.withValues(alpha: 0.1),
-              ],
-            ),
-          ),
+          padding: const EdgeInsets.all(22),
           child: Row(
             children: [
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: completed ? Colors.green.withValues(alpha: 0.1) : (isConfirmed ? goldColor.withValues(alpha: 0.2) : goldColor.withValues(alpha: 0.1)),
+                  color: accentColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: accentColor.withValues(alpha: 0.2)),
                 ),
-                child: Icon(icon, color: completed ? Colors.green : goldColor, size: 22),
+                child: Icon(icon, color: accentColor, size: 22),
               ),
               const SizedBox(width: 18),
               Expanded(
@@ -151,21 +149,21 @@ class _SessionSectionState extends State<SessionSection> {
                           const SizedBox(width: 8),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                            decoration: BoxDecoration(color: goldColor.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(4)),
-                            child: const Text('CONFIRMED', style: TextStyle(color: goldColor, fontSize: 8, fontWeight: FontWeight.bold)),
+                            decoration: BoxDecoration(color: accentColor.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(4)),
+                            child: Text('CONFIRMED', style: TextStyle(color: accentColor, fontSize: 8, fontWeight: FontWeight.bold)),
                           ),
                         ],
                       ],
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 6),
                     Text('$time • $location',
                         style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.7), fontSize: 11)),
+                            color: Colors.white.withValues(alpha: 0.6), fontSize: 11, fontWeight: FontWeight.w500)),
                   ],
                 ),
               ),
               Icon(completed || isConfirmed ? Icons.verified : Icons.arrow_forward_ios,
-                  color: completed ? Colors.green.withValues(alpha: 0.5) : (isConfirmed ? goldColor : Colors.white.withValues(alpha: 0.3)),
+                  color: accentColor.withValues(alpha: 0.5),
                   size: 14),
             ],
           ),

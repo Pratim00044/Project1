@@ -26,15 +26,6 @@ class _PlayerProgressDashboardState extends State<PlayerProgressDashboard> with 
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: darkBg,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white70),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text('Player progress', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900)),
-      ),
       body: Column(
         children: [
           Padding(

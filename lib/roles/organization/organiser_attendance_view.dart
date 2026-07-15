@@ -4,7 +4,7 @@ import 'pitch_rating_view.dart';
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
 const Color surfaceColor = Color(0xFF121212);
-const Color greenAccent = Color(0xFF2ECC71);
+const Color greenAccent = Color(0xFF2ECC36);
 
 class OrganiserAttendanceView extends StatefulWidget {
   final String title;

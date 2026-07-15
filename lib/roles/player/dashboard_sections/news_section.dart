@@ -48,27 +48,26 @@ class _NewsSectionState extends State<NewsSection> {
 
   List<Widget> _buildNewsList() {
     return [
-      _buildNewsCard('MATCH PREVIEW: CORE FC VS DUBAI CITY', 'Jan 30, 2024 • 5 min read', 'assets/images/league_green.png'),
-      _buildNewsCard('MESSI HITS 90 GOAL MARK', 'Jan 28, 2024 • 3 min read', 'assets/images/league_gold.png'),
-      _buildNewsCard('NEW TRAINING FACILITY OPENED', 'Jan 25, 2024 • 4 min read', 'assets/images/league_blue.png'),
+      _buildNewsCard('MATCH PREVIEW: CORE FC VS DUBAI CITY', 'Jan 30, 2024 • 5 min read', const Color(0xFF38EF7D)),
+      _buildNewsCard('MESSI HITS 90 GOAL MARK', 'Jan 28, 2024 • 3 min read', const Color(0xFFFFB75E)),
+      _buildNewsCard('NEW TRAINING FACILITY OPENED', 'Jan 25, 2024 • 4 min read', const Color(0xFF007CFE)),
     ];
   }
 
-  Widget _buildNewsCard(String title, String meta, String bgImage) {
+  Widget _buildNewsCard(String title, String meta, Color accentColor) {
     return GestureDetector(
       onTap: () {
         setState(() {
           _selectedNews = {
             'title': title,
             'meta': meta,
-            'image': bgImage,
+            'color': accentColor,
             'content': [
               {
                 'type': 'text',
                 'data':
                     'The club has officially announced the opening of its latest training facility. This world-class center features state-of-the-art equipment, multiple indoor pitches, and specialized recovery zones for players.'
               },
-              {'type': 'image', 'data': bgImage},
               {
                 'type': 'text',
                 'data':
@@ -84,60 +83,59 @@ class _NewsSectionState extends State<NewsSection> {
           decoration: BoxDecoration(
             color: surfaceColor,
             borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+            border: Border.all(color: accentColor.withValues(alpha: 0.2), width: 1.5),
+            gradient: LinearGradient(
+              colors: [accentColor.withValues(alpha: 0.15), Colors.transparent],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: accentColor.withValues(alpha: 0.05),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
+              )
+            ],
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(30),
-            child: Stack(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Image.asset(
-                  bgImage,
-                  height: double.infinity,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: goldColor,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Text('LATEST',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 9,
-                                fontWeight: FontWeight.w900,
-                                letterSpacing: 1)),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(title,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w900,
-                              height: 1.2)),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          const Icon(Icons.access_time, color: Colors.white38, size: 14),
-                          const SizedBox(width: 6),
-                          Text(meta,
-                              style: const TextStyle(
-                                  color: Colors.white38,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.bold)),
-                          const Spacer(),
-                          const Icon(Icons.arrow_forward, color: goldColor, size: 18),
-                        ],
-                      ),
-                    ],
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: accentColor,
+                    borderRadius: BorderRadius.circular(8),
                   ),
+                  child: const Text('LATEST',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 9,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1)),
+                ),
+                const SizedBox(height: 12),
+                Text(title,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                        height: 1.2)),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    const Icon(Icons.access_time, color: Colors.white38, size: 14),
+                    const SizedBox(width: 6),
+                    Text(meta,
+                        style: const TextStyle(
+                            color: Colors.white38,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold)),
+                    const Spacer(),
+                    Icon(Icons.arrow_forward, color: accentColor, size: 18),
+                  ],
                 ),
               ],
             ),

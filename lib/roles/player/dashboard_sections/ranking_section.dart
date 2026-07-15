@@ -53,46 +53,53 @@ class RankingSection extends StatelessWidget {
   }
 
   Widget _buildRankingColoredCard(int index, String label, String value, String sub, IconData icon, List<Color> colors) {
+    final Color accentColor = colors[0];
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        image: DecorationImage(
-          image: AssetImage('assets/images/img${(index % 4) + 1}.jpeg'),
-          fit: BoxFit.cover,
+        color: surfaceColor,
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(color: accentColor.withValues(alpha: 0.2), width: 1.5),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            accentColor.withValues(alpha: 0.15),
+            Colors.transparent,
+          ],
         ),
+        boxShadow: [
+          BoxShadow(
+            color: accentColor.withValues(alpha: 0.05),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          )
+        ],
       ),
       child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Colors.black.withValues(alpha: 0.2),
-              Colors.black.withValues(alpha: 0.1),
-            ],
-          ),
-        ),
+        padding: const EdgeInsets.all(24),
         child: Row(
           children: [
             Container(
               padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), shape: BoxShape.circle),
-              child: Icon(icon, color: Colors.white, size: 24),
+              decoration: BoxDecoration(
+                color: accentColor.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+                border: Border.all(color: accentColor.withValues(alpha: 0.2)),
+              ),
+              child: Icon(icon, color: accentColor, size: 24),
             ),
             const SizedBox(width: 20),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(label, style: const TextStyle(color: Colors.white70, fontSize: 11)),
-                  const SizedBox(height: 4),
-                  Text(value, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 24)),
+                  Text(label, style: TextStyle(color: accentColor.withValues(alpha: 0.7), fontSize: 11, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 6),
+                  Text(value, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 32)),
                 ],
               ),
             ),
-            Text(sub, style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold)),
+            Text(sub, style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 10, fontWeight: FontWeight.bold)),
           ],
         ),
       ),

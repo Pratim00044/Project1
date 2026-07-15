@@ -128,11 +128,23 @@ class OrganisationHomeState extends State<OrganisationHome> {
     const String title = 'FOOTLAB DXB';
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
+      padding: const EdgeInsets.fromLTRB(10, 15, 20, 10),
       child: Row(
         children: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              if (_selectedIndex == 0) {
+                Navigator.pushReplacementNamed(context, '/login');
+              } else {
+                setState(() {
+                  _selectedIndex = 0;
+                });
+              }
+            },
+          ),
           Image.asset('assets/images/footlab.png', height: 65, fit: BoxFit.contain),
-          const SizedBox(width: 20),
+          const SizedBox(width: 15),
           const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,7 +162,6 @@ class OrganisationHomeState extends State<OrganisationHome> {
               ],
             ),
           ),
-          const Spacer(),
           Builder(
             builder: (context) => IconButton(
               icon: const Icon(Icons.menu, color: goldColor),

@@ -215,11 +215,23 @@ class PlayerHomeState extends State<PlayerHome> {
     const String title = 'PLAYER DASHBOARD';
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
+      padding: const EdgeInsets.fromLTRB(10, 15, 20, 10),
       child: Row(
         children: [
+          IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              if (_selectedIndex == 0) {
+                Navigator.pushReplacementNamed(context, '/login');
+              } else {
+                setState(() {
+                  _selectedIndex = 0;
+                });
+              }
+            },
+          ),
           Image.asset('assets/logo.png', height: 65, fit: BoxFit.contain),
-          const SizedBox(width: 20),
+          const SizedBox(width: 15),
           const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

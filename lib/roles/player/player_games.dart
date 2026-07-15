@@ -799,9 +799,11 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
             borderRadius: BorderRadius.circular(30),
             child: Stack(
               children: [
-                CustomPaint(
-                  size: const Size(double.infinity, 1000),
-                  painter: GoogleStylePitchPainter(),
+                Positioned.fill(
+                  child: Image.asset(
+                    'assets/images/ground.png',
+                    fit: BoxFit.fill,
+                  ),
                 ),
                 _buildFormationPlayers(),
               ],
@@ -879,44 +881,3 @@ class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with Sin
   }
 }
 
-class GoogleStylePitchPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Paint linePaint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.4)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
-
-    final Paint pitchPaint = Paint()..color = const Color(0xFF121212);
-
-    canvas.drawRRect(
-        RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, size.width, size.height), const Radius.circular(30)),
-        pitchPaint);
-
-    final Paint grassPaint = Paint()..color = Colors.white.withValues(alpha: 0.02);
-    int stripes = 12;
-    for (int i = 0; i < stripes; i++) {
-      if (i % 2 == 0) {
-        canvas.drawRect(Rect.fromLTWH(0, (size.height / stripes) * i, size.width, size.height / stripes), grassPaint);
-      }
-    }
-
-    canvas.drawRect(Rect.fromLTWH(10, 10, size.width - 20, size.height - 20), linePaint);
-    canvas.drawLine(Offset(10, size.height / 2), Offset(size.width - 10, size.height / 2), linePaint);
-    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 50, linePaint);
-    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 3, linePaint..style = PaintingStyle.fill);
-    linePaint.style = PaintingStyle.stroke;
-
-    double boxWidth = size.width * 0.65;
-    double boxHeight = size.height * 0.14;
-    
-    canvas.drawRect(Rect.fromLTWH((size.width - boxWidth) / 2, 10, boxWidth, boxHeight), linePaint);
-    canvas.drawRect(Rect.fromLTWH(size.width * 0.35, 10, size.width * 0.3, boxHeight * 0.3), linePaint);
-
-    canvas.drawRect(Rect.fromLTWH((size.width - boxWidth) / 2, size.height - boxHeight - 10, boxWidth, boxHeight), linePaint);
-    canvas.drawRect(Rect.fromLTWH(size.width * 0.35, size.height - (boxHeight * 0.3) - 10, size.width * 0.3, boxHeight * 0.3), linePaint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
-}

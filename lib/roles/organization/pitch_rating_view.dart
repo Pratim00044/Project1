@@ -86,15 +86,16 @@ class _PitchRatingViewState extends State<PitchRatingView> {
               margin: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
-                color: const Color(0xFF90EE90), // Light green ground color
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(30),
                 child: Stack(
                   children: [
-                    CustomPaint(
-                      size: Size.infinite,
-                      painter: PitchPainter(),
+                    Positioned.fill(
+                      child: Image.asset(
+                        'assets/images/ground.png',
+                        fit: BoxFit.fill,
+                      ),
                     ),
                     // Draw absent players first so they are in the background
                     ..._players.where((p) => p['absent']).map((p) => _buildPitchPlayer(p)),
@@ -216,10 +217,10 @@ class _PitchRatingViewState extends State<PitchRatingView> {
             ),
             const SizedBox(height: 6), // More space between circle and name
             Text(p['name'], style: TextStyle(
-              color: isAbsent ? Colors.black26 : Colors.black87, 
+              color: isAbsent ? Colors.white30 : Colors.white, 
               fontSize: 10.5, 
               fontWeight: FontWeight.w900,
-              shadows: const [Shadow(color: Colors.white24, blurRadius: 2, offset: Offset(0, 1))]
+              shadows: const [Shadow(color: Colors.black, blurRadius: 4, offset: Offset(0, 1))]
             )),
           ],
         ),
@@ -432,37 +433,3 @@ class _RatingSheetState extends State<_RatingSheet> {
   }
 }
 
-class PitchPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..color = Colors.black.withValues(alpha: 0.15) // Darker lines for light ground
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.2;
-
-    // Outer boundary
-    canvas.drawRect(Rect.fromLTWH(10, 10, size.width - 20, size.height - 20), paint);
-    
-    // Halfway line
-    canvas.drawLine(Offset(10, size.height / 2), Offset(size.width - 10, size.height / 2), paint);
-    
-    // Center circle
-    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 50, paint);
-    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 2, paint); // Center spot
-    
-    // Penalty boxes (top and bottom)
-    double boxWidth = size.width * 0.6;
-    double boxHeight = 70;
-    canvas.drawRect(Rect.fromLTWH((size.width - boxWidth) / 2, 10, boxWidth, boxHeight), paint);
-    canvas.drawRect(Rect.fromLTWH((size.width - boxWidth) / 2, size.height - 10 - boxHeight, boxWidth, boxHeight), paint);
-    
-    // Goal areas
-    double goalWidth = size.width * 0.3;
-    double goalHeight = 25;
-    canvas.drawRect(Rect.fromLTWH((size.width - goalWidth) / 2, 10, goalWidth, goalHeight), paint);
-    canvas.drawRect(Rect.fromLTWH((size.width - goalWidth) / 2, size.height - 10 - goalHeight, goalWidth, goalHeight), paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
