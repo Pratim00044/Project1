@@ -16,9 +16,9 @@ class CdlFixtureMaker extends StatelessWidget {
           const Text('GENERATED SCHEDULE', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 0.5)),
           const Text('Manage and fix upcoming league matches', style: TextStyle(color: Colors.white38, fontSize: 12)),
           const SizedBox(height: 25),
-          _buildFixtureCard('Core FC', 'Dubai Lions', 'Sat, 12 Jul', '07:00 PM', 'Zayed Sports City', [const Color(0xFF007CFE), const Color(0xFF004A99)]),
-          _buildFixtureCard('Eagle FC', 'Turan Dubai', 'Sat, 12 Jul', '09:00 PM', 'Dubai Sports World', [const Color(0xFF38EF7D), const Color(0xFF11998E)]),
-          _buildFixtureCard('United FC', 'Emirates Club', 'Sun, 13 Jul', '06:00 PM', 'Al Barsha Pitch', [const Color(0xFFEE0979), const Color(0xFFF12711)]),
+          _buildFixtureCard('Core FC', 'Dubai Lions', 'Sat, 12 Jul', '07:00 PM', 'Zayed Sports City', [const Color(0xFF1E3A8A), const Color(0xFF312E81)]),
+          _buildFixtureCard('Eagle FC', 'Turan Dubai', 'Sat, 12 Jul', '09:00 PM', 'Dubai Sports World', [const Color(0xFF2E5B4F), const Color(0xFF3B2A50)]),
+          _buildFixtureCard('United FC', 'Emirates Club', 'Sun, 13 Jul', '06:00 PM', 'Al Barsha Pitch', [const Color(0xFF831843), const Color(0xFF701A75)]),
           const SizedBox(height: 40),
           _buildActionButton(
             label: 'AUTO FIX',
@@ -57,8 +57,15 @@ class CdlFixtureMaker extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-        color: colors[0],
+        gradient: LinearGradient(
+          colors: colors,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(25),
+        boxShadow: [
+          BoxShadow(color: colors[0].withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 5)),
+        ],
       ),
       child: Column(
         children: [

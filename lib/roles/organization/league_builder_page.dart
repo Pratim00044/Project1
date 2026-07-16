@@ -103,11 +103,22 @@ class _LeagueBuilderPageState extends State<LeagueBuilderPage> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: _teams.length,
                     itemBuilder: (context, index) {
+                      final List<List<Color>> itemGradients = [
+                        [const Color(0xFF2E5B4F), const Color(0xFF3B2A50)],
+                        [const Color(0xFF1E3A8A), const Color(0xFF312E81)],
+                        [const Color(0xFF334155), const Color(0xFF1E293B)],
+                      ];
+                      final List<Color> currentGradient = itemGradients[index % itemGradients.length];
+
                       return Container(
                         margin: const EdgeInsets.only(bottom: 12),
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: surfaceColor,
+                          gradient: LinearGradient(
+                            colors: currentGradient,
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(color: Colors.white.withOpacity(0.02)),
                         ),
@@ -116,13 +127,13 @@ class _LeagueBuilderPageState extends State<LeagueBuilderPage> {
                             CircleAvatar(
                               radius: 18,
                               backgroundColor: Colors.white10,
-                              child: Text(_teams[index]['logo']!, style: const TextStyle(color: goldColor, fontSize: 12, fontWeight: FontWeight.bold)),
+                              child: Text(_teams[index]['logo']!, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
                             ),
                             const SizedBox(width: 15),
                             Text(_teams[index]['name']!, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                             const Spacer(),
                             IconButton(
-                              icon: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 18),
+                              icon: const Icon(Icons.delete_outline, color: Colors.white70, size: 18),
                               onPressed: () => setState(() => _teams.removeAt(index)),
                             ),
                           ],

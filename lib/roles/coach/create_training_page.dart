@@ -149,19 +149,32 @@ class _CreateTrainingPageState extends State<CreateTrainingPage> {
                   const SizedBox(height: 35),
                   _inviteType == 'PLAYER' ? _buildPlayerSelection() : _buildTeamSelection(),
                   const SizedBox(height: 40),
-                  ElevatedButton(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Training session scheduled successfully!')));
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: goldColor,
-                      minimumSize: const Size(double.infinity, 60),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                      elevation: 10,
-                      shadowColor: goldColor.withOpacity(0.3),
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                      boxShadow: [
+                        BoxShadow(color: const Color(0xFF2E5B4F).withOpacity(0.3), blurRadius: 20, offset: const Offset(0, 10))
+                      ],
                     ),
-                    child: const Text('SCHEDULE SESSION', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16)),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Training session scheduled successfully!')));
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        minimumSize: const Size(double.infinity, 60),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                        elevation: 0,
+                      ),
+                      child: const Text('SCHEDULE SESSION', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                    ),
                   ),
                   const SizedBox(height: 50),
                 ],
@@ -184,14 +197,19 @@ class _CreateTrainingPageState extends State<CreateTrainingPage> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 25),
         decoration: BoxDecoration(
-          color: isSelected ? goldColor.withOpacity(0.1) : const Color(0xFF121212),
+          gradient: isSelected ? const LinearGradient(
+            colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ) : null,
+          color: isSelected ? null : const Color(0xFF121212),
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: isSelected ? goldColor : Colors.white.withOpacity(0.05)),
-          boxShadow: isSelected ? [BoxShadow(color: goldColor.withOpacity(0.05), blurRadius: 10)] : null,
+          border: Border.all(color: isSelected ? Colors.transparent : Colors.white.withOpacity(0.05)),
+          boxShadow: isSelected ? [BoxShadow(color: const Color(0xFF2E5B4F).withOpacity(0.2), blurRadius: 10)] : null,
         ),
         child: Column(
           children: [
-            Icon(icon, color: isSelected ? goldColor : Colors.white24, size: 32),
+            Icon(icon, color: isSelected ? Colors.white : Colors.white24, size: 32),
             const SizedBox(height: 12),
             Text(label, style: TextStyle(color: isSelected ? Colors.white : Colors.white24, fontSize: 12, fontWeight: FontWeight.bold)),
           ],
@@ -268,11 +286,16 @@ class _CreateTrainingPageState extends State<CreateTrainingPage> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 decoration: BoxDecoration(
-                  color: isSelected ? goldColor : const Color(0xFF121212),
+                  gradient: isSelected ? const LinearGradient(
+                    colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ) : null,
+                  color: isSelected ? null : const Color(0xFF121212),
                   borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: isSelected ? goldColor : Colors.white10),
+                  border: Border.all(color: isSelected ? Colors.transparent : Colors.white10),
                 ),
-                child: Text(team, style: TextStyle(color: isSelected ? Colors.black : Colors.white70, fontSize: 13, fontWeight: FontWeight.bold)),
+                child: Text(team, style: TextStyle(color: isSelected ? Colors.white : Colors.white70, fontSize: 13, fontWeight: FontWeight.bold)),
               ),
             );
           }).toList(),

@@ -26,7 +26,7 @@ class _CoachHomeState extends State<CoachHome> {
     const DashboardPage(),
     const SquadPage(),
     const GamesPage(),
-    const PlayerProgressDashboard(),
+    const PlayerProgressDashboard(showBackButton: false),
   ];
 
   void _onItemTapped(int index) {

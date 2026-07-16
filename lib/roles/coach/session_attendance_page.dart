@@ -86,6 +86,7 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
                   playerName: player['name'],
                   playerNumber: '10',
                   isReadOnly: true,
+                  showBackButton: true,
                 )));
               }),
             ],
@@ -157,7 +158,14 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
                   decoration: BoxDecoration(color: surfaceColor, borderRadius: BorderRadius.circular(15)),
                   child: Row(
                     children: [
-                      CircleAvatar(backgroundColor: Colors.white10, radius: 18, child: Text(_players[index]['name'].split(' ').map((e) => e[0]).join(), style: const TextStyle(color: Colors.white70, fontSize: 12))),
+                      CircleAvatar(
+                        backgroundColor: Colors.white10, 
+                        radius: 18, 
+                        backgroundImage: _players[index]['image'] != null ? AssetImage(_players[index]['image']) : null,
+                        child: _players[index]['image'] == null 
+                          ? Text(_players[index]['name'].split(' ').map((e) => e[0]).join(), style: const TextStyle(color: Colors.white70, fontSize: 12))
+                          : null,
+                      ),
                       const SizedBox(width: 15),
                       Expanded(
                         child: Column(
@@ -299,11 +307,11 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
-                _buildSummaryBox(presentCount.toString(), 'Present', greenAccent),
+                _buildSummaryBox(presentCount.toString(), 'Present', [const Color(0xFF064E3B), const Color(0xFF14532D)]),
                 const SizedBox(width: 12),
-                _buildSummaryBox(absentCount.toString(), 'Absent', Colors.redAccent),
+                _buildSummaryBox(absentCount.toString(), 'Absent', [const Color(0xFF7F1D1D), const Color(0xFF450A0A)]),
                 const SizedBox(width: 12),
-                _buildSummaryBox(unmarkedCount.toString(), 'Unmarked', goldColor),
+                _buildSummaryBox(unmarkedCount.toString(), 'Unmarked', [const Color(0xFF334155), const Color(0xFF1E293B)]),
               ],
             ),
           ),
@@ -333,25 +341,40 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
               itemBuilder: (context, index) {
                 final player = _players[index];
                 return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: ListTile(
-                    onTap: () => _showPlayerOptions(index),
-                    leading: CircleAvatar(
-                      backgroundColor: _getStatusColor(player['status']).withOpacity(0.1),
-                      child: Text(player['name'].split(' ').map((e) => e[0]).join(), style: TextStyle(color: _getStatusColor(player['status']), fontSize: 12, fontWeight: FontWeight.bold)),
+                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [surfaceColor, surfaceColor.withValues(alpha: 0.8)],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.03)),
                     ),
-                    title: Text(player['name'], style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
-                    subtitle: Text('Attended ${player['ratio']} sessions', style: const TextStyle(color: Colors.white38, fontSize: 11)),
-                    trailing: player['status'] == null
-                        ? Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              _buildActionButton('Present', greenAccent, () => setState(() => player['status'] = 'Present')),
-                              const SizedBox(width: 8),
-                              _buildActionButton('Absent', Colors.redAccent, () => _showAbsentConfirmation(index)),
-                            ],
-                          )
-                        : _buildStatusPill(player['status']),
+                    child: ListTile(
+                      onTap: () => _showPlayerOptions(index),
+                      leading: CircleAvatar(
+                        radius: 22,
+                        backgroundColor: _getStatusColor(player['status']).withOpacity(0.1),
+                        backgroundImage: player['image'] != null ? AssetImage(player['image']) : null,
+                        child: player['image'] == null 
+                          ? Text(player['name'].split(' ').map((e) => e[0]).join(), style: TextStyle(color: _getStatusColor(player['status']), fontSize: 12, fontWeight: FontWeight.bold))
+                          : null,
+                      ),
+                      title: Text(player['name'], style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                      subtitle: Text('Attended ${player['ratio']} sessions', style: const TextStyle(color: Colors.white38, fontSize: 11)),
+                      trailing: player['status'] == null
+                          ? Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _buildActionButton('Present', greenAccent, () => setState(() => player['status'] = 'Present')),
+                                const SizedBox(width: 8),
+                                _buildActionButton('Absent', Colors.redAccent, () => _showAbsentConfirmation(index)),
+                              ],
+                            )
+                          : _buildStatusPill(player['status']),
+                    ),
                   ),
                 );
               },
@@ -392,15 +415,22 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
     );
   }
 
-  Widget _buildSummaryBox(String val, String label, Color color) {
+  Widget _buildSummaryBox(String val, String label, List<Color> colors) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 15),
-        decoration: BoxDecoration(color: surfaceColor, borderRadius: BorderRadius.circular(15)),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: colors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(15),
+        ),
         child: Column(
           children: [
-            Text(val, style: TextStyle(color: color, fontSize: 20, fontWeight: FontWeight.w900)),
-            Text(label, style: const TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold)),
+            Text(val, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900)),
+            Text(label, style: const TextStyle(color: Colors.white70, fontSize: 10, fontWeight: FontWeight.bold)),
           ],
         ),
       ),

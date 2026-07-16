@@ -7,7 +7,8 @@ const Color surfaceColor = Color(0xFF121212);
 const Color greenAccent = Color(0xFF2ECC71);
 
 class PlayerProgressDashboard extends StatefulWidget {
-  const PlayerProgressDashboard({super.key});
+  final bool showBackButton;
+  const PlayerProgressDashboard({super.key, this.showBackButton = true});
 
   @override
   State<PlayerProgressDashboard> createState() => _PlayerProgressDashboardState();
@@ -26,6 +27,14 @@ class _PlayerProgressDashboardState extends State<PlayerProgressDashboard> with 
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: darkBg,
+      appBar: widget.showBackButton ? AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ) : null,
       body: Column(
         children: [
           Padding(
@@ -48,9 +57,9 @@ class _PlayerProgressDashboardState extends State<PlayerProgressDashboard> with 
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
-                _buildSummaryBox('5', 'Players rated', const Color(0xFF1E3A8A)),
+                _buildSummaryBox('5', 'Players rated', const [Color(0xFF1E3A8A), Color(0xFF312E81)]),
                 const SizedBox(width: 12),
-                _buildSummaryBox('3.8', 'Squad avg', const Color(0xFF3730A3)),
+                _buildSummaryBox('3.8', 'Squad avg', const [Color(0xFF3730A3), Color(0xFF312E81)]),
               ],
             ),
           ),
@@ -70,11 +79,11 @@ class _PlayerProgressDashboardState extends State<PlayerProgressDashboard> with 
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               children: [
-                _buildPlayerRow(context, 'James Doe', '5 goals', 4.4, 0.3, [const Color(0xFF007CFE), const Color(0xFF004A99)]),
-                _buildPlayerRow(context, 'Marcus Reid', '7 goals', 4.1, 0.5, [const Color(0xFF38EF7D), const Color(0xFF11998E)]),
-                _buildPlayerRow(context, 'Sam Khan', '2 goals', 3.5, 0.0, [const Color(0xFFEE0979), const Color(0xFFF12711)]),
-                _buildPlayerRow(context, 'Lena Shah', '2 clean sheets', 3.2, -0.2, [const Color(0xFFFFB75E), const Color(0xFFED8F03)]),
-                _buildPlayerRow(context, 'Omar Patel', '0 goals', 2.4, -0.4, [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)], needsAttention: true),
+                _buildPlayerRow(context, 'James Doe', '5 goals', 4.4, 0.3, [const Color(0xFF007CFE), const Color(0xFF004A99)], [const Color(0xFF1E3A8A), const Color(0xFF312E81)]),
+                _buildPlayerRow(context, 'Marcus Reid', '7 goals', 4.1, 0.5, [const Color(0xFF38EF7D), const Color(0xFF11998E)], [const Color(0xFF064E3B), const Color(0xFF14532D)]),
+                _buildPlayerRow(context, 'Sam Khan', '2 goals', 3.5, 0.0, [const Color(0xFFEE0979), const Color(0xFFF12711)], [const Color(0xFF7C2D12), const Color(0xFF451A03)]),
+                _buildPlayerRow(context, 'Lena Shah', '2 clean sheets', 3.2, -0.2, [const Color(0xFFFFB75E), const Color(0xFFED8F03)], [const Color(0xFF78350F), const Color(0xFF451A03)]),
+                _buildPlayerRow(context, 'Omar Patel', '0 goals', 2.4, -0.4, [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)], [const Color(0xFF4C1D95), const Color(0xFF2E1065)], needsAttention: true),
               ],
             ),
           ),
@@ -83,11 +92,18 @@ class _PlayerProgressDashboardState extends State<PlayerProgressDashboard> with 
     );
   }
 
-  Widget _buildSummaryBox(String val, String label, Color color) {
+  Widget _buildSummaryBox(String val, String label, List<Color> colors) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20),
-        decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(20)),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: colors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+        ),
         child: Column(
           children: [
             Text(val, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
@@ -98,9 +114,8 @@ class _PlayerProgressDashboardState extends State<PlayerProgressDashboard> with 
     );
   }
 
-  Widget _buildPlayerRow(BuildContext context, String name, String stat, double rating, double trend, List<Color> avatarColors, {bool needsAttention = false}) {
+  Widget _buildPlayerRow(BuildContext context, String name, String stat, double rating, double trend, List<Color> avatarColors, List<Color> tileGradients, {bool needsAttention = false}) {
     Color ratingColor = Colors.white;
-    Color tileColor = avatarColors[0];
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -109,7 +124,14 @@ class _PlayerProgressDashboardState extends State<PlayerProgressDashboard> with 
         borderRadius: BorderRadius.circular(20),
         child: Container(
           padding: const EdgeInsets.all(15),
-          decoration: BoxDecoration(color: tileColor, borderRadius: BorderRadius.circular(20)),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: tileGradients,
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+            borderRadius: BorderRadius.circular(20),
+          ),
           child: Row(
             children: [
               Stack(
@@ -122,7 +144,7 @@ class _PlayerProgressDashboardState extends State<PlayerProgressDashboard> with 
                   if (needsAttention)
                     Positioned(
                       bottom: 0, right: 0,
-                      child: Container(width: 10, height: 10, decoration: BoxDecoration(color: Colors.redAccent, shape: BoxShape.circle, border: Border.all(color: tileColor, width: 2))),
+                      child: Container(width: 10, height: 10, decoration: BoxDecoration(color: Colors.redAccent, shape: BoxShape.circle, border: Border.all(color: tileGradients[0], width: 2))),
                     ),
                 ],
               ),

@@ -92,17 +92,17 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
                   const SizedBox(height: 15),
                   _buildFilterRow(),
                   const SizedBox(height: 30),
-                  _buildLeagueSection('MIXED', 'Core FC', '45 AED', '7-A-SIDE • 1 FIXTURE', cardColors[0]),
+                  _buildLeagueSection('MIXED', 'Core FC', '45 AED', '7-A-SIDE • 1 FIXTURE', [Color(0xFF2E5B4F), Color(0xFF3B2A50)]),
                   const SizedBox(height: 30),
-                  _buildLeagueSection('MEN', 'Dubai City Football Club', '55 AED', '5-A-SIDE • 2 FIXTURES', cardColors[1]),
+                  _buildLeagueSection('MEN', 'Dubai City Football Club', '55 AED', '5-A-SIDE • 2 FIXTURES', [Color(0xFF1E3A8A), Color(0xFF312E81)]),
                   const SizedBox(height: 30),
-                  _buildLeagueSection('MIXED', 'United Football Club', '40 AED', '8-A-SIDE • 1 FIXTURE', cardColors[2]),
+                  _buildLeagueSection('MIXED', 'United Football Club', '40 AED', '8-A-SIDE • 1 FIXTURE', [Color(0xFF064E3B), Color(0xFF14532D)]),
                   const SizedBox(height: 30),
-                  _buildLeagueSection('MEN', 'Eagle FC', '65 AED', '9-A-SIDE • 3 FIXTURES', cardColors[3]),
+                  _buildLeagueSection('MEN', 'Eagle FC', '65 AED', '9-A-SIDE • 3 FIXTURES', [Color(0xFF334155), Color(0xFF1E293B)]),
                   const SizedBox(height: 30),
-                  _buildLeagueSection('MEN', 'Emirates Club', '69 AED', '11-A-SIDE • 1 FIXTURE', cardColors[4]),
+                  _buildLeagueSection('MEN', 'Emirates Club', '69 AED', '11-A-SIDE • 1 FIXTURE', [Color(0xFF4C1D95), Color(0xFF2E1065)]),
                   const SizedBox(height: 30),
-                  _buildLeagueSection('MEN', 'Gulf united FC', '75 AED', '11-A-SIDE • 2 FIXTURES', cardColors[5]),
+                  _buildLeagueSection('MEN', 'Gulf united FC', '75 AED', '11-A-SIDE • 2 FIXTURES', [Color(0xFF831843), Color(0xFF701A75)]),
                   const SizedBox(height: 50),
                 ],
               ),
@@ -156,6 +156,14 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
                         const SizedBox(height: 5),
                         Text(date.day.toString(),
                           style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900)),
+                        const SizedBox(height: 5),
+                        Text(['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'][date.month - 1],
+                          style: TextStyle(
+                            color: isSelected ? greenAccent : Colors.white24, 
+                            fontSize: 9, 
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 0.5
+                          )),
                       ],
                     ),
                   ),
@@ -176,11 +184,15 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
               child: Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1A1A1A),
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
                 ),
-                child: const Icon(Icons.chevron_left, color: Colors.white38, size: 18),
+                child: const Icon(Icons.chevron_left, color: Colors.white, size: 18),
               ),
             ),
           ),
@@ -197,10 +209,14 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
               child: Container(
                 padding: const EdgeInsets.all(10),
                 decoration: const BoxDecoration(
-                  color: greenAccent,
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.chevron_right, color: Colors.black, size: 18),
+                child: const Icon(Icons.chevron_right, color: Colors.white, size: 18),
               ),
             ),
           ),
@@ -274,7 +290,7 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
     );
   }
 
-  Widget _buildLeagueSection(String category, String title, String price, String fixtures, Color color) {
+  Widget _buildLeagueSection(String category, String title, String price, String fixtures, List<Color> gradient) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -294,15 +310,14 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
             height: 180,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: color,
               borderRadius: BorderRadius.circular(25),
               gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [color, color.withOpacity(0.6)],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: gradient,
               ),
               boxShadow: [
-                BoxShadow(color: color.withOpacity(0.3), blurRadius: 15, offset: const Offset(0, 8))
+                BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 15, offset: const Offset(0, 8))
               ],
             ),
             child: Stack(
@@ -310,7 +325,7 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
                 Positioned(
                   right: -20,
                   top: -20,
-                  child: Icon(Icons.emoji_events_rounded, size: 150, color: Colors.white.withOpacity(0.1)),
+                  child: Icon(Icons.emoji_events_rounded, size: 150, color: Colors.white.withValues(alpha: 0.1)),
                 ),
                 Positioned(
                   top: 15, left: 15,
@@ -344,7 +359,7 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
                       const SizedBox(height: 12),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        decoration: BoxDecoration(color: Colors.black.withOpacity(0.2), borderRadius: BorderRadius.circular(10)),
+                        decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(10)),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -362,7 +377,7 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                    child: Icon(Icons.arrow_forward_ios_rounded, color: color, size: 18),
+                    child: Icon(Icons.arrow_forward_ios_rounded, color: gradient[0], size: 18),
                   ),
                 ),
               ],

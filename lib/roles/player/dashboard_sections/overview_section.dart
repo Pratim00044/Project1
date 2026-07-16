@@ -13,45 +13,9 @@ class OverviewSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildNotificationBanner(context),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
-          child: Row(
-            children: [
-              _buildColoredSquareTile(0, Icons.cake_rounded, '24 Years', 'Age', [const Color(0xFF007CFE), const Color(0xFF004A99)]),
-              const SizedBox(width: 8),
-              _buildColoredSquareTile(1, Icons.auto_graph_rounded, '92%', 'Skill', [const Color(0xFF38EF7D), const Color(0xFF11998E)]),
-              const SizedBox(width: 8),
-              _buildColoredSquareTile(2, Icons.directions_run, 'Right Foot', 'Leg', [const Color(0xFFEE0979), const Color(0xFFF12711)]),
-            ],
-          ),
-        ),
-        const SizedBox(height: 15),
+        _buildNotificationsSection(context),
         const Padding(
-          padding: EdgeInsets.fromLTRB(20, 10, 20, 15),
-          child: Text('STATS',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 2)),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: InkWell(
-            onTap: () {
-              final homeState = context.findAncestorStateOfType<PlayerHomeState>();
-              if (homeState != null) {
-                homeState.changeTab(3);
-              }
-            },
-            borderRadius: BorderRadius.circular(24),
-            child: _buildCurrentStat2026Card(),
-          ),
-        ),
-        const SizedBox(height: 20),
-        const Padding(
-          padding: EdgeInsets.fromLTRB(20, 10, 20, 15),
+          padding: EdgeInsets.fromLTRB(25, 10, 20, 15),
           child: Text('MATCH ALERT',
               style: TextStyle(
                   color: Colors.white,
@@ -72,10 +36,11 @@ class OverviewSection extends StatelessWidget {
             child: _buildPremiumMatchCard(),
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 25),
+        _buildLatestAchievementCard(context),
         const Padding(
-          padding: EdgeInsets.fromLTRB(20, 10, 20, 15),
-          child: Text('UPCOMING TRAINING SESSION',
+          padding: EdgeInsets.fromLTRB(25, 10, 20, 15),
+          child: Text('OVERALL PERFORMANCE',
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 10,
@@ -84,14 +49,15 @@ class OverviewSection extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            children: [
-              _buildColoredSquareTile(3, Icons.timer_outlined, '18:00 PM', 'FEB 05', [const Color(0xFFFFB75E), const Color(0xFFED8F03)]),
-              const SizedBox(width: 8),
-              _buildColoredSquareTile(4, Icons.fitness_center_rounded, 'Tactical', 'Type', [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)]),
-              const SizedBox(width: 8),
-              _buildColoredSquareTile(5, Icons.location_on_outlined, 'Pitch 4', 'Location', [const Color(0xFF00D2FF), const Color(0xFF3A7BD5)]),
-            ],
+          child: InkWell(
+            onTap: () {
+              final homeState = context.findAncestorStateOfType<PlayerHomeState>();
+              if (homeState != null) {
+                homeState.changeTab(3);
+              }
+            },
+            borderRadius: BorderRadius.circular(24),
+            child: _buildCurrentStat2026Card(),
           ),
         ),
         const SizedBox(height: 50),
@@ -99,66 +65,240 @@ class OverviewSection extends StatelessWidget {
     );
   }
 
-  Widget _buildNotificationBanner(BuildContext context) {
-    return InkWell(
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationsPage())),
-      child: Container(
-        margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-        decoration: BoxDecoration(
-          color: goldColor,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [BoxShadow(color: goldColor.withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 4))],
-        ),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(
-                color: Colors.black26,
-                shape: BoxShape.circle,
+  Widget _buildNotificationsSection(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(25, 10, 20, 15),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('NEW ALERTS',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 2)),
+              GestureDetector(
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationsPage())),
+                child: const Text('VIEW ALL', 
+                  style: TextStyle(color: goldColor, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1)),
               ),
-              child: const Icon(Icons.notifications_active_rounded, color: Colors.black, size: 22),
-            ),
-            const SizedBox(width: 15),
-            const Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('NEW MATCH CREATED', 
-                    style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 1)),
-                  SizedBox(height: 4),
-                  Text('Coach James has scheduled a new league match.', 
-                    style: TextStyle(color: Colors.black87, fontSize: 11, fontWeight: FontWeight.w600)),
-                ],
-              ),
-            ),
-            const Icon(Icons.arrow_forward_ios_rounded, color: Colors.black, size: 14),
-          ],
+            ],
+          ),
         ),
+        // UPCOMING SESSION
+        _buildNotificationItem(
+          icon: Icons.fitness_center_rounded,
+          color: const Color(0xFF2E5B4F),
+          title: 'UPCOMING SESSION',
+          subtitle: 'Tactical Training at Pitch 4 • FEB 05',
+          time: '2h ago',
+        ),
+        // MVP ALERT
+        _buildNotificationItem(
+          icon: Icons.emoji_events_rounded,
+          color: const Color(0xFF1E3A8A),
+          title: 'MVP AWARDED!',
+          subtitle: 'Congratulations! You received MVP for the last match.',
+          time: '1d ago',
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNotificationItem({required IconData icon, required Color color, required String title, required String subtitle, required String time}) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: const Color(0xFF121212),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.03)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: color, size: 22),
+          ),
+          const SizedBox(width: 18),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+                const SizedBox(height: 4),
+                Text(subtitle, 
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w500)),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          Text(time, style: const TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.bold)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLatestAchievementCard(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      decoration: BoxDecoration(
+        color: const Color(0xFF0D0D0D),
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.4),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          )
+        ],
+      ),
+      child: Stack(
+        children: [
+          // Subtle background texture/sparkle feel
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.03,
+              child: Image.asset('assets/images/img4.jpeg', fit: BoxFit.cover),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(25),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('LATEST ACHIEVEMENT', 
+                  style: TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
+                const SizedBox(height: 25),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Trophy Section with Glow and Wreath-like feel
+                    Expanded(
+                      flex: 4,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            width: 90,
+                            height: 90,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: goldColor.withValues(alpha: 0.15),
+                                  blurRadius: 40,
+                                  spreadRadius: 5,
+                                )
+                              ],
+                            ),
+                          ),
+                          const Icon(Icons.emoji_events_rounded, color: goldColor, size: 85),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    // Achievement Details Section
+                    Expanded(
+                      flex: 6,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Row(
+                            children: [
+                              Icon(Icons.star_rounded, color: goldColor, size: 20),
+                              SizedBox(width: 6),
+                              Text('CONGRATULATIONS!', 
+                                style: TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          const Text('You have received the', 
+                            style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.w500)),
+                          const SizedBox(height: 2),
+                          const FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text('MVP AWARD', 
+                              style: TextStyle(color: goldColor, fontSize: 34, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
+                          ),
+                          const Text('for your last match.', 
+                            style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.w500)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                const Divider(color: Colors.white10, height: 1),
+                const SizedBox(height: 15),
+                const Row(
+                  children: [
+                    Icon(Icons.stars_rounded, color: goldColor, size: 16),
+                    SizedBox(width: 10),
+                    Text('Most Valuable Player', 
+                      style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                  ],
+                ),
+                const SizedBox(height: 25),
+                // Premium Styled Action Button
+                InkWell(
+                  onTap: () {},
+                  borderRadius: BorderRadius.circular(30),
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(color: goldColor.withValues(alpha: 0.6), width: 1.5),
+                    ),
+                    child: const Center(
+                      child: Text('VIEW MATCH DETAILS', 
+                        style: TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildCurrentStat2026Card() {
-    const cardColor = Color(0xFF007CFE);
+    final List<Color> cardGradient = [const Color(0xFF1E3A8A), const Color(0xFF312E81)];
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: cardColor,
+        gradient: LinearGradient(
+          colors: cardGradient,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(24),
-        boxShadow: [BoxShadow(color: cardColor.withValues(alpha: 0.3), blurRadius: 15, offset: const Offset(0, 6))],
+        boxShadow: [BoxShadow(color: cardGradient[0].withValues(alpha: 0.3), blurRadius: 15, offset: const Offset(0, 6))],
       ),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildStatItem(Icons.event_available, '48', 'MATCHES', Colors.white),
-              _buildStatItem(Icons.sports_soccer, '24', 'GOALS', Colors.white),
-              _buildStatItem(Icons.assistant_navigation, '12', 'ASSISTS', Colors.white),
-              _buildStatItem(Icons.emoji_events_rounded, '08', 'MVP', Colors.white),
+              Expanded(child: _buildStatItem(Icons.event_available, '48', 'MATCHES', Colors.white)),
+              Expanded(child: _buildStatItem(Icons.sports_soccer, '24', 'GOALS', Colors.white)),
+              Expanded(child: _buildStatItem(Icons.assistant_navigation, '12', 'ASSISTS', Colors.white)),
+              Expanded(child: _buildStatItem(Icons.emoji_events_rounded, '08', 'MVP', Colors.white)),
+              Expanded(child: _buildStatItem(Icons.front_hand_rounded, '12', 'CLEAN SHEETS', Colors.white)),
             ],
           ),
           const SizedBox(height: 12),
@@ -184,55 +324,25 @@ class OverviewSection extends StatelessWidget {
         Icon(icon, color: color, size: 24),
         const SizedBox(height: 6),
         Text(value, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-        Text(label, style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 8, fontWeight: FontWeight.bold)),
+        Text(label, 
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 8, fontWeight: FontWeight.bold)),
       ],
     );
   }
 
-  Widget _buildColoredSquareTile(int index, IconData icon, String val, String label, List<Color> colors) {
-    final bgColor = colors[0];
-    return Expanded(
-      child: AspectRatio(
-        aspectRatio: 1.8,
-        child: Container(
-          decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [BoxShadow(color: bgColor.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 4))],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, color: Colors.white, size: 24),
-              const SizedBox(height: 6),
-              FittedBox(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Text(
-                    val,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildPremiumMatchCard() {
-    const cardColor = Color(0xFFEE0979);
+    final List<Color> cardGradient = [const Color(0xFF2E5B4F), const Color(0xFF3B2A50)];
     return Container(
       padding: const EdgeInsets.all(25),
       decoration: BoxDecoration(
-        color: cardColor,
+        gradient: LinearGradient(
+          colors: cardGradient,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(30),
-        boxShadow: [BoxShadow(color: cardColor.withValues(alpha: 0.3), blurRadius: 15, offset: const Offset(0, 6))],
+        boxShadow: [BoxShadow(color: cardGradient[0].withValues(alpha: 0.3), blurRadius: 15, offset: const Offset(0, 6))],
       ),
       child: Column(
         children: [
@@ -252,18 +362,18 @@ class OverviewSection extends StatelessWidget {
                   width: 1,
                   color: Colors.white30,
                   margin: const EdgeInsets.symmetric(horizontal: 20)),
-              Column(
+              const Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  const Text('FEB 02',
+                  Text('FEB 02',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 14,
                           fontWeight: FontWeight.w900)),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   Text('22:00 PM',
                       style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.9),
+                          color: Colors.white,
                           fontSize: 11,
                           fontWeight: FontWeight.bold)),
                 ],
@@ -273,14 +383,14 @@ class OverviewSection extends StatelessWidget {
           const SizedBox(height: 20),
           Divider(color: Colors.white.withValues(alpha: 0.2), height: 1),
           const SizedBox(height: 15),
-          Row(
+          const Row(
             children: [
-              const Icon(Icons.location_on_outlined, color: Colors.white, size: 14),
-              const SizedBox(width: 8),
+              Icon(Icons.location_on_outlined, color: Colors.white, size: 14),
+              SizedBox(width: 8),
               Expanded(
                 child: Text('Al Hamra Stadium, Ras Al Khaimah',
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.9), 
+                      color: Colors.white, 
                       fontSize: 11, 
                       fontWeight: FontWeight.w500,
                     )),
@@ -295,10 +405,10 @@ class OverviewSection extends StatelessWidget {
   Widget _buildMatchTeam(String name, bool highlight) {
     return Row(
       children: [
-        Icon(Icons.shield, 
+        const Icon(Icons.shield, 
           color: Colors.white, 
           size: 18,
-          shadows: [const Shadow(color: Colors.black26, blurRadius: 8)],
+          shadows: [Shadow(color: Colors.black26, blurRadius: 8)],
         ),
         const SizedBox(width: 12),
         Expanded(

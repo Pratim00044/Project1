@@ -86,12 +86,12 @@ class _SessionSectionState extends State<SessionSection> {
     bool isConfirmed = _confirmedSessions.contains(title);
     
     final List<Color> accentColors = [
-      const Color(0xFF007CFE),
-      const Color(0xFF38EF7D),
-      const Color(0xFFFFB75E),
-      const Color(0xFFEE0979),
+      const Color(0xFF1E3A8A),
+      const Color(0xFF2E5B4F),
+      const Color(0xFF831843),
+      const Color(0xFF4C1D95),
     ];
-    final Color accentColor = completed ? Colors.green : accentColors[index % accentColors.length];
+    final Color accentColor = completed ? const Color(0xFF064E3B) : accentColors[index % accentColors.length];
 
     return GestureDetector(
       onTap: () => setState(() => _selectedSession = {

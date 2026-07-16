@@ -64,7 +64,7 @@ class ProfessionalPathwayPage extends StatelessWidget {
               Icons.explore,
               'DUBAI CITY FC TRIALS',
               'Open trials for U23 squad. Registration closing on July 10th.',
-              [const Color(0xFF38EF7D), const Color(0xFF11998E)],
+              [const Color(0xFF064E3B), const Color(0xFF14532D)],
               () {},
             ),
             const SizedBox(height: 15),
@@ -73,7 +73,7 @@ class ProfessionalPathwayPage extends StatelessWidget {
               Icons.explore,
               'SHARJAH ELITE ACADEMY',
               'Scouting event for defensive midfielders. Minimum age 16.',
-              [const Color(0xFFEE0979), const Color(0xFFF12711)],
+              [const Color(0xFF831843), const Color(0xFF701A75)],
               () {},
             ),
             const SizedBox(height: 35),
@@ -86,7 +86,7 @@ class ProfessionalPathwayPage extends StatelessWidget {
               Icons.description_outlined,
               'CREATE DIGITAL CV',
               'Upload your technical data, match highlights, and career history for club managers.',
-              [const Color(0xFFFFB75E), const Color(0xFFED8F03)],
+              [const Color(0xFF92400E), const Color(0xFF78350F)],
               () {},
             ),
             const SizedBox(height: 15),
@@ -95,7 +95,7 @@ class ProfessionalPathwayPage extends StatelessWidget {
               Icons.visibility_outlined,
               'CLUB VISIBILITY',
               'Top clubs like Core FC pay to access trialist data. Get your profile in front of decision makers.',
-              [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)],
+              [const Color(0xFF4C1D95), const Color(0xFF2E1065)],
               () {},
             ),
             
@@ -132,7 +132,11 @@ class ProfessionalPathwayPage extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: colors[0],
+          gradient: LinearGradient(
+            colors: colors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(

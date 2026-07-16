@@ -27,9 +27,9 @@ class RankingSection extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 20),
-          _buildRankingColoredCard(0, 'Current Rank', '#14', 'Top 5% in Region', Icons.trending_up, [const Color(0xFF007CFE), const Color(0xFF004A99)]),
+          _buildRankingColoredCard(0, 'Current Rank', '#14', 'Top 5% in Region', Icons.trending_up, [const Color(0xFF1E3A8A), const Color(0xFF312E81)]),
           const SizedBox(height: 15),
-          _buildRankingColoredCard(1, 'Season Points', '2,450', '+250 from last match', Icons.bolt, [const Color(0xFF38EF7D), const Color(0xFF11998E)]),
+          _buildRankingColoredCard(1, 'Season Points', '2,450', '+250 from last match', Icons.bolt, [const Color(0xFF2E5B4F), const Color(0xFF3B2A50)]),
           const SizedBox(height: 30),
           const Text('LEADERBOARD',
               style: TextStyle(

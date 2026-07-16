@@ -17,7 +17,7 @@ class NotificationsPage extends StatelessWidget {
         'time': '2 hours ago',
         'icon': 'sports_soccer',
         'isNew': true,
-        'color': const Color(0xFFD4AF37),
+        'color': const Color(0xFF1E3A8A),
       },
       {
         'title': 'TRAINING SESSION UPDATED',
@@ -25,7 +25,7 @@ class NotificationsPage extends StatelessWidget {
         'time': '5 hours ago',
         'icon': 'fitness_center',
         'isNew': true,
-        'color': const Color(0xFF38EF7D),
+        'color': const Color(0xFF2E5B4F),
       },
       {
         'title': 'MVP AWARDED!',
@@ -33,7 +33,7 @@ class NotificationsPage extends StatelessWidget {
         'time': '1 day ago',
         'icon': 'emoji_events',
         'isNew': false,
-        'color': const Color(0xFF007CFE),
+        'color': const Color(0xFF064E3B),
       },
       {
         'title': 'NEW STATS AVAILABLE',
@@ -41,7 +41,7 @@ class NotificationsPage extends StatelessWidget {
         'time': '2 days ago',
         'icon': 'analytics',
         'isNew': false,
-        'color': const Color(0xFFEE0979),
+        'color': const Color(0xFF831843),
       },
       {
         'title': 'TEAM MEETING',
@@ -49,7 +49,7 @@ class NotificationsPage extends StatelessWidget {
         'time': '3 days ago',
         'icon': 'groups',
         'isNew': false,
-        'color': Colors.orangeAccent,
+        'color': const Color(0xFF4C1D95),
       },
     ];
 
@@ -95,13 +95,13 @@ class NotificationsPage extends StatelessWidget {
           Widget iconWidget = Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: accentColor.withValues(alpha: 0.1),
+              color: Colors.white.withValues(alpha: 0.1),
               shape: BoxShape.circle,
-              border: Border.all(color: accentColor.withValues(alpha: 0.2)),
+              border: Border.all(color: isNew ? Colors.white.withValues(alpha: 0.4) : Colors.white10),
             ),
             child: Icon(
               _getIcon(notif['icon']!),
-              color: accentColor,
+              color: Colors.white,
               size: 20,
             ),
           );
@@ -117,11 +117,11 @@ class NotificationsPage extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.only(right: 8),
                         width: 8, height: 8,
-                        decoration: BoxDecoration(color: accentColor, shape: BoxShape.circle),
+                        decoration: const BoxDecoration(color: goldColor, shape: BoxShape.circle),
                       ),
                     Text(notif['title']!,
                         style: TextStyle(
-                            color: accentColor,
+                            color: isNew ? Colors.white : accentColor.withValues(alpha: 0.8),
                             fontSize: 11,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.0)),
@@ -129,7 +129,7 @@ class NotificationsPage extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.only(left: 8),
                         width: 8, height: 8,
-                        decoration: BoxDecoration(color: accentColor, shape: BoxShape.circle),
+                        decoration: const BoxDecoration(color: goldColor, shape: BoxShape.circle),
                       ),
                   ],
                 ),
@@ -143,8 +143,8 @@ class NotificationsPage extends StatelessWidget {
                         height: 1.5)),
                 const SizedBox(height: 12),
                 Text(notif['time']!,
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.4),
+                    style: const TextStyle(
+                      color: Colors.white38,
                       fontSize: 10, 
                       fontWeight: FontWeight.bold,
                     )),
@@ -155,7 +155,13 @@ class NotificationsPage extends StatelessWidget {
           return Container(
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: BoxDecoration(
-              color: surfaceColor,
+              gradient: LinearGradient(
+                colors: isNew 
+                  ? [accentColor, accentColor.withValues(alpha: 0.7)]
+                  : [surfaceColor, surfaceColor],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
               borderRadius: BorderRadius.circular(28),
               boxShadow: [
                 BoxShadow(
@@ -170,14 +176,9 @@ class NotificationsPage extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(28),
                 border: Border.all(
-                  color: isNew ? accentColor.withValues(alpha: 0.3) : Colors.white.withValues(alpha: 0.05),
+                  color: isNew ? Colors.white.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.05),
                   width: 1.5,
                 ),
-                gradient: isNew ? LinearGradient(
-                  colors: [accentColor.withValues(alpha: 0.05), Colors.transparent],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ) : null,
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,

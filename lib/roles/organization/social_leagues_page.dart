@@ -83,11 +83,11 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
             _buildPickADate(),
             _buildFilterSection(),
             _buildCategorySection('MIXED', [
-              _buildLeagueCard('7-A-SIDE', '1 FIXTURE', _cardImages[0], '7\$', const Color(0xFF007CFE)),
+              _buildLeagueCard('7-A-SIDE', '1 FIXTURE', _cardImages[0], '7\$', [const Color(0xFF2E5B4F), const Color(0xFF3B2A50)]),
             ]),
             _buildCategorySection('MEN', [
-              _buildLeagueCard('5-A-SIDE', '2 FIXTURES', _cardImages[1], '5\$', const Color(0xFF38EF7D)),
-              _buildLeagueCard('11-A-SIDE', '0 FIXTURES', _cardImages[2], '11\$', const Color(0xFFEE0979)),
+              _buildLeagueCard('5-A-SIDE', '2 FIXTURES', _cardImages[1], '5\$', [const Color(0xFF1E3A8A), const Color(0xFF312E81)]),
+              _buildLeagueCard('11-A-SIDE', '0 FIXTURES', _cardImages[2], '11\$', [const Color(0xFF831843), const Color(0xFF701A75)]),
             ]),
             const SizedBox(height: 40),
           ],
@@ -136,6 +136,9 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
                           const SizedBox(height: 5),
                           Text(date.day.toString(),
                             style: TextStyle(color: isSelected ? Colors.white : Colors.white70, fontSize: 22, fontWeight: FontWeight.w900)),
+                          const SizedBox(height: 4),
+                          Text(['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'][date.month - 1],
+                            style: TextStyle(color: isSelected ? greenAccent : Colors.white24, fontSize: 10, fontWeight: FontWeight.w900)),
                         ],
                       ),
                     ),
@@ -275,15 +278,19 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
     );
   }
 
-  Widget _buildLeagueCard(String type, String fixtures, String image, String price, Color color) {
+  Widget _buildLeagueCard(String type, String fixtures, String image, String price, List<Color> colors) {
     return Container(
       height: 180,
       margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
       decoration: BoxDecoration(
-        color: color,
+        gradient: LinearGradient(
+          colors: colors,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(25),
         boxShadow: [
-          BoxShadow(color: color.withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 5)),
+          BoxShadow(color: colors[0].withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 5)),
         ],
       ),
       child: Container(

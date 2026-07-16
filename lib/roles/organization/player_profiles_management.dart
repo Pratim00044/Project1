@@ -41,14 +41,14 @@ class _PlayerProfilesManagementState extends State<PlayerProfilesManagement> {
               itemCount: _players.length,
               itemBuilder: (context, index) {
                 final player = _players[index];
-                final List<Color> cardColors = [
-                  const Color(0xFF007CFE), // Blue
-                  const Color(0xFF38EF7D), // Green
-                  const Color(0xFFEE0979), // Pink
-                  const Color(0xFFFFB75E), // Orange
-                  const Color(0xFF8E2DE2), // Purple
+                final List<List<Color>> cardGradients = [
+                  [const Color(0xFF2E5B4F), const Color(0xFF3B2A50)],
+                  [const Color(0xFF1E3A8A), const Color(0xFF312E81)],
+                  [const Color(0xFF064E3B), const Color(0xFF14532D)],
+                  [const Color(0xFF334155), const Color(0xFF1E293B)],
+                  [const Color(0xFF4C1D95), const Color(0xFF2E1065)],
                 ];
-                final Color cardColor = cardColors[index % cardColors.length];
+                final List<Color> cardGradient = cardGradients[index % cardGradients.length];
                 
                 return GestureDetector(
                   onTap: () {
@@ -56,9 +56,10 @@ class _PlayerProfilesManagementState extends State<PlayerProfilesManagement> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => PlayerProfile(
-                          playerName: player['name'],
+                          playerName: player['name']!,
                           playerNumber: player['no'],
                           isReadOnly: true,
+                          showBackButton: true,
                         ),
                       ),
                     );
@@ -67,10 +68,14 @@ class _PlayerProfilesManagementState extends State<PlayerProfilesManagement> {
                     margin: const EdgeInsets.only(bottom: 15),
                     padding: const EdgeInsets.all(18),
                     decoration: BoxDecoration(
-                      color: cardColor,
+                      gradient: LinearGradient(
+                        colors: cardGradient,
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                       borderRadius: BorderRadius.circular(25),
                       boxShadow: [
-                        BoxShadow(color: cardColor.withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 5))
+                        BoxShadow(color: cardGradient[0].withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 5))
                       ],
                     ),
                     child: Row(

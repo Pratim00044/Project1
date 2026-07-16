@@ -3,6 +3,7 @@ import 'player_dashboard.dart' hide surfaceColor;
 import 'player_team.dart' hide surfaceColor;
 import 'player_games.dart';
 import 'player_profile.dart';
+import 'performance_dashboard.dart';
 import 'profile_details/security_detail.dart';
 import 'profile_details/help_center_detail.dart';
 import 'profile_details/notifications_page.dart';
@@ -46,6 +47,7 @@ class PlayerHomeState extends State<PlayerHome> {
     const PlayerDashboard(),
     const MyTeamsPage(),
     const PlayerGamesPage(),
+    const PerformanceDashboard(),
     const PlayerProfile(),
   ];
 
@@ -86,6 +88,7 @@ class PlayerHomeState extends State<PlayerHome> {
               BottomNavigationBarItem(icon: Icon(Icons.grid_view_rounded), label: 'DASHBOARD'),
               BottomNavigationBarItem(icon: Icon(Icons.groups_rounded), label: 'TEAM'),
               BottomNavigationBarItem(icon: Icon(Icons.calendar_today_rounded), label: 'GAMES'),
+              BottomNavigationBarItem(icon: Icon(Icons.auto_graph_rounded), label: 'PROGRESS'),
               BottomNavigationBarItem(icon: Icon(Icons.person_outline_rounded), label: 'PROFILE'),
             ],
           ),

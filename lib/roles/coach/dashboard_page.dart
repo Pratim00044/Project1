@@ -133,11 +133,15 @@ class _DashboardPageState extends State<DashboardPage> {
       width: double.infinity,
       height: 200,
       decoration: BoxDecoration(
-        color: const Color(0xFF007CFE),
+        gradient: const LinearGradient(
+          colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF007CFE).withOpacity(0.3),
+            color: const Color(0xFF2E5B4F).withOpacity(0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -162,7 +166,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             const SizedBox(height: 15),
             const Text('LIONEL SCALONI',
-              style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.w900, letterSpacing: 1)),
+              style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900, letterSpacing: 1)),
           ],
         ),
       ),
@@ -185,7 +189,11 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Container(
         margin: const EdgeInsets.fromLTRB(20, 0, 20, 15),
         decoration: BoxDecoration(
-          color: bgColor,
+          gradient: const LinearGradient(
+            colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
@@ -292,8 +300,6 @@ class _DashboardPageState extends State<DashboardPage> {
                     bool isSelected = date.day == _selectedDate.day;
                     String label = index == 0 ? 'TODAY' : ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'][date.weekday - 1];
                     
-                    int dots = index == 0 ? 2 : 1;
-
                     return GestureDetector(
                       onTap: () => setState(() => _selectedDate = date),
                       child: Container(
@@ -321,14 +327,13 @@ class _DashboardPageState extends State<DashboardPage> {
                             Text(date.day.toString(),
                               style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900)),
                             const SizedBox(height: 5),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: List.generate(dots, (i) => Container(
-                                margin: const EdgeInsets.symmetric(horizontal: 2),
-                                width: 4, height: 4,
-                                decoration: const BoxDecoration(color: goldColor, shape: BoxShape.circle),
+                            Text(['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'][date.month - 1],
+                              style: TextStyle(
+                                color: isSelected ? goldColor : Colors.white24, 
+                                fontSize: 9, 
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 0.5
                               )),
-                            ),
                           ],
                         ),
                       ),
@@ -356,8 +361,15 @@ class _DashboardPageState extends State<DashboardPage> {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(12),
-        decoration: const BoxDecoration(color: goldColor, shape: BoxShape.circle),
-        child: Icon(icon, color: Colors.black, size: 20),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, color: Colors.white, size: 20),
       ),
     );
   }
@@ -376,34 +388,38 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Widget _buildForeignLeaguesSection() {
     final leagues = [
-      {'name': 'SAUDI PRO LEAGUE', 'match': 'Al-Hilal vs Al-Ittihad', 'time': '20:30', 'color': const Color(0xFF007CFE)},
-      {'name': 'UEFA CHAMPIONS LEAGUE', 'match': 'Core FC vs Dortmund', 'time': '18:00', 'color': const Color(0xFF38EF7D)},
+      {'name': 'SAUDI PRO LEAGUE', 'match': 'Al-Hilal vs Al-Ittihad', 'time': '20:30', 'gradient': [Color(0xFF1E3A8A), Color(0xFF312E81)]},
+      {'name': 'UEFA CHAMPIONS LEAGUE', 'match': 'Core FC vs Dortmund', 'time': '18:00', 'gradient': [Color(0xFF064E3B), Color(0xFF14532D)]},
     ];
 
     return Column(
       children: leagues.map((l) {
-        final Color color = l['color'] as Color;
+        final List<Color> colors = l['gradient'] as List<Color>;
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: color,
+            gradient: LinearGradient(
+              colors: colors,
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
             borderRadius: BorderRadius.circular(15),
           ),
           child: Row(
             children: [
-              const Icon(Icons.emoji_events_outlined, color: Colors.black, size: 20),
+              const Icon(Icons.emoji_events_outlined, color: Colors.white70, size: 20),
               const SizedBox(width: 15),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(l['name'].toString(), style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w900)),
-                    Text(l['match'].toString(), style: const TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold)),
+                    Text(l['name'].toString(), style: const TextStyle(color: Colors.white54, fontSize: 10, fontWeight: FontWeight.w900)),
+                    Text(l['match'].toString(), style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
                   ],
                 ),
               ),
-              Text(l['time'].toString(), style: const TextStyle(color: Colors.black87, fontSize: 12, fontWeight: FontWeight.bold)),
+              Text(l['time'].toString(), style: const TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.bold)),
             ],
           ),
         );
@@ -424,18 +440,22 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget _buildRankingSection() {
     return Column(
       children: [
-        _buildRankingItem('TOP PERFORMER', 'MANUEL NEUER', '98% Save Rate', const Color(0xFF38EF7D)),
-        _buildRankingItem('TOP PERFORMER', 'SERGIO RAMOS', '45 Tackles', const Color(0xFF007CFE)),
+        _buildRankingItem('TOP PERFORMER', 'MANUEL NEUER', '98% Save Rate', [Color(0xFF064E3B), Color(0xFF14532D)]),
+        _buildRankingItem('TOP PERFORMER', 'SERGIO RAMOS', '45 Tackles', [Color(0xFF1E3A8A), Color(0xFF312E81)]),
       ],
     );
   }
 
-  Widget _buildRankingItem(String category, String name, String stat, Color color) {
+  Widget _buildRankingItem(String category, String name, String stat, List<Color> colors) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: color,
+        gradient: LinearGradient(
+          colors: colors,
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
@@ -443,19 +463,19 @@ class _DashboardPageState extends State<DashboardPage> {
           Container(
             width: 35, height: 35,
             decoration: BoxDecoration(color: Colors.black.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
-            child: const Icon(Icons.person, color: Colors.black, size: 18),
+            child: const Icon(Icons.person, color: Colors.white70, size: 18),
           ),
           const SizedBox(width: 15),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(category, style: const TextStyle(color: Colors.black87, fontSize: 9, fontWeight: FontWeight.bold)),
-                Text(name, style: const TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold)),
+                Text(category, style: const TextStyle(color: Colors.white54, fontSize: 9, fontWeight: FontWeight.bold)),
+                Text(name, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
               ],
             ),
           ),
-          Text(stat, style: const TextStyle(color: Colors.black, fontSize: 11, fontWeight: FontWeight.bold)),
+          Text(stat, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
         ],
       ),
     );

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'dashboard_sections/overview_section.dart';
-import 'dashboard_sections/stats_section.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color surfaceColor = Color(0xFF121212);
@@ -16,8 +15,6 @@ class PlayerDashboard extends StatefulWidget {
 }
 
 class _PlayerDashboardState extends State<PlayerDashboard> {
-  String _activeTab = 'Overview';
-  final List<String> _tabHistory = ['Overview'];
   late VideoPlayerController _videoController;
 
   @override
@@ -36,15 +33,6 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
   void dispose() {
     _videoController.dispose();
     super.dispose();
-  }
-
-  void _changeTab(String label) {
-    if (_activeTab != label) {
-      setState(() {
-        _activeTab = label;
-        _tabHistory.add(label);
-      });
-    }
   }
 
   @override
@@ -66,20 +54,6 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
         const SliverToBoxAdapter(child: SizedBox(height: 50)),
       ],
     );
-  }
-
-  Widget _buildActiveContent() {
-    switch (_activeTab) {
-      case 'Overview':
-        return const OverviewSection();
-      case 'Stats':
-        return StatsSection(
-          onSeeHistory: () {
-          },
-        );
-      default:
-        return const OverviewSection();
-    }
   }
 
   Widget _buildUniqueHeroCard() {
@@ -173,34 +147,6 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildTabLink(String label) {
-    bool isActive = _activeTab == label;
-    return GestureDetector(
-      onTap: () => _changeTab(label),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: isActive ? goldColor.withValues(alpha: 0.1) : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isActive ? goldColor.withValues(alpha: 0.3) : Colors.white10,
-            width: 1,
-          ),
-        ),
-        child: Text(
-          label.toUpperCase(),
-          style: TextStyle(
-            color: isActive ? goldColor : Colors.white,
-            fontSize: 12,
-            fontWeight: isActive ? FontWeight.w900 : FontWeight.w600,
-            letterSpacing: 1.2,
-          ),
-        ),
       ),
     );
   }

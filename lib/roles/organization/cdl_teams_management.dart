@@ -12,10 +12,10 @@ class CdlTeamsManagement extends StatefulWidget {
 
 class CdlTeamsManagementState extends State<CdlTeamsManagement> {
   final List<Map<String, dynamic>> _teams = [
-    {'name': 'Core FC', 'logo': 'C', 'city': 'Dubai', 'founded': '2015', 'color': Color(0xFF1E3A8A)},
-    {'name': 'Dubai Lions', 'logo': 'D', 'city': 'Abu Dhabi', 'founded': '2018', 'color': Color(0xFF3730A3)},
-    {'name': 'Eagle FC', 'logo': 'E', 'city': 'Sharjah', 'founded': '2020', 'color': Color(0xFF5B21B6)},
-    {'name': 'Turan Dubai', 'logo': 'T', 'city': 'Dubai', 'founded': '2022', 'color': Color(0xFF7C3AED)},
+    {'name': 'Core FC', 'logo': 'C', 'city': 'Dubai', 'founded': '2015', 'gradient': [Color(0xFF2E5B4F), Color(0xFF3B2A50)]},
+    {'name': 'Dubai Lions', 'logo': 'D', 'city': 'Abu Dhabi', 'founded': '2018', 'gradient': [Color(0xFF1E3A8A), Color(0xFF312E81)]},
+    {'name': 'Eagle FC', 'logo': 'E', 'city': 'Sharjah', 'founded': '2020', 'gradient': [Color(0xFF064E3B), Color(0xFF14532D)]},
+    {'name': 'Turan Dubai', 'logo': 'T', 'city': 'Dubai', 'founded': '2022', 'gradient': [Color(0xFF334155), Color(0xFF1E293B)]},
   ];
 
   void showAddTeamDialog() {
@@ -35,14 +35,21 @@ class CdlTeamsManagementState extends State<CdlTeamsManagement> {
               itemCount: _teams.length,
               itemBuilder: (context, index) {
                 final team = _teams[index];
-                final Color tileColor = team['color'];
+                final List<Color> gradient = team['gradient'];
 
                 return Container(
                   margin: const EdgeInsets.only(bottom: 15),
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: tileColor,
+                    gradient: LinearGradient(
+                      colors: gradient,
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
                     borderRadius: BorderRadius.circular(25),
+                    boxShadow: [
+                      BoxShadow(color: gradient[0].withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 5)),
+                    ],
                   ),
                   child: Row(
                     children: [

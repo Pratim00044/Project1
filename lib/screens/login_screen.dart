@@ -201,8 +201,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ],
                                   ),
 
+                                  const SizedBox(height: 30),
+                                  _buildLoginButton(),
+                                  const SizedBox(height: 20),
+
                                   if (_roles[_currentIndex]['name'] == 'PLAYER') ...[
-                                    const SizedBox(height: 20),
                                     Center(
                                       child: Wrap(
                                         alignment: WrapAlignment.center,
@@ -236,8 +239,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ],
                                   
                                   const SizedBox(height: 30),
-                                  _buildLoginButton(),
-                                  const SizedBox(height: 30),
                                 ],
                               ),
                             ),
@@ -261,19 +262,6 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildInteractiveCurvedSelector(bool isDesktop) {
     return Column(
       children: [
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            SizedBox(
-              height: 60,
-              width: isDesktop ? 600 : double.infinity,
-              child: CustomPaint(
-                painter: ArcPainter(),
-              ),
-            ),
-          ],
-        ),
-        
         SizedBox(
           height: 160,
           child: AnimatedBuilder(
@@ -535,30 +523,3 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-class ArcPainter extends CustomPainter {
-  ArcPainter();
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..shader = LinearGradient(
-        colors: [
-          goldColor.withValues(alpha: 0.0),
-          goldColor.withValues(alpha: 0.4),
-          goldColor.withValues(alpha: 0.0),
-        ],
-      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height))
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0
-      ..strokeCap = StrokeCap.round;
-
-    final path = Path();
-    path.moveTo(size.width * 0.05, size.height);
-    path.quadraticBezierTo(size.width / 2, -size.height * 0.4, size.width * 0.95, size.height);
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pitch_rating_view.dart';
+import '../player/player_profile.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
@@ -284,46 +285,60 @@ class _OrganiserAttendanceViewState extends State<OrganiserAttendanceView> {
                 final p = _players[index];
                 bool isPending = p['status'] == 'Pending';
 
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.all(18),
-                  decoration: BoxDecoration(
-                    color: surfaceColor,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.03)),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 45, height: 45,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(image: AssetImage(p['image']), fit: BoxFit.cover),
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PlayerProfile(
+                          playerName: p['name'],
+                          isReadOnly: true,
+                          showBackButton: true,
                         ),
                       ),
-                      const SizedBox(width: 15),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(p['name'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 15)),
-                            const SizedBox(height: 4),
-                            if (isPending)
-                              Text('Wallet: ${p['wallet']} cr · Fee: ${p['fee']} cr', style: const TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.w600))
-                            else if (p['status'] == 'Attended')
-                              const Text('Attended · Fee processed', style: TextStyle(color: greenAccent, fontSize: 10, fontWeight: FontWeight.bold))
-                            else
-                              const Text('Cash paid · Fee: 20 cr', style: TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.bold)),
-                          ],
+                    );
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.all(18),
+                    decoration: BoxDecoration(
+                      color: surfaceColor,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.03)),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 45, height: 45,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(image: AssetImage(p['image']), fit: BoxFit.cover),
+                          ),
                         ),
-                      ),
-                      if (isPending) ...[
-                        _buildActionBtn('Attended', greenAccent, () => _showPaymentPopup(index)),
-                        const SizedBox(width: 8),
-                        _buildActionBtn('Absent', Colors.redAccent, () => _markAbsent(index), isOutline: true),
-                      ] else
-                        _buildStatusPill(p['status']),
-                    ],
+                        const SizedBox(width: 15),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(p['name'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 15)),
+                              const SizedBox(height: 4),
+                              if (isPending)
+                                Text('Wallet: ${p['wallet']} cr · Fee: ${p['fee']} cr', style: const TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.w600))
+                              else if (p['status'] == 'Attended')
+                                const Text('Attended · Fee processed', style: TextStyle(color: greenAccent, fontSize: 10, fontWeight: FontWeight.bold))
+                              else
+                                const Text('Cash paid · Fee: 20 cr', style: TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        ),
+                        if (isPending) ...[
+                          _buildActionBtn('Attended', greenAccent, () => _showPaymentPopup(index)),
+                          const SizedBox(width: 8),
+                          _buildActionBtn('Absent', Colors.redAccent, () => _markAbsent(index), isOutline: true),
+                        ] else
+                          _buildStatusPill(p['status']),
+                      ],
+                    ),
                   ),
                 );
               },

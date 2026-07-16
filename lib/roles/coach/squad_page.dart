@@ -234,7 +234,11 @@ class _SquadPageState extends State<SquadPage> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: player['color'],
+          gradient: const LinearGradient(
+            colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
           borderRadius: BorderRadius.circular(25),
         ),
         child: Row(
@@ -331,6 +335,7 @@ class _SquadPageState extends State<SquadPage> {
                   playerName: player['name'],
                   playerNumber: '10',
                   isReadOnly: true,
+                  showBackButton: true,
                 )));
               }),
             ],

@@ -434,17 +434,30 @@ class _PlayerDetailPageState extends State<PlayerDetailPage> with SingleTickerPr
         ),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
-          child: ElevatedButton(
-            onPressed: _showFitnessDialog,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: goldColor,
-              minimumSize: const Size(double.infinity, 65),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35)),
-              elevation: 10,
-              shadowColor: goldColor.withOpacity(0.3),
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(35),
+              gradient: const LinearGradient(
+                colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              boxShadow: [
+                BoxShadow(color: const Color(0xFF2E5B4F).withOpacity(0.3), blurRadius: 20, offset: const Offset(0, 10))
+              ],
             ),
-            child: const Text('NEW EVALUATION', 
-              style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 16, letterSpacing: 1)),
+            child: ElevatedButton(
+              onPressed: _showFitnessDialog,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                minimumSize: const Size(double.infinity, 65),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35)),
+                elevation: 0,
+              ),
+              child: const Text('NEW EVALUATION', 
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16, letterSpacing: 1)),
+            ),
           ),
         ),
       ),
@@ -582,12 +595,19 @@ class _PlayerDetailPageState extends State<PlayerDetailPage> with SingleTickerPr
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20),
-        decoration: BoxDecoration(color: surfaceColor, borderRadius: BorderRadius.circular(20)),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF1E3A8A), Color(0xFF312E81)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+        ),
         child: Column(
           children: [
-            Icon(icon, color: goldColor.withOpacity(0.5), size: 24),
+            Icon(icon, color: Colors.white70, size: 24),
             const SizedBox(height: 10),
-            Text(label, style: const TextStyle(color: Colors.white24, fontSize: 9, fontWeight: FontWeight.bold)),
+            Text(label, style: const TextStyle(color: Colors.white54, fontSize: 9, fontWeight: FontWeight.bold)),
             const SizedBox(height: 5),
             Text(value, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900)),
           ],
@@ -603,9 +623,12 @@ class _PlayerDetailPageState extends State<PlayerDetailPage> with SingleTickerPr
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: surfaceColor,
+            gradient: const LinearGradient(
+              colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: goldColor.withOpacity(0.1)),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -613,7 +636,7 @@ class _PlayerDetailPageState extends State<PlayerDetailPage> with SingleTickerPr
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('WALLET BALANCE', style: TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1)),
+                  const Text('WALLET BALANCE', style: TextStyle(color: Colors.white60, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1)),
                   const SizedBox(height: 5),
                   Text('$walletBalance AED', style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
                 ],
@@ -632,8 +655,12 @@ class _PlayerDetailPageState extends State<PlayerDetailPage> with SingleTickerPr
                     _showZeroBalanceAlert();
                   }
                 },
-                style: ElevatedButton.styleFrom(backgroundColor: goldColor, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-                child: const Text('MARK ATTENDED', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white.withOpacity(0.2), 
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  elevation: 0,
+                ),
+                child: const Text('MARK ATTENDED', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
               ),
             ],
           ),

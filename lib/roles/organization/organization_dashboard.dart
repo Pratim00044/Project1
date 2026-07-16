@@ -22,12 +22,12 @@ class _OrganisationDashboardState extends State<OrganisationDashboard> {
   final ScrollController _dateScrollController = ScrollController();
 
   final List<List<Color>> tileColors = [
-    [const Color(0xFF007CFE), const Color(0xFF004A99)],
-    [const Color(0xFF38EF7D), const Color(0xFF11998E)],
-    [const Color(0xFFEE0979), const Color(0xFFF12711)],
-    [const Color(0xFFFFB75E), const Color(0xFFED8F03)],
-    [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)],
-    [const Color(0xFF00D2FF), const Color(0xFF3A7BD5)],
+    [const Color(0xFF2E5B4F), const Color(0xFF3B2A50)],
+    [const Color(0xFF1E3A8A), const Color(0xFF312E81)],
+    [const Color(0xFF064E3B), const Color(0xFF14532D)],
+    [const Color(0xFF334155), const Color(0xFF1E293B)],
+    [const Color(0xFF4C1D95), const Color(0xFF2E1065)],
+    [const Color(0xFF831843), const Color(0xFF701A75)],
   ];
 
   final List<String> _cardImages = [
@@ -99,17 +99,17 @@ class _OrganisationDashboardState extends State<OrganisationDashboard> {
         SliverToBoxAdapter(child: _buildFilterSection()),
         SliverToBoxAdapter(
           child: _buildCategorySection('MIXED', [
-            _buildLeagueCard(context, 'Midweek Turbo 5s', 'Wed, Apr 15 • 11:00 PM', 'Business Bay Courts', 'Jun 12', '55 AED', category: 'OPEN', bgImage: _cardImages[0], reserved: 6, total: 10, color: const Color(0xFF007CFE)),
-            _buildLeagueCard(context, 'Thursday Social 7s', 'Thu, Apr 16 • 11:30 PM', 'Dubai Sports City', 'Jun 14', '75 AED', category: 'OPEN', bgImage: _cardImages[1], reserved: 8, total: 14, color: const Color(0xFF38EF7D)),
-            _buildLeagueCard(context, 'Friday Night Lights 7s', 'Sat, Apr 18 • 10:00 PM', 'JBR Arena', 'Jun 15', '75 AED', category: 'OPEN', bgImage: _cardImages[2], reserved: 6, total: 14, color: const Color(0xFFEE0979)),
+            _buildLeagueCard(context, 'Midweek Turbo 5s', 'Wed, Apr 15 • 11:00 PM', 'Business Bay Courts', 'Jun 12', '55 AED', category: 'OPEN', bgImage: _cardImages[0], reserved: 6, total: 10, gradient: tileColors[1]),
+            _buildLeagueCard(context, 'Thursday Social 7s', 'Thu, Apr 16 • 11:30 PM', 'Dubai Sports City', 'Jun 14', '75 AED', category: 'OPEN', bgImage: _cardImages[1], reserved: 8, total: 14, gradient: tileColors[0]),
+            _buildLeagueCard(context, 'Friday Night Lights 7s', 'Sat, Apr 18 • 10:00 PM', 'JBR Arena', 'Jun 15', '75 AED', category: 'OPEN', bgImage: _cardImages[2], reserved: 6, total: 14, gradient: tileColors[5]),
           ]),
         ),
         SliverToBoxAdapter(
           child: _buildCategorySection('MEN', [
-            _buildLeagueCard(context, '5-A-SIDE', '2 FIXTURES', 'Kite Beach', 'Jun 10', '45 AED', category: 'MEN', bgImage: _cardImages[3], color: const Color(0xFF00D2FF)),
-            _buildLeagueCard(context, '11-A-SIDE', '0 FIXTURES', 'Main Stadium', 'Jun 20', '99 AED', category: 'MEN', bgImage: _cardImages[4], color: const Color(0xFF8E2DE2)),
-            _buildLeagueCard(context, '6-A-SIDE', '3 FIXTURES', 'JLT Pitch', 'Jun 18', '55 AED', category: 'MEN', bgImage: _cardImages[0], color: const Color(0xFF38EF7D)),
-            _buildLeagueCard(context, '5-A-SIDE', '1 FIXTURE', 'Dubai Hills', 'Jun 13', '45 AED', category: 'MEN', bgImage: _cardImages[1], color: const Color(0xFFFFB75E)),
+            _buildLeagueCard(context, '5-A-SIDE', '2 FIXTURES', 'Kite Beach', 'Jun 10', '45 AED', category: 'MEN', bgImage: _cardImages[3], gradient: tileColors[1]),
+            _buildLeagueCard(context, '11-A-SIDE', '0 FIXTURES', 'Main Stadium', 'Jun 20', '99 AED', category: 'MEN', bgImage: _cardImages[4], gradient: tileColors[4]),
+            _buildLeagueCard(context, '6-A-SIDE', '3 FIXTURES', 'JLT Pitch', 'Jun 18', '55 AED', category: 'MEN', bgImage: _cardImages[0], gradient: tileColors[2]),
+            _buildLeagueCard(context, '5-A-SIDE', '1 FIXTURE', 'Dubai Hills', 'Jun 13', '45 AED', category: 'MEN', bgImage: _cardImages[1], gradient: tileColors[3]),
           ]),
         ),
         const SliverToBoxAdapter(child: SizedBox(height: 50)),
@@ -122,11 +122,16 @@ class _OrganisationDashboardState extends State<OrganisationDashboard> {
       width: double.infinity,
       padding: const EdgeInsets.all(25),
       decoration: BoxDecoration(
-        color: goldColor,
+        gradient: LinearGradient(
+          colors: [const Color(0xFF1A1A1A), const Color(0xFF0D0D0D)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: goldColor.withValues(alpha: 0.2)),
         boxShadow: [
           BoxShadow(
-            color: goldColor.withValues(alpha: 0.3),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -140,8 +145,8 @@ class _OrganisationDashboardState extends State<OrganisationDashboard> {
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white,
-              border: Border.all(color: Colors.white.withValues(alpha: 0.6), width: 2.5),
+              color: goldColor.withValues(alpha: 0.1),
+              border: Border.all(color: goldColor.withValues(alpha: 0.5), width: 2.5),
             ),
             child: Container(
               decoration: const BoxDecoration(
@@ -159,12 +164,12 @@ class _OrganisationDashboardState extends State<OrganisationDashboard> {
             children: [
               const Text('AHMED AL-MANSOORI',
                   style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 0.5)),
               const SizedBox(width: 8),
-              Icon(Icons.verified_user_rounded, color: Colors.black.withValues(alpha: 0.6), size: 18),
+              Icon(Icons.verified_user_rounded, color: goldColor, size: 18),
             ],
           ),
         ],
@@ -178,10 +183,14 @@ class _OrganisationDashboardState extends State<OrganisationDashboard> {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: const Color(0xFF007CFE),
+          gradient: LinearGradient(
+            colors: tileColors[0],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
           borderRadius: BorderRadius.circular(25),
           boxShadow: [
-            BoxShadow(color: const Color(0xFF007CFE).withValues(alpha: 0.3), blurRadius: 15, offset: const Offset(0, 8))
+            BoxShadow(color: tileColors[0][0].withValues(alpha: 0.3), blurRadius: 15, offset: const Offset(0, 8))
           ],
         ),
         child: const Column(
@@ -206,10 +215,14 @@ class _OrganisationDashboardState extends State<OrganisationDashboard> {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: const Color(0xFFEE0979),
+          gradient: LinearGradient(
+            colors: tileColors[4],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
           borderRadius: BorderRadius.circular(25),
           boxShadow: [
-            BoxShadow(color: const Color(0xFFEE0979).withValues(alpha: 0.3), blurRadius: 15, offset: const Offset(0, 8))
+            BoxShadow(color: tileColors[4][0].withValues(alpha: 0.3), blurRadius: 15, offset: const Offset(0, 8))
           ],
         ),
         child: const Column(
@@ -291,6 +304,9 @@ class _OrganisationDashboardState extends State<OrganisationDashboard> {
                           const SizedBox(height: 8),
                           Text(date.day.toString(),
                             style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
+                          const SizedBox(height: 4),
+                          Text(['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'][date.month - 1],
+                            style: TextStyle(color: isSelected ? greenAccent : Colors.white24, fontSize: 10, fontWeight: FontWeight.w900)),
                         ],
                       ),
                     ),
@@ -421,10 +437,10 @@ class _OrganisationDashboardState extends State<OrganisationDashboard> {
     );
   }
 
-  Widget _buildLeagueCard(BuildContext context, String type, String time, String location, String date, String price, {required String category, required String bgImage, int reserved = 0, int total = 10, Color? color}) {
+  Widget _buildLeagueCard(BuildContext context, String type, String time, String location, String date, String price, {required String category, required String bgImage, int reserved = 0, int total = 10, List<Color>? gradient}) {
     int slotsLeft = total - reserved;
     double progress = (reserved / total).clamp(0.0, 1.0);
-    final Color cardColor = color ?? const Color(0xFF007CFE);
+    final List<Color> cardGradient = gradient ?? tileColors[1];
 
     return GestureDetector(
       onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => OrganiserAttendanceView(
@@ -436,10 +452,14 @@ class _OrganisationDashboardState extends State<OrganisationDashboard> {
       child: Container(
         margin: const EdgeInsets.only(left: 20, right: 20, bottom: 15),
         decoration: BoxDecoration(
-          color: cardColor,
+          gradient: LinearGradient(
+            colors: cardGradient,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
           borderRadius: BorderRadius.circular(25),
           boxShadow: [
-            BoxShadow(color: cardColor.withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 5)),
+            BoxShadow(color: cardGradient[0].withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 5)),
           ],
         ),
         child: Padding(

@@ -482,7 +482,11 @@ class _CreateGamePageState extends State<CreateGamePage> {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFF007CFE),
+        gradient: const LinearGradient(
+          colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -600,15 +604,22 @@ class _CreateGamePageState extends State<CreateGamePage> {
           ),
         ),
         const SizedBox(width: 15),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
-          decoration: BoxDecoration(
-            color: goldColor,
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: const Text(
-            'INVITE',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 12, letterSpacing: 0.5),
+        GestureDetector(
+          onTap: () {}, // Add logic for invite
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: const Text(
+              'INVITE',
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 12, letterSpacing: 0.5),
+            ),
           ),
         ),
       ],
@@ -617,10 +628,16 @@ class _CreateGamePageState extends State<CreateGamePage> {
 
   Widget _buildScheduleButton() {
     return Container(
+      width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
+        gradient: const LinearGradient(
+          colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
         boxShadow: [
-          BoxShadow(color: goldColor.withOpacity(0.3), blurRadius: 20, offset: const Offset(0, 10))
+          BoxShadow(color: const Color(0xFF2E5B4F).withOpacity(0.3), blurRadius: 20, offset: const Offset(0, 10))
         ],
       ),
       child: ElevatedButton(
@@ -631,8 +648,8 @@ class _CreateGamePageState extends State<CreateGamePage> {
           Navigator.pop(context);
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: goldColor,
-          foregroundColor: Colors.black,
+          backgroundColor: Colors.transparent,
+          foregroundColor: Colors.white,
           minimumSize: const Size(double.infinity, 60),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           elevation: 0,

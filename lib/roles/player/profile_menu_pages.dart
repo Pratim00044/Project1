@@ -43,11 +43,11 @@ class PlayerMatchesScreen extends StatelessWidget {
     ];
 
     final List<List<Color>> colors = [
-      [const Color(0xFF007CFE), const Color(0xFF004A99)],
-      [const Color(0xFF38EF7D), const Color(0xFF11998E)],
-      [const Color(0xFFEE0979), const Color(0xFFF12711)],
-      [const Color(0xFFFFB75E), const Color(0xFFED8F03)],
-      [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)],
+      [const Color(0xFF1E3A8A), const Color(0xFF312E81)],
+      [const Color(0xFF064E3B), const Color(0xFF14532D)],
+      [const Color(0xFF831843), const Color(0xFF701A75)],
+      [const Color(0xFF92400E), const Color(0xFF78350F)],
+      [const Color(0xFF4C1D95), const Color(0xFF2E1065)],
     ];
 
     return Scaffold(
@@ -88,7 +88,11 @@ class PlayerMatchesScreen extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 25),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 decoration: BoxDecoration(
-                  color: gradientColors[0],
+                  gradient: LinearGradient(
+                    colors: gradientColors,
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
@@ -179,12 +183,12 @@ class PlayerStatsScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 25),
         child: Column(
           children: [
-            _buildStarSkillRow(0, 'SHOOTING', getVal('shooting'), [const Color(0xFFFFB75E), const Color(0xFFED8F03)]),
-            _buildStarSkillRow(1, 'PASSING', getVal('passing'), [const Color(0xFF007CFE), const Color(0xFF004A99)]),
-            _buildStarSkillRow(2, 'DRIBBLING', getVal('dribbling'), [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)]),
-            _buildStarSkillRow(3, 'DEFENDING', getVal('defending'), [const Color(0xFF38EF7D), const Color(0xFF11998E)]),
-            _buildStarSkillRow(4, 'PHYSICAL', getVal('physical'), [const Color(0xFFEE0979), const Color(0xFFF12711)]),
-            _buildStarSkillRow(5, 'SAVING', getVal('saving'), [const Color(0xFF00D2FF), const Color(0xFF3A7BD5)]),
+            _buildStarSkillRow(0, 'SHOOTING', getVal('shooting'), [const Color(0xFF92400E), const Color(0xFF78350F)]),
+            _buildStarSkillRow(1, 'PASSING', getVal('passing'), [const Color(0xFF1E3A8A), const Color(0xFF312E81)]),
+            _buildStarSkillRow(2, 'DRIBBLING', getVal('dribbling'), [const Color(0xFF4C1D95), const Color(0xFF2E1065)]),
+            _buildStarSkillRow(3, 'DEFENDING', getVal('defending'), [const Color(0xFF064E3B), const Color(0xFF14532D)]),
+            _buildStarSkillRow(4, 'PHYSICAL', getVal('physical'), [const Color(0xFF831843), const Color(0xFF701A75)]),
+            _buildStarSkillRow(5, 'SAVING', getVal('saving'), [const Color(0xFF2E5B4F), const Color(0xFF3B2A50)]),
           ],
         ),
       ),
@@ -205,7 +209,11 @@ class PlayerStatsScreen extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12, left: 15, right: 15),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       decoration: BoxDecoration(
-        color: colors[0],
+        gradient: LinearGradient(
+          colors: colors,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -257,12 +265,12 @@ class PlayerFeedbackScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> themeVariations = [
-      {'colors': [const Color(0xFF007CFE), const Color(0xFF004A99)]},
-      {'colors': [const Color(0xFF38EF7D), const Color(0xFF11998E)]},
-      {'colors': [const Color(0xFFEE0979), const Color(0xFFF12711)]},
-      {'colors': [const Color(0xFFFFB75E), const Color(0xFFED8F03)]},
-      {'colors': [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)]},
-      {'colors': [const Color(0xFF00D2FF), const Color(0xFF3A7BD5)]},
+      {'colors': [const Color(0xFF1E3A8A), const Color(0xFF312E81)]},
+      {'colors': [const Color(0xFF064E3B), const Color(0xFF14532D)]},
+      {'colors': [const Color(0xFF831843), const Color(0xFF701A75)]},
+      {'colors': [const Color(0xFF92400E), const Color(0xFF78350F)]},
+      {'colors': [const Color(0xFF4C1D95), const Color(0xFF2E1065)]},
+      {'colors': [const Color(0xFF2E5B4F), const Color(0xFF3B2A50)]},
     ];
 
     return Scaffold(
@@ -294,7 +302,11 @@ class PlayerFeedbackScreen extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  color: gradientColors[0],
+                  gradient: LinearGradient(
+                    colors: gradientColors,
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                   borderRadius: BorderRadius.circular(25),
                   boxShadow: [
                     BoxShadow(
@@ -438,12 +450,12 @@ class PlayerAttendanceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<List<Color>> colors = [
-      [const Color(0xFF38EF7D), const Color(0xFF11998E)],
-      [const Color(0xFF007CFE), const Color(0xFF004A99)],
-      [const Color(0xFFEE0979), const Color(0xFFF12711)],
-      [const Color(0xFFFFB75E), const Color(0xFFED8F03)],
-      [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)],
-      [const Color(0xFF00D2FF), const Color(0xFF3A7BD5)],
+      [const Color(0xFF064E3B), const Color(0xFF14532D)],
+      [const Color(0xFF1E3A8A), const Color(0xFF312E81)],
+      [const Color(0xFF831843), const Color(0xFF701A75)],
+      [const Color(0xFF92400E), const Color(0xFF78350F)],
+      [const Color(0xFF4C1D95), const Color(0xFF2E1065)],
+      [const Color(0xFF2E5B4F), const Color(0xFF3B2A50)],
     ];
 
     final attendance = [
@@ -532,7 +544,11 @@ class PlayerAttendanceScreen extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: colors[0],
+        gradient: LinearGradient(
+          colors: colors,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(

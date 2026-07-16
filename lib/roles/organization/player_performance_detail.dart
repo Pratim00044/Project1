@@ -30,23 +30,26 @@ class PlayerPerformanceDetail extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.white70),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Progress', style: TextStyle(color: Colors.white70, fontSize: 14)),
-        actions: [
-          if (!isReadOnly)
-            TextButton(onPressed: () {}, child: const Text('Edit latest', style: TextStyle(color: goldColor, fontWeight: FontWeight.bold))),
-        ],
+        title: const Text('Performance Progress', style: TextStyle(color: Colors.white70, fontSize: 14)),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(25),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Header (Image 1 Style)
             Row(
               children: [
-                CircleAvatar(
-                  radius: 35,
-                  backgroundColor: goldColor.withValues(alpha: 0.1),
-                  backgroundImage: const AssetImage('assets/images/sunil.png'),
+                Container(
+                  padding: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: goldColor, width: 2),
+                  ),
+                  child: const CircleAvatar(
+                    radius: 35,
+                    backgroundImage: AssetImage('assets/images/sunil.png'),
+                  ),
                 ),
                 const SizedBox(width: 20),
                 Expanded(
@@ -54,7 +57,6 @@ class PlayerPerformanceDetail extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(name, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
-                      Text(pos != null ? '$pos • Core FC' : 'Core FC', style: const TextStyle(color: Colors.white38, fontSize: 13, fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),
@@ -67,6 +69,7 @@ class PlayerPerformanceDetail extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 30),
+            // Metrics (Image 1 Style)
             Row(
               children: [
                 _buildStatTile('4', 'Games'),
@@ -96,9 +99,22 @@ class PlayerPerformanceDetail extends StatelessWidget {
             _buildHistoryRow('Apr 12', 'Sunday 5s', 4.0),
             _buildHistoryRow('Apr 9', 'Thursday Social 7s', 3.2),
             _buildHistoryRow('Apr 5', 'Saturday 5s', 3.3),
-            const SizedBox(height: 50),
+            const SizedBox(height: 60),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildHistoryRow(String date, String game, double r) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15),
+      child: Row(
+        children: [
+          SizedBox(width: 50, child: Text(date, style: const TextStyle(color: Colors.white24, fontSize: 12, fontWeight: FontWeight.bold))),
+          Expanded(child: Text(game, style: const TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w700))),
+          Text('$r', style: const TextStyle(color: goldColor, fontSize: 14, fontWeight: FontWeight.w900)),
+        ],
       ),
     );
   }
@@ -149,19 +165,6 @@ class PlayerPerformanceDetail extends StatelessWidget {
             width: 8, height: 8,
             decoration: BoxDecoration(color: statusColor, shape: BoxShape.circle),
           )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHistoryRow(String date, String game, double r) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
-      child: Row(
-        children: [
-          SizedBox(width: 50, child: Text(date, style: const TextStyle(color: Colors.white24, fontSize: 12, fontWeight: FontWeight.bold))),
-          Expanded(child: Text(game, style: const TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w700))),
-          Text('$r', style: const TextStyle(color: goldColor, fontSize: 14, fontWeight: FontWeight.w900)),
         ],
       ),
     );

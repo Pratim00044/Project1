@@ -11,12 +11,12 @@ class MyTeamsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<List<Color>> tileColors = [
-      [const Color(0xFF007CFE), const Color(0xFF004A99)],
-      [const Color(0xFF38EF7D), const Color(0xFF11998E)],
-      [const Color(0xFFEE0979), const Color(0xFFF12711)],
-      [const Color(0xFFFFB75E), const Color(0xFFED8F03)],
-      [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)],
-      [const Color(0xFF00D2FF), const Color(0xFF3A7BD5)],
+      [const Color(0xFF2E5B4F), const Color(0xFF3B2A50)],
+      [const Color(0xFF1E3A8A), const Color(0xFF312E81)],
+      [const Color(0xFF064E3B), const Color(0xFF14532D)],
+      [const Color(0xFF334155), const Color(0xFF1E293B)],
+      [const Color(0xFF4C1D95), const Color(0xFF2E1065)],
+      [const Color(0xFF831843), const Color(0xFF701A75)],
     ];
 
     return CustomScrollView(
@@ -25,9 +25,13 @@ class MyTeamsPage extends StatelessWidget {
             child: Container(
               margin: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: const Color(0xFF1E1E1E),
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF1A1A1A), Color(0xFF0D0D0D)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
                 borderRadius: BorderRadius.circular(30),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                border: Border.all(color: goldColor.withValues(alpha: 0.2)),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.3),
@@ -115,9 +119,8 @@ class MyTeamsPage extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => TeammateProfile(
-                              playerName: member['name'],
+                              playerName: member['name']!,
                               playerNumber: member['no'],
-                              playerStats: member,
                             ),
                           ),
                         );
@@ -126,7 +129,11 @@ class MyTeamsPage extends StatelessWidget {
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 15),
                       decoration: BoxDecoration(
-                        color: colors[0],
+                        gradient: LinearGradient(
+                          colors: colors,
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
                         borderRadius: BorderRadius.circular(25),
                         boxShadow: [
                           BoxShadow(
@@ -188,7 +195,7 @@ class MyTeamsPage extends StatelessWidget {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.9), 
+                                  color: Colors.white.withValues(alpha: 0.9),
                                   borderRadius: BorderRadius.circular(8)
                                 ),
                                 child: Text('ME', style: TextStyle(color: colors[0], fontSize: 10, fontWeight: FontWeight.w900)),

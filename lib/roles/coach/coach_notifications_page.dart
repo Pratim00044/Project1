@@ -15,7 +15,7 @@ class CoachNotificationsPage extends StatelessWidget {
         'category': 'Training',
         'time': '08:30 AM',
         'icon': Icons.fitness_center_rounded,
-        'color': const Color(0xFF38EF7D),
+        'color': const Color(0xFF2E5B4F),
         'isNew': true,
       },
       {
@@ -23,7 +23,7 @@ class CoachNotificationsPage extends StatelessWidget {
         'category': 'Analysis',
         'time': '11:15 AM',
         'icon': Icons.analytics_outlined,
-        'color': const Color(0xFF007CFE),
+        'color': const Color(0xFF1E3A8A),
         'isNew': true,
       },
       {
@@ -31,7 +31,7 @@ class CoachNotificationsPage extends StatelessWidget {
         'category': 'Match',
         'time': 'Yesterday',
         'icon': Icons.sports_soccer_rounded,
-        'color': goldColor,
+        'color': const Color(0xFF064E3B),
         'isNew': true,
       },
       {
@@ -39,7 +39,7 @@ class CoachNotificationsPage extends StatelessWidget {
         'category': 'Chat',
         'time': 'Yesterday',
         'icon': Icons.chat_bubble_outline_rounded,
-        'color': const Color(0xFFEE0979),
+        'color': const Color(0xFF831843),
         'isNew': true,
       },
       {
@@ -47,7 +47,7 @@ class CoachNotificationsPage extends StatelessWidget {
         'category': 'Roster',
         'time': '2 days ago',
         'icon': Icons.people_outline_rounded,
-        'color': Colors.deepPurpleAccent,
+        'color': const Color(0xFF4C1D95),
         'isNew': true,
       },
     ];
@@ -94,13 +94,13 @@ class CoachNotificationsPage extends StatelessWidget {
           Widget iconWidget = Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: isNew ? Colors.black.withValues(alpha: 0.1) : Colors.black.withValues(alpha: 0.6),
+              color: Colors.white.withValues(alpha: 0.1),
               shape: BoxShape.circle,
-              border: Border.all(color: isNew ? Colors.black.withValues(alpha: 0.1) : Colors.white10),
+              border: Border.all(color: isNew ? Colors.white.withValues(alpha: 0.4) : Colors.white10),
             ),
             child: Icon(
               notif['icon'] as IconData,
-              color: isNew ? Colors.black.withValues(alpha: 0.5) : accentColor,
+              color: isNew ? Colors.white : accentColor.withValues(alpha: 0.7),
               size: 20,
             ),
           );
@@ -115,35 +115,35 @@ class CoachNotificationsPage extends StatelessWidget {
                     if (!isEven && isNew)
                       Container(
                         margin: const EdgeInsets.only(right: 8),
-                        width: 6, height: 6,
-                        decoration: const BoxDecoration(color: Colors.black26, shape: BoxShape.circle),
+                        width: 8, height: 8,
+                        decoration: const BoxDecoration(color: goldColor, shape: BoxShape.circle),
                       ),
                     Text(notif['category'].toString().toUpperCase(),
                         style: TextStyle(
-                            color: isNew ? Colors.black.withValues(alpha: 0.5) : accentColor,
+                            color: isNew ? Colors.white.withValues(alpha: 0.7) : accentColor.withValues(alpha: 0.8),
                             fontSize: 11,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 0.5)),
                     if (isEven && isNew)
                       Container(
                         margin: const EdgeInsets.only(left: 8),
-                        width: 6, height: 6,
-                        decoration: const BoxDecoration(color: Colors.black26, shape: BoxShape.circle),
+                        width: 8, height: 8,
+                        decoration: const BoxDecoration(color: goldColor, shape: BoxShape.circle),
                       ),
                   ],
                 ),
                 const SizedBox(height: 6),
                 Text(notif['title']!,
                     textAlign: isEven ? TextAlign.left : TextAlign.right,
-                    style: TextStyle(
-                        color: isNew ? Colors.black87 : Colors.white.withValues(alpha: 0.9),
+                    style: const TextStyle(
+                        color: Colors.white,
                         fontSize: 13,
                         height: 1.4,
                         fontWeight: FontWeight.bold)),
                 const SizedBox(height: 10),
                 Text(notif['time']!,
-                    style: TextStyle(
-                      color: isNew ? Colors.black.withValues(alpha: 0.4) : Colors.white38, 
+                    style: const TextStyle(
+                      color: Colors.white38, 
                       fontSize: 10, 
                       fontWeight: FontWeight.bold,
                     )),
@@ -154,7 +154,13 @@ class CoachNotificationsPage extends StatelessWidget {
           return Container(
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             decoration: BoxDecoration(
-              color: isNew ? accentColor : surfaceColor,
+              gradient: LinearGradient(
+                colors: isNew 
+                  ? [accentColor, accentColor.withValues(alpha: 0.7)]
+                  : [surfaceColor, surfaceColor],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
               borderRadius: BorderRadius.circular(25),
               boxShadow: [
                 BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 10, offset: const Offset(0, 4))
@@ -164,7 +170,7 @@ class CoachNotificationsPage extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(25),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                border: Border.all(color: isNew ? Colors.white.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.05)),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,

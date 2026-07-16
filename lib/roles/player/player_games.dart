@@ -19,12 +19,12 @@ class _PlayerGamesPageState extends State<PlayerGamesPage> {
   final ScrollController _calendarController = ScrollController();
 
   final List<List<Color>> tileColors = [
-    [const Color(0xFF007CFE), const Color(0xFF004A99)],
-    [const Color(0xFF38EF7D), const Color(0xFF11998E)],
-    [const Color(0xFFEE0979), const Color(0xFFF12711)],
-    [const Color(0xFFFFB75E), const Color(0xFFED8F03)],
-    [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)],
-    [const Color(0xFF00D2FF), const Color(0xFF3A7BD5)],
+    [const Color(0xFF2E5B4F), const Color(0xFF3B2A50)],
+    [const Color(0xFF1E3A8A), const Color(0xFF312E81)],
+    [const Color(0xFF064E3B), const Color(0xFF14532D)],
+    [const Color(0xFF334155), const Color(0xFF1E293B)],
+    [const Color(0xFF4C1D95), const Color(0xFF2E1065)],
+    [const Color(0xFF831843), const Color(0xFF701A75)],
   ];
 
   @override
@@ -78,11 +78,15 @@ class _PlayerGamesPageState extends State<PlayerGamesPage> {
               margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
               padding: const EdgeInsets.all(25),
               decoration: BoxDecoration(
-                color: const Color(0xFF8E2DE2),
+                gradient: LinearGradient(
+                  colors: [const Color(0xFF4C1D95), const Color(0xFF2E1065)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
                 borderRadius: BorderRadius.circular(30),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF8E2DE2).withValues(alpha: 0.2),
+                    color: const Color(0xFF4C1D95).withValues(alpha: 0.2),
                     blurRadius: 15,
                     offset: const Offset(0, 8),
                   )
@@ -275,6 +279,15 @@ class _PlayerGamesPageState extends State<PlayerGamesPage> {
                               fontWeight: FontWeight.w900,
                             ),
                           ),
+                          const SizedBox(height: 4),
+                          Text(
+                            ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'][date.month - 1],
+                            style: TextStyle(
+                              color: isSelected ? const Color(0xFF2ECC71) : Colors.white24,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -341,7 +354,11 @@ class _PlayerGamesPageState extends State<PlayerGamesPage> {
         height: 160,
         padding: const EdgeInsets.all(25),
         decoration: BoxDecoration(
-          color: colors[0],
+          gradient: LinearGradient(
+            colors: colors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
           borderRadius: BorderRadius.circular(30),
           boxShadow: [
             BoxShadow(
@@ -467,16 +484,16 @@ class _PlayerMatchDetailView extends StatefulWidget {
 
 class _PlayerMatchDetailViewState extends State<_PlayerMatchDetailView> with SingleTickerProviderStateMixin {
   late TabController _innerTab;
-  final Color teamAColor = const Color(0xFF007CFE);
-  final Color teamBColor = const Color(0xFF38EF7D);
+  final Color teamAColor = const Color(0xFF1E3A8A);
+  final Color teamBColor = const Color(0xFF2E5B4F);
 
   final List<List<Color>> playerColors = [
-    [const Color(0xFF007CFE), const Color(0xFF004A99)],
-    [const Color(0xFF38EF7D), const Color(0xFF11998E)],
-    [const Color(0xFFEE0979), const Color(0xFFF12711)],
-    [const Color(0xFFFFB75E), const Color(0xFFED8F03)],
-    [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)],
-    [const Color(0xFF00D2FF), const Color(0xFF3A7BD5)],
+    [const Color(0xFF2E5B4F), const Color(0xFF3B2A50)],
+    [const Color(0xFF1E3A8A), const Color(0xFF312E81)],
+    [const Color(0xFF064E3B), const Color(0xFF14532D)],
+    [const Color(0xFF334155), const Color(0xFF1E293B)],
+    [const Color(0xFF4C1D95), const Color(0xFF2E1065)],
+    [const Color(0xFF831843), const Color(0xFF701A75)],
   ];
 
   final Map<String, List<Map<String, dynamic>>> _teamLineups = {

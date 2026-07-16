@@ -115,8 +115,8 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
       children: [
         _buildSectionTitle('PAST GAMES / MATCHES'),
         const SizedBox(height: 15),
-        _buildPastGameItem('Under 12s vs City FC', 'Jul 10 • 2 - 1 Win', cardColors[0]),
-        _buildPastGameItem('Shooting Session', 'Jul 08 • Completed', cardColors[1]),
+        _buildPastGameItem('Under 12s vs City FC', 'Jul 10 • 2 - 1 Win', 0),
+        _buildPastGameItem('Shooting Session', 'Jul 08 • Completed', 1),
         
         const SizedBox(height: 30),
         _buildCreateNewButton(),
@@ -158,26 +158,30 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
             padding: const EdgeInsets.all(25),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
-              color: goldColor,
+              gradient: const LinearGradient(
+                colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
             ),
             child: Row(
               children: [
                 Container(
                   padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(color: Colors.black.withOpacity(0.1), shape: BoxShape.circle),
-                  child: const Icon(Icons.add_rounded, color: Colors.black, size: 28),
+                  decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), shape: BoxShape.circle),
+                  child: const Icon(Icons.add_rounded, color: Colors.white, size: 28),
                 ),
                 const SizedBox(width: 20),
                 const Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('CREATE LEAGUE', style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 1)),
-                      Text('Start your own custom competition', style: TextStyle(color: Colors.black54, fontSize: 12, fontWeight: FontWeight.bold)),
+                      Text('CREATE LEAGUE', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                      Text('Start your own custom competition', style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),
-                const Icon(Icons.arrow_forward_ios_rounded, color: Colors.black45, size: 18),
+                const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white38, size: 18),
               ],
             ),
           ),
@@ -185,9 +189,9 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
         const SizedBox(height: 35),
         _buildSectionTitle('ACTIVE LEAGUES'),
         const SizedBox(height: 15),
-        _buildLeagueItem('Champions League', 'Europe • 32 Teams', 'IN PROGRESS', cardColors[2]),
-        _buildLeagueItem('Premier League', 'England • 20 Teams', 'OPEN', cardColors[3]),
-        _buildLeagueItem('La Liga', 'Spain • 20 Teams', 'UPCOMING', cardColors[4]),
+        _buildLeagueItem('Champions League', 'Europe • 32 Teams', 'IN PROGRESS', 2),
+        _buildLeagueItem('Premier League', 'England • 20 Teams', 'OPEN', 3),
+        _buildLeagueItem('La Liga', 'Spain • 20 Teams', 'UPCOMING', 4),
       ],
     );
   }
@@ -210,17 +214,21 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 20),
           decoration: BoxDecoration(
-            color: goldColor,
+            gradient: const LinearGradient(
+              colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
             borderRadius: BorderRadius.circular(20),
-            boxShadow: [BoxShadow(color: goldColor.withOpacity(0.2), blurRadius: 15, offset: const Offset(0, 8))],
+            boxShadow: [BoxShadow(color: const Color(0xFF2E5B4F).withOpacity(0.2), blurRadius: 15, offset: const Offset(0, 8))],
           ),
           child: const Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.add_circle_outline_rounded, color: Colors.black, size: 20),
+                Icon(Icons.add_circle_outline_rounded, color: Colors.white, size: 20),
                 SizedBox(width: 10),
-                Text('CREATE NEW', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, fontSize: 15, letterSpacing: 1)),
+                Text('CREATE NEW', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 15, letterSpacing: 1)),
               ],
             ),
           ),
@@ -264,11 +272,25 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
     );
   }
 
-  Widget _buildPastGameItem(String title, String subtitle, Color color) {
+  Widget _buildPastGameItem(String title, String subtitle, int index) {
+    final List<List<Color>> pastGradients = [
+      [Color(0xFF1E3A8A), Color(0xFF312E81)],
+      [Color(0xFF064E3B), Color(0xFF14532D)],
+      [Color(0xFF334155), Color(0xFF1E293B)],
+    ];
+    final gradient = pastGradients[index % pastGradients.length];
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(15)),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: gradient,
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
+        borderRadius: BorderRadius.circular(15),
+      ),
       child: Row(
         children: [
           Container(width: 40, height: 40, decoration: BoxDecoration(color: Colors.black.withOpacity(0.1), borderRadius: BorderRadius.circular(10)), child: const Icon(Icons.history, color: Colors.white, size: 20)),
@@ -285,11 +307,26 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
     );
   }
 
-  Widget _buildLeagueItem(String title, String subtitle, String status, Color color) {
+  Widget _buildLeagueItem(String title, String subtitle, String status, int index) {
+    final List<List<Color>> leagueGradients = [
+      [Color(0xFF1E3A8A), Color(0xFF312E81)],
+      [Color(0xFF064E3B), Color(0xFF14532D)],
+      [Color(0xFF334155), Color(0xFF1E293B)],
+      [Color(0xFF4C1D95), Color(0xFF2E1065)],
+    ];
+    final gradient = leagueGradients[index % leagueGradients.length];
+
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(20)),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: gradient,
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Row(
         children: [
           Expanded(
@@ -311,7 +348,14 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(15)),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
+        borderRadius: BorderRadius.circular(15),
+      ),
       child: Row(
         children: [
           Container(
@@ -355,7 +399,7 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
         const SizedBox(width: 10),
         Expanded(
           child: SizedBox(
-            height: 90,
+            height: 100,
             child: ListView.builder(
               controller: _dateScrollController,
               scrollDirection: Axis.horizontal,
@@ -380,6 +424,14 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
                         Text(label, style: TextStyle(color: isSelected ? goldColor : Colors.white24, fontSize: 9, fontWeight: FontWeight.w900)),
                         const SizedBox(height: 5),
                         Text(date.day.toString(), style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900)),
+                        const SizedBox(height: 5),
+                        Text(['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'][date.month - 1],
+                          style: TextStyle(
+                            color: isSelected ? goldColor : Colors.white24, 
+                            fontSize: 9, 
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 0.5
+                          )),
                       ],
                     ),
                   ),
@@ -401,8 +453,15 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(10),
-        decoration: const BoxDecoration(color: goldColor, shape: BoxShape.circle),
-        child: Icon(icon, color: Colors.black, size: 18),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, color: Colors.white, size: 18),
       ),
     );
   }

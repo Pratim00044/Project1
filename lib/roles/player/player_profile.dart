@@ -4,337 +4,290 @@ import 'custom_painters.dart';
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
 const Color surfaceColor = Color(0xFF121212);
+const Color greenAccent = Color(0xFF2ECC71);
 
-class PlayerProfile extends StatefulWidget {
-  final String? playerName;
+class PlayerProfile extends StatelessWidget {
+  final String playerName;
   final String? playerNumber;
-  final Map<String, dynamic>? playerStats;
   final bool isReadOnly;
+  final bool showBackButton;
 
   const PlayerProfile({
     super.key,
-    this.playerName,
+    this.playerName = 'Lionel Messi',
     this.playerNumber,
-    this.playerStats,
     this.isReadOnly = false,
+    this.showBackButton = false,
   });
 
   @override
-  State<PlayerProfile> createState() => _PlayerProfileState();
+  Widget build(BuildContext context) {
+    return DetailedPlayerProfile(
+      name: playerName,
+      pos: 'Forward',
+      club: 'Core FC',
+      isMe: !isReadOnly,
+      showBackButton: showBackButton,
+    );
+  }
 }
 
-class _PlayerProfileState extends State<PlayerProfile> {
+class DetailedPlayerProfile extends StatelessWidget {
+  final String name;
+  final String pos;
+  final String club;
+  final bool isMe;
+  final Map<String, String>? stats;
+  final bool showBackButton;
+
+  const DetailedPlayerProfile({
+    super.key,
+    required this.name,
+    required this.pos,
+    required this.club,
+    this.isMe = false,
+    this.stats,
+    this.showBackButton = false,
+  });
+
   @override
   Widget build(BuildContext context) {
-    final String displayName = widget.playerName ?? 'LIONEL MESSI';
-    final String displaySub = widget.playerNumber != null 
-        ? '#${widget.playerNumber}' 
-        : '#11';
+    final displayStats = stats ?? {
+      'Goals': '12',
+      'Assists': '7',
+      'Clean sheets': '4',
+      'Games played': '24',
+      'Attendance': '87%',
+      'Avg rating': '4.8',
+    };
 
     return Scaffold(
       backgroundColor: darkBg,
-      body: Stack(
-        children: [
-          CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                expandedHeight: 320,
-                pinned: false,
-                toolbarHeight: 0,
-                backgroundColor: darkBg,
-                elevation: 0,
-                automaticallyImplyLeading: false,
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Stack(
-                    fit: StackFit.expand,
+      appBar: showBackButton ? AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ) : null,
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header with Photo
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: goldColor, width: 2),
+                  ),
+                  child: const CircleAvatar(
+                    radius: 35,
+                    backgroundImage: AssetImage('assets/images/sunil.png'),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(color: darkBg),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(height: 40),
-                          Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: goldColor, width: 2),
-                              boxShadow: [BoxShadow(color: goldColor.withValues(alpha: 0.2), blurRadius: 20)],
-                            ),
-                            child: const CircleAvatar(
-                              radius: 55,
-                              backgroundImage: AssetImage('assets/images/sunil.png'),
-                            ),
-                          ),
-                          const SizedBox(height: 15),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text(displayName.toUpperCase(),
-                                maxLines: 1,
-                                style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900, letterSpacing: 1)),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const SizedBox(width: 32),
-                              Column(
-                                children: [
-                                  _buildHeaderPill(displaySub),
-                                  const SizedBox(height: 8),
-                                  Text('CLUB PLAYER', style: TextStyle(color: goldColor.withValues(alpha: 0.8), fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1)),
-                                ],
-                              ),
-                              const SizedBox(width: 10),
-                              if (!widget.isReadOnly)
-                              GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  padding: const EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    color: goldColor.withValues(alpha: 0.1),
-                                    shape: BoxShape.circle,
-                                    border: Border.all(color: goldColor.withValues(alpha: 0.2)),
-                                  ),
-                                  child: const Icon(Icons.edit, color: goldColor, size: 12),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 15),
-                        ],
-                      ),
+                      Text(name, style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900)),
                     ],
                   ),
                 ),
-              ),
-              SliverToBoxAdapter(
-                child: _buildProfileContent(),
-              ),
-            ],
-          ),
-          if (widget.isReadOnly)
-            Positioned(
-              top: 40,
-              left: 20,
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 22),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHeaderPill(String text, {bool isGold = false}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-      decoration: BoxDecoration(
-        color: isGold ? goldColor.withValues(alpha: 0.1) : Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: isGold ? goldColor.withValues(alpha: 0.3) : Colors.white10),
-      ),
-      child: Text(text, 
-        style: TextStyle(color: isGold ? goldColor : Colors.white70, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1)),
-    );
-  }
-
-  Widget _buildProfileContent() {
-    final stats = widget.playerStats ?? {
-      'shooting': '98',
-      'passing': '88',
-      'dribbling': '92',
-      'defending': '45',
-      'physical': '85',
-      'saving': '10',
-    };
-
-    double getVal(String key) => (double.tryParse(stats[key]?.toString() ?? '0') ?? 0) / 100;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 8, bottom: 15),
-            child: Text('PERSONAL DETAILS', 
-              style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
-          ),
-          GridView.count(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 3,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            childAspectRatio: 0.9,
-            children: [
-              _buildModernTile(0, '170 cm', 'Height', Icons.height_rounded, [const Color(0xFF007CFE), const Color(0xFF004A99)]),
-              _buildModernTile(1, '12 Years', 'Age', Icons.calendar_month_rounded, [const Color(0xFFFFB75E), const Color(0xFFED8F03)]),
-              _buildModernTile(2, 'UAE', 'Nationality', Icons.public_rounded, [const Color(0xFF38EF7D), const Color(0xFF11998E)], emoji: '🇦🇪'),
-              _buildModernTile(3, '11', 'Shirt #', Icons.format_list_numbered_rounded, [const Color(0xFF00D2FF), const Color(0xFF3A7BD5)]),
-              _buildModernTile(4, 'Right', 'Foot', Icons.directions_run_rounded, [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)]),
-              _buildModernTile(5, '#14', 'Rank', Icons.stars_rounded, [const Color(0xFFEE0979), const Color(0xFFF12711)]),
-            ],
-          ),
-
-          const SizedBox(height: 25),
-          const Padding(
-            padding: EdgeInsets.only(left: 8, bottom: 15),
-            child: Text('PLAYER SKILL RADAR', 
-              style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
-          ),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(30),
-            decoration: BoxDecoration(
-              color: surfaceColor,
-              borderRadius: BorderRadius.circular(30),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Column(
                   children: [
-                    const Text('Skill Traits', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                    const Icon(Icons.analytics_rounded, color: goldColor, size: 20),
+                    Text(displayStats['Avg rating']!, style: const TextStyle(color: goldColor, fontSize: 28, fontWeight: FontWeight.w900)),
+                    const Text('Avg rating', style: TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.bold)),
                   ],
-                ),
-                const Text('Comparing stats to regional averages', style: TextStyle(color: Colors.white38, fontSize: 11)),
-                const SizedBox(height: 40),
-                Center(
-                  child: SizedBox(
-                    width: 240,
-                    height: 240,
+                )
+              ],
+            ),
+            
+            const SizedBox(height: 30),
+            _buildSectionHeader('PERSONAL DETAILS'),
+            const SizedBox(height: 15),
+            GridView.count(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisCount: 3,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              childAspectRatio: 0.95,
+              children: [
+                _buildModernTile('170 cm', 'Height', Icons.height_rounded, const Color(0xFF1E3A8A)),
+                _buildModernTile('12 Years', 'Age', Icons.calendar_month_rounded, const Color(0xFF92400E)),
+                _buildModernTile('UAE', 'Nationality', Icons.public_rounded, const Color(0xFF064E3B)),
+                _buildModernTile('11', 'Shirt #', Icons.format_list_numbered_rounded, const Color(0xFF2E5B4F)),
+                _buildModernTile('Right', 'Foot', Icons.directions_run_rounded, const Color(0xFF4C1D95)),
+                _buildModernTile('#14', 'Rank', Icons.stars_rounded, const Color(0xFF831843)),
+              ],
+            ),
+
+            const SizedBox(height: 35),
+            _buildSectionHeader('SEASON STATS'),
+            const SizedBox(height: 15),
+            
+            // Season Stats Grid
+            GridView.count(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisCount: 3,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              childAspectRatio: 1.1,
+              children: [
+                _buildStatTile(displayStats['Goals']!, 'Goals'),
+                _buildStatTile(displayStats['Assists']!, 'Assists'),
+                _buildStatTile(displayStats['Clean sheets']!, 'Clean sheets'),
+                _buildStatTile(displayStats['Games played']!, 'Games played'),
+                _buildStatTile(displayStats['Attendance']!, 'Attendance'),
+                _buildStatTile(displayStats['Avg rating']!, 'Avg rating'),
+              ],
+            ),
+
+            const SizedBox(height: 35),
+            _buildSectionHeader('PLAYER SKILL RADAR'),
+            const SizedBox(height: 20),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(30),
+              decoration: BoxDecoration(
+                color: surfaceColor,
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Skill Traits', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                      Icon(Icons.analytics_rounded, color: goldColor, size: 20),
+                    ],
+                  ),
+                  const Text('Comparing stats to regional averages', style: TextStyle(color: Colors.white38, fontSize: 11)),
+                  const SizedBox(height: 40),
+                  Center(
+                    child: SizedBox(
+                      width: 240,
+                      height: 240,
+                      child: CustomPaint(
+                        painter: RadarChartPainter(
+                          stats: const [0.98, 0.88, 0.92, 0.45, 0.85, 0.10],
+                          labels: const [
+                            'Shooting\n98%',
+                            'Passing\n88%',
+                            'Dribbling\n92%',
+                            'Defending\n45%',
+                            'Physical\n85%',
+                            'Saving\n10%',
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 40),
+            _buildSectionHeader('POSITION'),
+            const SizedBox(height: 15),
+            Container(
+              padding: const EdgeInsets.all(25),
+              decoration: BoxDecoration(
+                color: surfaceColor,
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+              ),
+              child: Row(
+                children: [
+                  const Expanded(
+                    flex: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Primary', style: TextStyle(color: Color(0xFFE91E63), fontSize: 12, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 5),
+                        Text('Striker', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900)),
+                        SizedBox(height: 25),
+                        Text('Others', style: TextStyle(color: Colors.white38, fontSize: 12, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 8),
+                        Text('Attacking Midfielder', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+                        SizedBox(height: 4),
+                        Text('Right Winger', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  SizedBox(
+                    width: 120,
+                    height: 160,
                     child: CustomPaint(
-                      painter: RadarChartPainter(
-                        stats: [
-                          getVal('shooting'),
-                          getVal('passing'),
-                          getVal('dribbling'),
-                          getVal('defending'),
-                          getVal('physical'),
-                          getVal('saving'),
-                        ],
-                        labels: [
-                          'Shooting\n${(getVal('shooting') * 100).toInt()}%',
-                          'Passing\n${(getVal('passing') * 100).toInt()}%',
-                          'Dribbling\n${(getVal('dribbling') * 100).toInt()}%',
-                          'Defending\n${(getVal('defending') * 100).toInt()}%',
-                          'Physical\n${(getVal('physical') * 100).toInt()}%',
-                          'Saving\n${(getVal('saving') * 100).toInt()}%',
+                      painter: SoccerFieldPainter(
+                        positions: const [
+                          {'pos': 'ST', 'x': 0.5, 'y': 0.15, 'primary': true},
+                          {'pos': 'AM', 'x': 0.5, 'y': 0.45, 'primary': false},
+                          {'pos': 'RW', 'x': 0.85, 'y': 0.25, 'primary': false},
                         ],
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 30),
-          _buildPositionSection(),
-
-          const SizedBox(height: 50),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPositionSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 8, bottom: 15),
-          child: Text('POSITION', 
-            style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
-        ),
-        Container(
-          padding: const EdgeInsets.all(25),
-          decoration: BoxDecoration(
-            color: surfaceColor,
-            borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Primary', style: TextStyle(color: Color(0xFFE91E63), fontSize: 12, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 5),
-                    const Text('Striker', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900)),
-                    const SizedBox(height: 25),
-                    const Text('Others', style: TextStyle(color: Colors.white38, fontSize: 12, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 8),
-                    const Text('Attacking Midfielder', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
-                    const SizedBox(height: 4),
-                    const Text('Right Winger', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 20),
-              SizedBox(
-                width: 140,
-                height: 180,
-                child: CustomPaint(
-                  painter: SoccerFieldPainter(
-                    positions: [
-                      {'pos': 'ST', 'x': 0.7, 'y': 0.15, 'primary': true},
-                      {'pos': 'AM', 'x': 0.65, 'y': 0.45, 'primary': false},
-                      {'pos': 'RW', 'x': 0.85, 'y': 0.35, 'primary': false},
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildModernTile(int index, String val, String label, IconData icon, List<Color> colors, {String? emoji}) {
-    final bgColor = colors[0];
-    return Container(
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: bgColor.withValues(alpha: 0.2),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          )
-        ],
-      ),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: Colors.white, size: 16),
-            const SizedBox(height: 6),
-            FittedBox(
-              child: Row(
-                children: [
-                  if (emoji != null) Padding(padding: const EdgeInsets.only(right: 4), child: Text(emoji, style: const TextStyle(fontSize: 10))),
-                  Text(val, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 13)),
                 ],
               ),
             ),
-            const SizedBox(height: 2),
-            Text(label.toUpperCase(), style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 8, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 60),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader(String title) {
+    return Text(title,
+        style: const TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1.5));
+  }
+
+  Widget _buildStatTile(String val, String label) {
+    return Container(
+      decoration: BoxDecoration(
+        color: surfaceColor,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.03)),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(val, style: const TextStyle(color: goldColor, fontSize: 20, fontWeight: FontWeight.w900)),
+          const SizedBox(height: 4),
+          Text(label, style: const TextStyle(color: Colors.white38, fontSize: 9, fontWeight: FontWeight.bold)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildModernTile(String val, String label, IconData icon, Color color) {
+    return Container(
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: color, size: 18),
+          const SizedBox(height: 6),
+          Text(val, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 13)),
+          const SizedBox(height: 2),
+          Text(label.toUpperCase(), style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 8, fontWeight: FontWeight.bold)),
+        ],
       ),
     );
   }
