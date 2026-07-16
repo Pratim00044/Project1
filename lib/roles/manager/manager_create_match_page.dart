@@ -20,7 +20,7 @@ class _ManagerCreateMatchPageState extends State<ManagerCreateMatchPage> {
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
 
-  final List<String> _categories = ['MEN', 'LADIES', 'MIXED', 'WEIGHT'];
+  final List<String> _categories = ['MEN', 'LADIES', 'MIXED', 'VETS'];
   final List<String> _myTeams = ['CORE FC', 'DUBAI LIONS', 'NATIONAL GULF FC'];
   final List<String> _opponents = ['Turan Dubai FC', 'National Paints FC', 'Street League FC', 'Eagle FC', 'United FC'];
   final List<String> _squadLimits = ['5', '7', '8', '11', '15', '20', '25'];
@@ -421,7 +421,7 @@ class _ManagerCreateMatchPageState extends State<ManagerCreateMatchPage> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF007CFE), Color(0xFF004A99)],
+          colors: [Color(0xFF0D47A1), Color(0xFF002171)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -447,16 +447,20 @@ class _ManagerCreateMatchPageState extends State<ManagerCreateMatchPage> {
     return Container(
       height: 250,
       decoration: BoxDecoration(
-        color: surfaceColor,
+        gradient: const LinearGradient(
+          colors: [Color(0xFF1B222E), Color(0xFF0D121A)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(25),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),
         child: ListView.separated(
           shrinkWrap: true,
           itemCount: _players.length,
-          separatorBuilder: (context, index) => Divider(color: Colors.white.withOpacity(0.05), height: 1),
+          separatorBuilder: (context, index) => Divider(color: Colors.white.withValues(alpha: 0.05), height: 1),
           itemBuilder: (context, index) {
             final player = _players[index];
             return ListTile(

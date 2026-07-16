@@ -114,14 +114,14 @@ class ManagerBudgetPage extends StatelessWidget {
       padding: const EdgeInsets.all(35),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF1C1C1C), Color(0xFF0D0D0D)],
+          colors: [Color(0xFF1B222E), Color(0xFF0D121A)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(45),
-        border: Border.all(color: goldColor.withOpacity(0.1)),
+        border: Border.all(color: goldColor.withValues(alpha: 0.1)),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.5), blurRadius: 20, offset: const Offset(0, 10))
+          BoxShadow(color: Colors.black.withValues(alpha: 0.5), blurRadius: 20, offset: const Offset(0, 10))
         ],
       ),
       child: Column(
@@ -140,7 +140,7 @@ class ManagerBudgetPage extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: accentGreen.withOpacity(0.1),
+              color: accentGreen.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
             ),
             child: const Row(
@@ -160,26 +160,26 @@ class ManagerBudgetPage extends StatelessWidget {
   Widget _buildQuickStatsRow() {
     return Row(
       children: [
-        _buildStatCard('INFLOW', '₹5.2L', accentGreen),
+        _buildStatCard('INFLOW', '₹5.2L', accentGreen, [const Color(0xFF004D40), const Color(0xFF00251A)]),
         const SizedBox(width: 15),
-        _buildStatCard('OUTFLOW', '₹1.0L', accentRed),
+        _buildStatCard('OUTFLOW', '₹1.0L', accentRed, [const Color(0xFF311B92), const Color(0xFF12005E)]),
       ],
     );
   }
 
-  Widget _buildStatCard(String label, String val, Color color) {
+  Widget _buildStatCard(String label, String val, Color color, List<Color> bgColors) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: surfaceColor,
+          gradient: LinearGradient(colors: bgColors),
           borderRadius: BorderRadius.circular(25),
-          border: Border.all(color: Colors.white.withOpacity(0.03)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.03)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(label, style: const TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1)),
+            Text(label, style: const TextStyle(color: Colors.white70, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1)),
             const SizedBox(height: 8),
             Text(val, style: TextStyle(color: color, fontSize: 24, fontWeight: FontWeight.w900)),
           ],
@@ -204,10 +204,10 @@ class ManagerBudgetPage extends StatelessWidget {
 
   Widget _buildAllocationScroll() {
     final categories = [
-      {'name': 'KITS', 'icon': Icons.sports_soccer, 'amount': '₹45k', 'color': accentBlue},
-      {'name': 'TRAVEL', 'icon': Icons.directions_bus_rounded, 'amount': '₹12k', 'color': Colors.purpleAccent},
-      {'name': 'STAFF', 'icon': Icons.badge_rounded, 'amount': '₹1.2L', 'color': Colors.orangeAccent},
-      {'name': 'ACADEMY', 'icon': Icons.school_rounded, 'amount': '₹85k', 'color': accentGreen},
+      {'name': 'KITS', 'icon': Icons.sports_soccer, 'amount': '₹45k', 'colors': [const Color(0xFF0D47A1), const Color(0xFF002171)]},
+      {'name': 'TRAVEL', 'icon': Icons.directions_bus_rounded, 'amount': '₹12k', 'colors': [const Color(0xFF311B92), const Color(0xFF12005E)]},
+      {'name': 'STAFF', 'icon': Icons.badge_rounded, 'amount': '₹1.2L', 'colors': [const Color(0xFF263238), const Color(0xFF000A12)]},
+      {'name': 'ACADEMY', 'icon': Icons.school_rounded, 'amount': '₹85k', 'colors': [const Color(0xFF004D40), const Color(0xFF00251A)]},
     ];
 
     return SingleChildScrollView(
@@ -219,15 +219,15 @@ class ManagerBudgetPage extends StatelessWidget {
           margin: const EdgeInsets.only(right: 15),
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: surfaceColor,
+            gradient: LinearGradient(colors: cat['colors'] as List<Color>),
             borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: (cat['color'] as Color).withOpacity(0.2)),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
           ),
           child: Column(
             children: [
-              Icon(cat['icon'] as IconData, color: cat['color'] as Color, size: 28),
+              Icon(cat['icon'] as IconData, color: Colors.white70, size: 28),
               const SizedBox(height: 15),
-              Text(cat['name'] as String, style: const TextStyle(color: Colors.white38, fontSize: 9, fontWeight: FontWeight.bold)),
+              Text(cat['name'] as String, style: const TextStyle(color: Colors.white70, fontSize: 9, fontWeight: FontWeight.bold)),
               const SizedBox(height: 4),
               Text(cat['amount'] as String, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900)),
             ],
@@ -240,22 +240,22 @@ class ManagerBudgetPage extends StatelessWidget {
   Widget _buildModernTransactionList() {
     return Column(
       children: [
-        _buildModernTxItem('EMIRATES SPONSOR', '+ ₹2.5L', true, 'Inflow', '02 JUL'),
-        _buildModernTxItem('KIT PROCUREMENT', '- ₹45k', false, 'Equipment', '30 JUN'),
-        _buildModernTxItem('ACADEMY FEES', '+ ₹85k', true, 'Registration', '25 JUN'),
-        _buildModernTxItem('GROUND RENT', '- ₹22k', false, 'Operations', '22 JUN'),
+        _buildModernTxItem('EMIRATES SPONSOR', '+ ₹2.5L', true, 'Inflow', '02 JUL', [const Color(0xFF004D40), const Color(0xFF00251A)]),
+        _buildModernTxItem('KIT PROCUREMENT', '- ₹45k', false, 'Equipment', '30 JUN', [const Color(0xFF1B222E), const Color(0xFF0D121A)]),
+        _buildModernTxItem('ACADEMY FEES', '+ ₹85k', true, 'Registration', '25 JUN', [const Color(0xFF0D47A1), const Color(0xFF002171)]),
+        _buildModernTxItem('GROUND RENT', '- ₹22k', false, 'Operations', '22 JUN', [const Color(0xFF263238), const Color(0xFF000A12)]),
       ],
     );
   }
 
-  Widget _buildModernTxItem(String title, String amount, bool isIncome, String category, String date) {
+  Widget _buildModernTxItem(String title, String amount, bool isIncome, String category, String date, List<Color> colors) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: surfaceColor.withOpacity(0.5),
+        gradient: LinearGradient(colors: colors),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withOpacity(0.02)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: Row(
         children: [
@@ -263,15 +263,16 @@ class ManagerBudgetPage extends StatelessWidget {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: isIncome ? accentGreen.withOpacity(0.05) : accentRed.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(15),
             ),
             child: Icon(
               isIncome ? Icons.add_chart_rounded : Icons.pie_chart_outline_rounded,
-              color: isIncome ? accentGreen : accentRed,
+              color: Colors.white,
               size: 24,
             ),
           ),
+
           const SizedBox(width: 15),
           Expanded(
             child: Column(

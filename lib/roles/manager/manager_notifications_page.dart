@@ -15,28 +15,28 @@ class ManagerNotificationsPage extends StatelessWidget {
         'category': 'Logistics',
         'day': 'Today',
         'time': '10:45 AM',
-        'colors': [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)]
+        'colors': [const Color(0xFF311B92), const Color(0xFF12005E)]
       },
       {
         'title': 'Monthly budget report generated',
         'category': 'Finance',
         'day': 'Yesterday',
         'time': '04:00 PM',
-        'colors': [const Color(0xFFEE0979), const Color(0xFFF12711)]
+        'colors': [const Color(0xFF004D40), const Color(0xFF00251A)]
       },
       {
         'title': 'Sponsorship deal under review',
         'category': 'Contracts',
         'day': 'Yesterday',
         'time': '11:20 AM',
-        'colors': [const Color(0xFF007CFE), const Color(0xFF004A99)]
+        'colors': [const Color(0xFF0D47A1), const Color(0xFF002171)]
       },
       {
         'title': 'New trialist registration received',
         'category': 'Recruitment',
         'day': '2 days ago',
         'time': '09:00 AM',
-        'colors': [const Color(0xFF38EF7D), const Color(0xFF11998E)]
+        'colors': [const Color(0xFF263238), const Color(0xFF000A12)]
       },
     ];
 

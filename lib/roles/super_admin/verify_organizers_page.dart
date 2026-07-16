@@ -197,19 +197,27 @@ class _VerifyOrganisersPageState extends State<VerifyOrganisersPage> {
               itemCount: _pendingOrganisers.length,
               itemBuilder: (context, index) {
                 final organiser = _pendingOrganisers[index];
+                const List<Color> colors = [Color(0xFF1E3C31), Color(0xFF2A1B3D)];
                 return Container(
                   margin: const EdgeInsets.only(bottom: 15),
                   decoration: BoxDecoration(
-                    color: surfaceColor,
+                    gradient: const LinearGradient(
+                      colors: colors,
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.white.withOpacity(0.02)),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                    boxShadow: [
+                      BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 10, offset: const Offset(0, 4))
+                    ],
                   ),
                   child: ListTile(
                     contentPadding: const EdgeInsets.all(16),
                     leading: const CircleAvatar(backgroundColor: Color(0xFF1A1A1A), child: Icon(Icons.person, color: goldColor)),
                     title: Text(organiser['name'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                    subtitle: Text(organiser['clubName'], style: const TextStyle(color: Colors.white38, fontSize: 12)),
-                    trailing: const Icon(Icons.chevron_right, color: Colors.white10),
+                    subtitle: Text(organiser['clubName'], style: const TextStyle(color: Colors.white70, fontSize: 12)),
+                    trailing: const Icon(Icons.chevron_right, color: Colors.white38),
                     onTap: () => _showOrganiserDetails(organiser),
                   ),
                 );

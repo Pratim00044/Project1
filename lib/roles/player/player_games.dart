@@ -48,13 +48,13 @@ class _PlayerGamesPageState extends State<PlayerGamesPage> {
     String matchTime = isToday ? '78\'' : 'FINAL';
 
     final List<Map<String, dynamic>> allAvailableGames = [
-      {'title': 'DUBAI CUP', 'day': 10, 'status': 'REGISTERED', 'colors': tileColors[0]},
-      {'title': 'ALL STARS MATCH', 'day': 10, 'status': 'REGISTERED', 'colors': tileColors[1]},
-      {'title': 'COMMUNITY SHIELD', 'day': 10, 'status': 'OPEN', 'colors': tileColors[2]},
-      {'title': 'LEAGUE GAME A', 'day': 11, 'status': 'REGISTERED', 'colors': tileColors[3]},
-      {'title': 'TRAINING MATCH', 'day': 11, 'status': 'OPEN', 'colors': tileColors[4]},
-      {'title': 'FRIENDLY CUP', 'day': 12, 'status': 'OPEN', 'colors': tileColors[5]},
-      {'title': 'YOUTH LEAGUE', 'day': 13, 'status': 'REGISTERED', 'colors': tileColors[0]},
+      {'title': 'DUBAI CUP', 'day': 10, 'status': 'REGISTERED', 'colors': tileColors[0], 'type': '7-a-side'},
+      {'title': 'ALL STARS MATCH', 'day': 10, 'status': 'REGISTERED', 'colors': tileColors[1], 'type': '5-a-side'},
+      {'title': 'COMMUNITY SHIELD', 'day': 10, 'status': 'OPEN', 'colors': tileColors[2], 'type': '8-a-side'},
+      {'title': 'LEAGUE GAME A', 'day': 11, 'status': 'REGISTERED', 'colors': tileColors[3], 'type': '9-a-side'},
+      {'title': 'TRAINING MATCH', 'day': 11, 'status': 'OPEN', 'colors': tileColors[4], 'type': '7-a-side'},
+      {'title': 'FRIENDLY CUP', 'day': 12, 'status': 'OPEN', 'colors': tileColors[5], 'type': '6-a-side'},
+      {'title': 'YOUTH LEAGUE', 'day': 13, 'status': 'REGISTERED', 'colors': tileColors[0], 'type': '5-a-side'},
     ];
 
     final gamesForSelectedDate = allAvailableGames.where((g) => g['day'] == selectedDate.day).toList();
@@ -167,7 +167,7 @@ class _PlayerGamesPageState extends State<PlayerGamesPage> {
                   final game = registeredGames[index];
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 15),
-                    child: _buildUpcomingGameTile(context, game['title'], 'FEB ${game['day']}', game['status'], game['colors']),
+                    child: _buildUpcomingGameTile(context, game['title'], 'FEB ${game['day']}', game['status'], game['colors'], game['type']),
                   );
                 },
                 childCount: registeredGames.length,
@@ -199,7 +199,7 @@ class _PlayerGamesPageState extends State<PlayerGamesPage> {
                   final game = gamesForSelectedDate[index];
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 15),
-                    child: _buildUpcomingGameTile(context, game['title'], 'FEB ${game['day']}', game['status'], game['colors']),
+                    child: _buildUpcomingGameTile(context, game['title'], 'FEB ${game['day']}', game['status'], game['colors'], game['type']),
                   );
                 },
                 childCount: gamesForSelectedDate.length,
@@ -341,14 +341,14 @@ class _PlayerGamesPageState extends State<PlayerGamesPage> {
     );
   }
 
-  Widget _buildUpcomingGameTile(BuildContext context, String title, String date, String status, List<Color> colors) {
+  Widget _buildUpcomingGameTile(BuildContext context, String title, String date, String status, List<Color> colors, String type) {
     return GestureDetector(
       onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PlayerGameDetail(
         title: title,
         date: date,
         time: '11:30 PM',
         location: 'Dubai Sports City',
-        type: '7-a-side',
+        type: type,
       ))),
       child: Container(
         height: 160,

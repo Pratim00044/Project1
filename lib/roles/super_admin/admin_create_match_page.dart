@@ -20,7 +20,7 @@ class _AdminCreateMatchPageState extends State<AdminCreateMatchPage> {
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
 
-  final List<String> _categories = ['MEN', 'LADIES', 'MIXED', 'WEIGHT'];
+  final List<String> _categories = ['MEN', 'LADIES', 'MIXED', 'VETS'];
   final List<String> _myTeams = ['CORE FC', 'DUBAI LIONS', 'NATIONAL GULF FC'];
   final List<String> _opponents = ['Turan Dubai FC', 'National Paints FC', 'Street League FC', 'Eagle FC', 'United FC'];
   final List<String> _squadLimits = ['5', '7', '8', '11', '15', '20', '25'];
@@ -261,7 +261,7 @@ class _AdminCreateMatchPageState extends State<AdminCreateMatchPage> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [surfaceColor, Color(0xFF1A1A1A)],
+              colors: [Color(0xFF1E3C31), Color(0xFF2A1B3D)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -306,7 +306,7 @@ class _AdminCreateMatchPageState extends State<AdminCreateMatchPage> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [surfaceColor, Color(0xFF1A1A1A)],
+          colors: [Color(0xFF1E3C31), Color(0xFF2A1B3D)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -351,7 +351,7 @@ class _AdminCreateMatchPageState extends State<AdminCreateMatchPage> {
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 18),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [surfaceColor, Color(0xFF1A1A1A)],
+              colors: [Color(0xFF1E3C31), Color(0xFF2A1B3D)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -388,7 +388,7 @@ class _AdminCreateMatchPageState extends State<AdminCreateMatchPage> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [surfaceColor, Color(0xFF1A1A1A)],
+              colors: [Color(0xFF1E3C31), Color(0xFF2A1B3D)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -431,11 +431,12 @@ class _AdminCreateMatchPageState extends State<AdminCreateMatchPage> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF007CFE), Color(0xFF004A99)],
+          colors: [Color(0xFF1E3C31), Color(0xFF2A1B3D)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -512,7 +513,7 @@ class _AdminCreateMatchPageState extends State<AdminCreateMatchPage> {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [surfaceColor, Color(0xFF1A1A1A)],
+          colors: [Color(0xFF1E3C31), Color(0xFF2A1B3D)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -540,7 +541,7 @@ class _AdminCreateMatchPageState extends State<AdminCreateMatchPage> {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [surfaceColor, Color(0xFF1A1A1A)],
+                colors: [Color(0xFF1E3C31), Color(0xFF2A1B3D)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),

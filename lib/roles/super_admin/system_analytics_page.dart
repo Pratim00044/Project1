@@ -61,12 +61,20 @@ class SystemAnalyticsPage extends StatelessWidget {
   }
 
   Widget _buildStatCard(String val, String label, IconData icon, Color color) {
+    const List<Color> colors = [Color(0xFF1E3C31), Color(0xFF2A1B3D)];
     return Container(
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: surfaceColor,
+        gradient: const LinearGradient(
+          colors: colors,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.1)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 10, offset: const Offset(0, 4))
+        ],
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -74,19 +82,28 @@ class SystemAnalyticsPage extends StatelessWidget {
           Icon(icon, color: color, size: 20),
           const SizedBox(height: 10),
           Text(val, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w900)),
-          Text(label, style: const TextStyle(color: Colors.white24, fontSize: 9, fontWeight: FontWeight.bold)),
+          Text(label, style: const TextStyle(color: Colors.white38, fontSize: 9, fontWeight: FontWeight.bold)),
         ],
       ),
     );
   }
 
   Widget _buildActivityChart() {
+    const List<Color> colors = [Color(0xFF1E3C31), Color(0xFF2A1B3D)];
     return Container(
       height: 200,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: surfaceColor,
+        gradient: const LinearGradient(
+          colors: colors,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 10, offset: const Offset(0, 4))
+        ],
       ),
       child: Center(
         child: Column(
@@ -94,8 +111,8 @@ class SystemAnalyticsPage extends StatelessWidget {
           children: [
             const Icon(Icons.show_chart, color: goldColor, size: 40),
             const SizedBox(height: 10),
-            const Text('Monthly Engagement Chart', style: TextStyle(color: Colors.white38, fontSize: 12)),
-            Text('85% Increase this month', style: TextStyle(color: Colors.greenAccent.withOpacity(0.7), fontSize: 10, fontWeight: FontWeight.bold)),
+            const Text('Monthly Engagement Chart', style: TextStyle(color: Colors.white70, fontSize: 12)),
+            Text('85% Increase this month', style: TextStyle(color: Colors.greenAccent.withValues(alpha: 0.7), fontSize: 10, fontWeight: FontWeight.bold)),
           ],
         ),
       ),
@@ -109,13 +126,20 @@ class SystemAnalyticsPage extends StatelessWidget {
       {'event': 'System Update', 'time': '5 hours ago', 'desc': 'New evaluation metrics deployed to all coach dashboards.'},
     ];
 
+    const List<Color> colors = [Color(0xFF1E3C31), Color(0xFF2A1B3D)];
+
     return Column(
       children: events.map((e) => Container(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: surfaceColor,
+          gradient: const LinearGradient(
+            colors: colors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
           borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
         ),
         child: Row(
           children: [
@@ -129,11 +153,11 @@ class SystemAnalyticsPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(e['event']!, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
-                      Text(e['time']!, style: const TextStyle(color: Colors.white24, fontSize: 9)),
+                      Text(e['time']!, style: const TextStyle(color: Colors.white38, fontSize: 9)),
                     ],
                   ),
                   const SizedBox(height: 4),
-                  Text(e['desc']!, style: const TextStyle(color: Colors.white38, fontSize: 11)),
+                  Text(e['desc']!, style: const TextStyle(color: Colors.white70, fontSize: 11)),
                 ],
               ),
             ),

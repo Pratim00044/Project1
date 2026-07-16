@@ -37,13 +37,21 @@ class PremiumFeaturesPage extends StatelessWidget {
               itemCount: _academies.length,
               itemBuilder: (context, index) {
                 final aca = _academies[index];
+                const List<Color> colors = [Color(0xFF1E3C31), Color(0xFF2A1B3D)];
                 return Container(
                   margin: const EdgeInsets.only(bottom: 20),
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: surfaceColor,
+                    gradient: const LinearGradient(
+                      colors: colors,
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: goldColor.withOpacity(0.1)),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                    boxShadow: [
+                      BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 10, offset: const Offset(0, 4))
+                    ],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

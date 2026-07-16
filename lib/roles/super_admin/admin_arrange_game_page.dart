@@ -29,9 +29,9 @@ class AdminArrangeGamePage extends StatelessWidget {
             const Text('GAME SCHEDULER', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 0.5)),
             const Text('Coordinate matches between different clubs', style: TextStyle(color: Colors.white38, fontSize: 12)),
             const SizedBox(height: 25),
-            _buildFixtureCard('CORE FC', 'DUBAI LIONS', 'Sat, 12 Jul', '07:00 PM', 'Zayed Sports City', [const Color(0xFF007CFE), const Color(0xFF004A99)]),
-            _buildFixtureCard('EAGLE FC', 'TURAN DUBAI', 'Sat, 12 Jul', '09:00 PM', 'Dubai Sports World', [const Color(0xFF38EF7D), const Color(0xFF11998E)]),
-            _buildFixtureCard('UNITED FC', 'EMIRATES CLUB', 'Sun, 13 Jul', '06:00 PM', 'Al Barsha Pitch', [const Color(0xFFEE0979), const Color(0xFFF12711)]),
+            _buildFixtureCard('CORE FC', 'DUBAI LIONS', 'Sat, 12 Jul', '07:00 PM', 'Zayed Sports City'),
+            _buildFixtureCard('EAGLE FC', 'TURAN DUBAI', 'Sat, 12 Jul', '09:00 PM', 'Dubai Sports World'),
+            _buildFixtureCard('UNITED FC', 'EMIRATES CLUB', 'Sun, 13 Jul', '06:00 PM', 'Al Barsha Pitch'),
             const SizedBox(height: 35),
             const Text('QUICK ACTIONS', 
               style: TextStyle(color: Colors.white38, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
@@ -81,16 +81,18 @@ class AdminArrangeGamePage extends StatelessWidget {
     );
   }
 
-  Widget _buildFixtureCard(String t1, String t2, String date, String time, String venue, List<Color> colors) {
+  Widget _buildFixtureCard(String t1, String t2, String date, String time, String venue) {
+    const List<Color> colors = [Color(0xFF1E3C31), Color(0xFF2A1B3D)];
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           colors: colors,
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(25),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
         boxShadow: [
           BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 5))
         ],

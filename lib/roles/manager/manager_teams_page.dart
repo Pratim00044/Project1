@@ -15,28 +15,28 @@ class ManagerTeamsPage extends StatelessWidget {
         'location': 'Town Square',
         'members': 18,
         'category': 'Academy',
-        'colors': [const Color(0xFF007CFE), const Color(0xFF004A99)]
+        'colors': [const Color(0xFF0D47A1), const Color(0xFF002171)]
       },
       {
         'name': 'UNDER 10s',
         'location': 'Sports City',
         'members': 22,
         'category': 'Academy',
-        'colors': [const Color(0xFFFFB75E), const Color(0xFFED8F03)]
+        'colors': [const Color(0xFF263238), const Color(0xFF000A12)]
       },
       {
         'name': 'UNDER 12s',
         'location': 'Jumeirah',
         'members': 20,
         'category': 'Club',
-        'colors': [const Color(0xFF38EF7D), const Color(0xFF11998E)]
+        'colors': [const Color(0xFF004D40), const Color(0xFF00251A)]
       },
       {
         'name': 'SENIOR SQUAD',
         'location': 'Al Barsha',
         'members': 25,
         'category': 'Professional',
-        'colors': [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)]
+        'colors': [const Color(0xFF311B92), const Color(0xFF12005E)]
       },
     ];
 

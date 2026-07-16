@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'player_payment_page.dart';
+import 'player_reserve_spot.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
@@ -124,11 +124,12 @@ class PlayerGameDetail extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => PlayerPaymentPage(
+                          builder: (context) => PlayerReserveSpot(
                             title: title,
                             date: date,
                             time: time,
                             location: location,
+                            type: type,
                           ),
                         ),
                       );

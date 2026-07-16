@@ -38,44 +38,42 @@ class SuperAdminHome extends StatelessWidget {
                     backgroundColor: darkBg,
                     elevation: 0,
                     flexibleSpace: FlexibleSpaceBar(
-                      background: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          Image.asset('assets/images/login_background.jpeg', fit: BoxFit.cover, opacity: const AlwaysStoppedAnimation(0.4)),
-                          Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [Colors.transparent, darkBg.withValues(alpha: 0.8), darkBg],
-                              ),
-                            ),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const SizedBox(height: 20),
-                              Container(
-                                padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: goldColor, width: 2),
-                                ),
-                                child: const CircleAvatar(
-                                  radius: 45,
-                                  backgroundColor: Color(0xFF1A1A1A),
-                                  child: Icon(Icons.admin_panel_settings, size: 50, color: goldColor),
-                                ),
-                              ),
-                              const SizedBox(height: 15),
-                              const Text('STATIXA COMMAND CENTER',
-                                style: TextStyle(color: goldColor, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 3)),
-                              const SizedBox(height: 5),
-                              const Text('ADMIN',
-                                style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                      background: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              const Color(0xFF1E3C31).withValues(alpha: 0.3), 
+                              const Color(0xFF2A1B3D).withValues(alpha: 0.6), 
+                              darkBg
                             ],
                           ),
-                        ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(height: 20),
+                            Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(color: goldColor, width: 2),
+                              ),
+                              child: const CircleAvatar(
+                                radius: 45,
+                                backgroundColor: Color(0xFF1A1A1A),
+                                child: Icon(Icons.admin_panel_settings, size: 50, color: goldColor),
+                              ),
+                            ),
+                            const SizedBox(height: 15),
+                            const Text('STATIXA COMMAND CENTER',
+                              style: TextStyle(color: goldColor, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 3)),
+                            const SizedBox(height: 5),
+                            const Text('ADMIN',
+                              style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -90,7 +88,7 @@ class SuperAdminHome extends StatelessWidget {
                           Icons.sports_soccer_rounded, 
                           'CREATE NEW MATCH',
                           'Schedule games (Organiser mode)', 
-                          [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)],
+                          [const Color(0xFF1E3C31), const Color(0xFF0D1F1A)],
                           () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminCreateMatchPage()))
                         ),
                         const SizedBox(height: 15),
@@ -99,7 +97,7 @@ class SuperAdminHome extends StatelessWidget {
                           Icons.event_note_rounded, 
                           'ARRANGE GAME',
                           'Coordinate fixtures between clubs', 
-                          [const Color(0xFFF093FB), const Color(0xFFF5576C)],
+                          [const Color(0xFF2A1B3D), const Color(0xFF1A1126)],
                           () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminArrangeGamePage()))
                         ),
                         const SizedBox(height: 15),
@@ -108,7 +106,7 @@ class SuperAdminHome extends StatelessWidget {
                           Icons.how_to_reg_rounded, 
                           'VERIFY ORGANISERS',
                           '3 Pending Applications', 
-                          [const Color(0xFF007CFE), const Color(0xFF004A99)],
+                          [const Color(0xFF1B222E), const Color(0xFF0D121A)],
                           () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VerifyOrganisersPage()))
                         ),
                         const SizedBox(height: 15),
@@ -117,7 +115,7 @@ class SuperAdminHome extends StatelessWidget {
                           Icons.contact_page_outlined, 
                           'COACH RECRUITMENT HUB', 
                           'Access coach CVs & recruitment data', 
-                          [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)],
+                          [const Color(0xFF252525), const Color(0xFF121212)],
                           () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CoachRecruitmentHub()))
                         ),
                         const SizedBox(height: 15),
@@ -126,7 +124,7 @@ class SuperAdminHome extends StatelessWidget {
                           Icons.star_outline_rounded, 
                           'PREMIUM ACADEMY FEATURES', 
                           'Manage owner subscriptions & billing', 
-                          [const Color(0xFFFFB75E), const Color(0xFFED8F03)],
+                          [const Color(0xFF1E3C31).withValues(alpha: 0.8), const Color(0xFF0D1F1A)],
                           () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PremiumFeaturesPage()))
                         ),
                         const SizedBox(height: 15),
@@ -135,7 +133,7 @@ class SuperAdminHome extends StatelessWidget {
                           Icons.business_rounded, 
                           'MANAGE CLUBS & LOGOS', 
                           'Edit Names & Visual Identity', 
-                          [const Color(0xFF00C6FF), const Color(0xFF0072FF)],
+                          [const Color(0xFF2A1B3D).withValues(alpha: 0.8), const Color(0xFF1A1126)],
                           () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ManageClubsPage()))
                         ),
                         const SizedBox(height: 15),
@@ -144,7 +142,7 @@ class SuperAdminHome extends StatelessWidget {
                           Icons.analytics_outlined, 
                           'SYSTEM ANALYTICS', 
                           'Global performance metrics', 
-                          [const Color(0xFF38EF7D), const Color(0xFF11998E)],
+                          [const Color(0xFF1B222E).withValues(alpha: 0.8), const Color(0xFF0D121A)],
                           () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SystemAnalyticsPage()))
                         ),
                         const SizedBox(height: 15),
@@ -153,7 +151,7 @@ class SuperAdminHome extends StatelessWidget {
                           Icons.security_rounded, 
                           'AUDIT LOGS', 
                           'Monitor administrative actions', 
-                          [const Color(0xFFEE0979), const Color(0xFFF12711)],
+                          [const Color(0xFF252525).withValues(alpha: 0.8), const Color(0xFF121212)],
                           () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AuditLogsPage()))
                         ),
                         const SizedBox(height: 60),
@@ -266,7 +264,13 @@ class SuperAdminHome extends StatelessWidget {
                 children: [
                   Container(
                     padding: const EdgeInsets.fromLTRB(20, 60, 20, 30),
-                    decoration: const BoxDecoration(color: Color(0xFF0D0D0D)),
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Color(0xFF1E3C31), Color(0xFF2A1B3D)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                    ),
                     child: Row(
                       children: [
                         const CircleAvatar(
@@ -357,8 +361,9 @@ class SuperAdminHome extends StatelessWidget {
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
           boxShadow: [
-            BoxShadow(color: colors.first.withValues(alpha: 0.2), blurRadius: 10, offset: const Offset(0, 4))
+            BoxShadow(color: colors.first.withValues(alpha: 0.1), blurRadius: 10, offset: const Offset(0, 4))
           ],
         ),
         child: Row(

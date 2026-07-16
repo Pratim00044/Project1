@@ -58,8 +58,13 @@ class ManagerSettingsPage extends StatelessWidget {
         const SizedBox(height: 15),
         Container(
           decoration: BoxDecoration(
-            color: surfaceColor,
+            gradient: const LinearGradient(
+              colors: [Color(0xFF1B222E), Color(0xFF0D121A)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
             borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
           ),
           child: Column(children: children),
         ),

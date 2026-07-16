@@ -49,13 +49,21 @@ class CoachRecruitmentHub extends StatelessWidget {
               itemCount: _coaches.length,
               itemBuilder: (context, index) {
                 final coach = _coaches[index];
+                const List<Color> colors = [Color(0xFF1E3C31), Color(0xFF2A1B3D)];
                 return Container(
                   margin: const EdgeInsets.only(bottom: 15),
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: surfaceColor,
+                    gradient: const LinearGradient(
+                      colors: colors,
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.white.withOpacity(0.05)),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                    boxShadow: [
+                      BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 10, offset: const Offset(0, 4))
+                    ],
                   ),
                   child: Column(
                     children: [

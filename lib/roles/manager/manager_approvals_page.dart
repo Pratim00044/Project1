@@ -34,11 +34,11 @@ class ManagerApprovalsPage extends StatelessWidget {
           final item = approvals[index];
           List<Color> gradientColors;
           if (item['status'] == 'Urgent') {
-            gradientColors = [const Color(0xFFEE0979), const Color(0xFFF12711)];
+            gradientColors = [const Color(0xFF311B92), const Color(0xFF12005E)]; // Deep Purple
           } else if (item['status'] == 'Review') {
-            gradientColors = [const Color(0xFF8E2DE2), const Color(0xFF4A00E0)];
+            gradientColors = [const Color(0xFF263238), const Color(0xFF000A12)]; // Charcoal
           } else {
-            gradientColors = [const Color(0xFF0F2027), const Color(0xFF203A43)];
+            gradientColors = [const Color(0xFF1B222E), const Color(0xFF0D121A)]; // Midnight
           }
 
           return Container(
