@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:file_picker/file_picker.dart' as fp;
 import 'dart:math' as math;
 import '../roles/organization/organization_home.dart';
 import '../roles/player/player_home.dart';
@@ -28,26 +27,6 @@ class _SignupScreenState extends State<SignupScreen> {
 
   bool _obscurePassword = true;
   bool _isClubCodeStep = true;
-
-  String? _idProofName;
-  String? _photoName;
-
-  Future<void> _pickFile(bool isIdProof) async {
-    fp.FilePickerResult? result = await fp.FilePicker.platform.pickFiles(
-      type: fp.FileType.custom,
-      allowedExtensions: ['jpg', 'pdf', 'doc', 'png', 'jpeg'],
-    );
-
-    if (result != null) {
-      setState(() {
-        if (isIdProof) {
-          _idProofName = result.files.single.name;
-        } else {
-          _photoName = result.files.single.name;
-        }
-      });
-    }
-  }
 
   final List<Map<String, dynamic>> _roles = [
     {'name': 'PLAYER', 'icon': Icons.directions_run_outlined, 'color': goldColor},
@@ -228,30 +207,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                             if (value.length != 10) return 'Must be 10 digits';
                                             return null;
                                           },
-                                        ),
-
-                                        const SizedBox(height: 32),
-                                        const Divider(color: Colors.white10),
-                                        const SizedBox(height: 16),
-                                        _buildLabel('Identity Verification', Icons.verified_user_outlined),
-                                        const SizedBox(height: 16),
-                                        _buildUploadPlaceholder(
-                                          _idProofName ?? 'Upload ID Proof Document',
-                                          onTap: () => _pickFile(true),
-                                          isSelected: _idProofName != null,
-                                        ),
-                                        const SizedBox(height: 16),
-                                        _buildUploadPlaceholder(
-                                          _photoName ?? 'Upload Recent Photo',
-                                          onTap: () => _pickFile(false),
-                                          isSelected: _photoName != null,
-                                        ),
-                                        const Padding(
-                                          padding: EdgeInsets.only(top: 12.0),
-                                          child: Text(
-                                            '* Documents will be verified by Statixa Administration.',
-                                            style: TextStyle(color: goldColor, fontSize: 10, fontStyle: FontStyle.italic),
-                                          ),
                                         ),
 
                                         const SizedBox(height: 24),
@@ -548,43 +503,6 @@ class _SignupScreenState extends State<SignupScreen> {
             );
           }).toList(),
           onChanged: onChanged,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildUploadPlaceholder(String label, {required VoidCallback onTap, bool isSelected = false}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-        decoration: BoxDecoration(
-          color: isSelected ? goldColor.withValues(alpha: 0.1) : const Color(0xFF1A1A1A),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected ? goldColor : Colors.white.withValues(alpha: 0.1), 
-            style: BorderStyle.solid
-          ),
-        ),
-        child: Column(
-          children: [
-            Icon(
-              isSelected ? Icons.check_circle_outline : Icons.cloud_upload_outlined, 
-              color: isSelected ? goldColor : Colors.white24, 
-              size: 30
-            ),
-            const SizedBox(height: 10),
-            Text(
-              label,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: isSelected ? Colors.white : Colors.white38, 
-                fontSize: 12,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal
-              ),
-            ),
-          ],
         ),
       ),
     );
