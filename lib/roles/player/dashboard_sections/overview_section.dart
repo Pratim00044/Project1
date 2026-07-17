@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../player_home.dart';
 import '../profile_details/notifications_page.dart';
+import '../match_history_page.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color surfaceColor = Color(0xFF121212);
@@ -252,7 +253,7 @@ class OverviewSection extends StatelessWidget {
                 const SizedBox(height: 25),
                 // Premium Styled Action Button
                 InkWell(
-                  onTap: () {},
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const MatchHistoryPage())),
                   borderRadius: BorderRadius.circular(30),
                   child: Container(
                     width: double.infinity,
