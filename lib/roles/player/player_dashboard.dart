@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'dashboard_sections/overview_section.dart';
+import 'dashboard_sections/ai_recognition_section.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color surfaceColor = Color(0xFF121212);
@@ -45,6 +46,10 @@ class _PlayerDashboardState extends State<PlayerDashboard> {
             padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
             child: _buildUniqueHeroCard(),
           ),
+        ),
+
+        const SliverToBoxAdapter(
+          child: AiRecognitionSection(),
         ),
 
         const SliverToBoxAdapter(

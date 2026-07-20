@@ -47,12 +47,13 @@ class MyTeamsPage extends StatelessWidget {
                     Container(
                       height: 65,
                       width: 65,
+                      padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: Colors.black,
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: goldColor, width: 2),
+                        border: Border.all(color: goldColor.withValues(alpha: 0.5), width: 2),
                       ),
-                      child: const Icon(Icons.shield, color: goldColor, size: 35),
+                      child: Image.asset('assets/logo.png', fit: BoxFit.contain),
                     ),
                     const SizedBox(width: 20),
                     const Column(

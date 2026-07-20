@@ -28,6 +28,7 @@ class _SquadPageState extends State<SquadPage> {
       'location': 'TOWN SQUARE',
       'phone': '+971 50 123 4567',
       'initials': 'AB',
+      'position': 'Goalkeeper',
       'color': Color(0xFF1E3A8A),
       'image': 'assets/images/sunil.png'
     },
@@ -36,6 +37,7 @@ class _SquadPageState extends State<SquadPage> {
       'location': 'TOWN SQUARE',
       'phone': '+971 50 123 4567',
       'initials': 'TC',
+      'position': 'Goalkeeper',
       'color': Color(0xFF3730A3),
       'image': 'assets/images/sunil.png'
     },
@@ -44,6 +46,7 @@ class _SquadPageState extends State<SquadPage> {
       'location': 'TOWN SQUARE',
       'phone': '+971 50 123 4567',
       'initials': 'VD',
+      'position': 'Defense',
       'color': Color(0xFF5B21B6),
       'image': 'assets/images/sunil.png'
     },
@@ -52,6 +55,7 @@ class _SquadPageState extends State<SquadPage> {
       'location': 'TOWN SQUARE',
       'phone': '+971 50 123 4567',
       'initials': 'KD',
+      'position': 'Midfield',
       'color': Color(0xFF7C3AED),
       'image': 'assets/images/sunil.png'
     },
@@ -60,6 +64,7 @@ class _SquadPageState extends State<SquadPage> {
       'location': 'TOWN SQUARE',
       'phone': '+971 50 123 4567',
       'initials': 'LM',
+      'position': 'Attack',
       'color': Color(0xFF9D174D),
       'image': 'assets/images/sunil.png'
     },
@@ -77,9 +82,6 @@ class _SquadPageState extends State<SquadPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('TEAM COMMANDER',
-                      style: TextStyle(color: Colors.white38, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 2)),
-                  const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -101,7 +103,7 @@ class _SquadPageState extends State<SquadPage> {
           SliverToBoxAdapter(
             child: _buildSearchBar(),
           ),
-          ..._buildFlatList(),
+          ..._buildCategorizedList(),
           const SliverToBoxAdapter(child: SizedBox(height: 50)),
         ],
       ),
@@ -206,25 +208,43 @@ class _SquadPageState extends State<SquadPage> {
     );
   }
 
-  List<Widget> _buildFlatList() {
-    return [
-      const SliverToBoxAdapter(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(25, 35, 25, 15),
-          child: Text('ALL PLAYERS',
-              style: TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
-        ),
-      ),
-      SliverPadding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        sliver: SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) => _buildPlayerCard(_squad[index]),
-            childCount: _squad.length,
+  List<Widget> _buildCategorizedList() {
+    final categories = {
+      'Goalkeeper': 'GOALKEEPERS',
+      'Defense': 'DEFENDERS',
+      'Midfield': 'MIDFIELDERS',
+      'Attack': 'ATTACKERS',
+    };
+
+    List<Widget> slivers = [];
+
+    categories.forEach((key, label) {
+      final categoryPlayers = _squad.where((p) => p['position'] == key).toList();
+      if (categoryPlayers.isNotEmpty) {
+        slivers.add(
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(25, 35, 25, 15),
+              child: Text(label,
+                  style: const TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
+            ),
           ),
-        ),
-      ),
-    ];
+        );
+        slivers.add(
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => _buildPlayerCard(categoryPlayers[index]),
+                childCount: categoryPlayers.length,
+              ),
+            ),
+          ),
+        );
+      }
+    });
+
+    return slivers;
   }
 
   Widget _buildPlayerCard(Map<String, dynamic> player) {

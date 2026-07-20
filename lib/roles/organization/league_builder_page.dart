@@ -4,7 +4,8 @@ const Color goldColor = Color(0xFFD4AF37);
 const Color surfaceColor = Color(0xFF121212);
 
 class LeagueBuilderPage extends StatefulWidget {
-  const LeagueBuilderPage({super.key});
+  final bool isCoach;
+  const LeagueBuilderPage({super.key, this.isCoach = false});
 
   @override
   State<LeagueBuilderPage> createState() => _LeagueBuilderPageState();
@@ -45,7 +46,7 @@ class _LeagueBuilderPageState extends State<LeagueBuilderPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('CDL LEAGUE BUILDER',
+                  const Text('LEAGUE BUILDER',
                       style: TextStyle(color: goldColor, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
                   const SizedBox(height: 25),
                   const Text('LEAGUE DETAILS', style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1)),
@@ -209,7 +210,7 @@ class _LeagueBuilderPageState extends State<LeagueBuilderPage> {
             onPressed: () => Navigator.pop(context),
           ),
           const SizedBox(width: 10),
-          Image.asset('assets/images/footlab.png', height: 35, fit: BoxFit.contain),
+          Image.asset(widget.isCoach ? 'assets/logo.png' : 'assets/images/footlab.png', height: 35, fit: BoxFit.contain),
           const SizedBox(width: 10),
           const Text('STATIXA',
               style: TextStyle(

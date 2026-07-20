@@ -39,14 +39,114 @@ class _OrganiserAttendanceViewState extends State<OrganiserAttendanceView> {
   int get _absentCount => _players.where((p) => p['status'] == 'Absent').length;
   int get _reservedCount => _players.length;
 
-  void _markAbsent(int index) {
-    setState(() {
-      _players[index]['status'] = 'Absent';
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Warning sent to ${_players[index]['name']}. Attendance marked as ABSENT.'),
-        backgroundColor: Colors.redAccent,
+  void _showAbsentConfirmation(int index) {
+    final player = _players[index];
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => Container(
+        decoration: const BoxDecoration(
+          color: Color(0xFF0D0D0D),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+        ),
+        child: DraggableScrollableSheet(
+          initialChildSize: 0.6,
+          minChildSize: 0.4,
+          maxChildSize: 0.9,
+          expand: false,
+          builder: (context, scrollController) => SingleChildScrollView(
+            controller: scrollController,
+            padding: const EdgeInsets.all(25),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.white12, borderRadius: BorderRadius.circular(2)))),
+                const SizedBox(height: 25),
+                const Text('Mark as absent?', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900)),
+                const SizedBox(height: 8),
+                Text('This will affect ${player['name']}\'s reliability score', style: const TextStyle(color: Colors.white38, fontSize: 13)),
+                const SizedBox(height: 25),
+                Container(
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(color: surfaceColor, borderRadius: BorderRadius.circular(15)),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.white10, 
+                        radius: 18, 
+                        backgroundImage: AssetImage(player['image']),
+                      ),
+                      const SizedBox(width: 15),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(player['name'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                            const Text('Reservation confirmed', style: TextStyle(color: Colors.white38, fontSize: 11)),
+                          ],
+                        ),
+                      ),
+                      const Text('Absent', style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold, fontSize: 13)),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 15),
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(color: surfaceColor, borderRadius: BorderRadius.circular(15), border: Border.all(color: Colors.white.withOpacity(0.05))),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Reliability score impact', style: TextStyle(color: Colors.white38, fontSize: 11, fontWeight: FontWeight.bold)),
+                          Row(
+                            children: [
+                              const Text('Current: ', style: TextStyle(color: Colors.white24, fontSize: 11)),
+                              const Text('94%', style: TextStyle(color: greenAccent, fontSize: 11, fontWeight: FontWeight.bold)),
+                              const Padding(padding: EdgeInsets.symmetric(horizontal: 10), child: Icon(Icons.arrow_forward, color: Colors.white12, size: 12)),
+                              const Text('After: ', style: TextStyle(color: Colors.white24, fontSize: 11)),
+                              const Text('86%', style: TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.bold)),
+                            ],
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _players[index]['status'] = 'Absent';
+                    });
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Warning sent to ${player['name']}. Attendance marked as ABSENT.'),
+                        backgroundColor: Colors.redAccent,
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    minimumSize: const Size(double.infinity, 55),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  ),
+                  child: const Text('Confirm absent', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900)),
+                ),
+                const SizedBox(height: 15),
+                Center(
+                  child: TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Cancel — keep pending', style: TextStyle(color: Colors.white38, fontSize: 12, fontWeight: FontWeight.bold)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -235,8 +335,14 @@ class _OrganiserAttendanceViewState extends State<OrganiserAttendanceView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(widget.title, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
-                const SizedBox(height: 5),
-                Text('${widget.location} • ${widget.time}', style: const TextStyle(color: Colors.white38, fontSize: 12)),
+                const SizedBox(height: 15),
+                Row(
+                  children: [
+                    _buildInfoTile(Icons.access_time, 'TIME', widget.time),
+                    const SizedBox(width: 30),
+                    _buildInfoTile(Icons.location_on_rounded, 'VENUE', widget.location),
+                  ],
+                ),
               ],
             ),
           ),
@@ -334,7 +440,7 @@ class _OrganiserAttendanceViewState extends State<OrganiserAttendanceView> {
                         if (isPending) ...[
                           _buildActionBtn('Attended', greenAccent, () => _showPaymentPopup(index)),
                           const SizedBox(width: 8),
-                          _buildActionBtn('Absent', Colors.redAccent, () => _markAbsent(index), isOutline: true),
+                          _buildActionBtn('Absent', Colors.redAccent, () => _showAbsentConfirmation(index), isOutline: true),
                         ] else
                           _buildStatusPill(p['status']),
                       ],
@@ -373,6 +479,26 @@ class _OrganiserAttendanceViewState extends State<OrganiserAttendanceView> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildInfoTile(IconData icon, String label, String value) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
+          child: Icon(icon, color: Colors.white70, size: 14),
+        ),
+        const SizedBox(width: 10),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: const TextStyle(color: Colors.white38, fontSize: 8, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
+            Text(value, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+          ],
+        ),
+      ],
     );
   }
 

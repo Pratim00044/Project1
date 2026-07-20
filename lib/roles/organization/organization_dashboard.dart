@@ -358,7 +358,8 @@ class _OrganisationDashboardState extends State<OrganisationDashboard> {
               const SizedBox(width: 8),
               const Icon(Icons.circle, size: 4, color: Colors.white24),
               const SizedBox(width: 8),
-              const Text('JULY 10', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+              Text('${_getDayWithSuffix(_selectedDate.day)} ${['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'][_selectedDate.month - 1]}', 
+                style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
               const SizedBox(width: 8),
               const Icon(Icons.circle, size: 4, color: Colors.white24),
               const SizedBox(width: 8),
@@ -368,6 +369,16 @@ class _OrganisationDashboardState extends State<OrganisationDashboard> {
         ),
       ],
     );
+  }
+
+  String _getDayWithSuffix(int day) {
+    if (day >= 11 && day <= 13) return '${day}th';
+    switch (day % 10) {
+      case 1: return '${day}st';
+      case 2: return '${day}nd';
+      case 3: return '${day}rd';
+      default: return '${day}th';
+    }
   }
 
   Widget _buildFilterSection() {
@@ -492,19 +503,43 @@ class _OrganisationDashboardState extends State<OrganisationDashboard> {
               ),
               const SizedBox(height: 15),
               Text(type, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900)),
-              const SizedBox(height: 5),
+              const SizedBox(height: 12),
               Row(
                 children: [
-                  const Icon(Icons.access_time, color: Colors.white70, size: 12),
-                  const SizedBox(width: 5),
-                  Text(time, style: const TextStyle(color: Colors.white70, fontSize: 10, fontWeight: FontWeight.w600)),
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
+                    child: const Icon(Icons.access_time, color: Colors.white70, size: 14),
+                  ),
                   const SizedBox(width: 10),
-                  const Icon(Icons.location_on_rounded, color: Colors.white70, size: 12),
-                  const SizedBox(width: 5),
-                  Expanded(child: Text(location, style: const TextStyle(color: Colors.white70, fontSize: 10, fontWeight: FontWeight.w600), overflow: TextOverflow.ellipsis)),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('TIME', style: TextStyle(color: Colors.white38, fontSize: 8, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
+                      Text(time, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
+                    child: const Icon(Icons.location_on_rounded, color: Colors.white70, size: 14),
+                  ),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('VENUE', style: TextStyle(color: Colors.white38, fontSize: 8, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
+                      Text(location, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15),
               Row(
                 children: [
                   const Icon(Icons.people_alt_rounded, color: Colors.white, size: 14),

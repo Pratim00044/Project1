@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'social_league_details.dart';
+import '../organization/league_builder_page.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color surfaceColor = Color(0xFF121212);
@@ -79,6 +80,41 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
                 children: [
                   const Text('SOCIAL LEAGUES', style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w900, letterSpacing: -1)),
                   const Text('Pick a league, find a game, and play.', style: TextStyle(color: Colors.white38, fontSize: 13, fontWeight: FontWeight.w500)),
+                  const SizedBox(height: 25),
+                  GestureDetector(
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const LeagueBuilderPage(isCoach: true))),
+                    child: Container(
+                      padding: const EdgeInsets.all(25),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24),
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), shape: BoxShape.circle),
+                            child: const Icon(Icons.add_rounded, color: Colors.white, size: 28),
+                          ),
+                          const SizedBox(width: 20),
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('CREATE LEAGUE', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                                Text('Start your own custom competition', style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                          ),
+                          const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white38, size: 18),
+                        ],
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 30),
                   const Text('PICK A DATE', style: TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
                   const SizedBox(height: 15),

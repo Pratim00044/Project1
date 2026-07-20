@@ -63,7 +63,7 @@ class _DashboardPageState extends State<DashboardPage> {
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 25, 20, 15),
-            child: Text("TODAY'S SESSIONS — JUL ${_selectedDate.day}",
+            child: Text("TODAY'S SESSIONS — ${_getDayWithSuffix(_selectedDate.day)} ${['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'][_selectedDate.month - 1]}",
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 11,
@@ -102,15 +102,6 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
           ),
 
-        SliverToBoxAdapter(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildSectionHeaderNormal('WORLD LEAGUES'),
-              _buildForeignLeaguesSection(),
-            ],
-          ),
-        ),
 
         SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
@@ -217,18 +208,36 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 12),
                   Row(
                     children: [
-                      const Icon(Icons.access_time, color: Colors.white70, size: 14),
-                      const SizedBox(width: 5),
-                      Text(time, style: const TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.bold)),
+                      Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(color: Colors.black.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
+                        child: const Icon(Icons.access_time, color: Colors.white70, size: 14),
+                      ),
                       const SizedBox(width: 10),
-                      const Text('•', style: TextStyle(color: Colors.white24)),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('TIME', style: TextStyle(color: Colors.white38, fontSize: 8, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
+                          Text(time, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                      const SizedBox(width: 25),
+                      Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(color: Colors.black.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
+                        child: const Icon(Icons.location_on_outlined, color: Colors.white70, size: 14),
+                      ),
                       const SizedBox(width: 10),
-                      const Icon(Icons.location_on_outlined, color: Colors.white70, size: 14),
-                      const SizedBox(width: 5),
-                      Text(pitch, style: const TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.bold)),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('VENUE', style: TextStyle(color: Colors.white38, fontSize: 8, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
+                          Text(pitch, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                        ],
+                      ),
                     ],
                   ),
                   const SizedBox(height: 25),
@@ -354,6 +363,16 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
       ],
     );
+  }
+
+  String _getDayWithSuffix(int day) {
+    if (day >= 11 && day <= 13) return '${day}th';
+    switch (day % 10) {
+      case 1: return '${day}st';
+      case 2: return '${day}nd';
+      case 3: return '${day}rd';
+      default: return '${day}th';
+    }
   }
 
   Widget _buildCircleArrow(IconData icon, VoidCallback onTap) {

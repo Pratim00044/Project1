@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'create_training_page.dart';
 import 'create_game_page.dart';
 import 'player_detail_page.dart';
+import 'session_attendance_page.dart';
 import '../organization/social_leagues_page.dart';
+import '../organization/league_builder_page.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color surfaceColor = Color(0xFF121212);
@@ -153,7 +155,7 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
       padding: const EdgeInsets.all(20),
       children: [
         GestureDetector(
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SocialLeaguesPage())),
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const LeagueBuilderPage(isCoach: true))),
           child: Container(
             padding: const EdgeInsets.all(25),
             decoration: BoxDecoration(
@@ -274,35 +276,45 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
 
   Widget _buildPastGameItem(String title, String subtitle, int index) {
     final List<List<Color>> pastGradients = [
-      [Color(0xFF1E3A8A), Color(0xFF312E81)],
-      [Color(0xFF064E3B), Color(0xFF14532D)],
-      [Color(0xFF334155), Color(0xFF1E293B)],
+      [const Color(0xFF1E3A8A), const Color(0xFF312E81)],
+      [const Color(0xFF064E3B), const Color(0xFF14532D)],
+      [const Color(0xFF334155), const Color(0xFF1E293B)],
     ];
     final gradient = pastGradients[index % pastGradients.length];
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: gradient,
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        children: [
-          Container(width: 40, height: 40, decoration: BoxDecoration(color: Colors.black.withOpacity(0.1), borderRadius: BorderRadius.circular(10)), child: const Icon(Icons.history, color: Colors.white, size: 20)),
-          const SizedBox(width: 15),
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
-              Text(subtitle, style: const TextStyle(color: Colors.white70, fontSize: 11)),
-            ]),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => SessionAttendancePage(
+          sessionTitle: title,
+          time: subtitle.split('•').first.trim(),
+          pitch: 'Main Pitch',
+          date: 'Jul 12',
+        )));
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        padding: const EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: gradient,
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
           ),
-          const Icon(Icons.chevron_right, color: Colors.white54, size: 20),
-        ],
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Row(
+          children: [
+            Container(width: 40, height: 40, decoration: BoxDecoration(color: Colors.black.withOpacity(0.1), borderRadius: BorderRadius.circular(10)), child: const Icon(Icons.history, color: Colors.white, size: 20)),
+            const SizedBox(width: 15),
+            Expanded(
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
+                Text(subtitle, style: const TextStyle(color: Colors.white70, fontSize: 11)),
+              ]),
+            ),
+            const Icon(Icons.chevron_right, color: Colors.white54, size: 20),
+          ],
+        ),
       ),
     );
   }
@@ -345,38 +357,48 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
 
   Widget _buildActivityTile(Map<String, dynamic> data, Color color) {
     bool isMatch = data['type'] == 'MATCH';
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => SessionAttendancePage(
+          sessionTitle: isMatch ? data['teams'] : data['title'],
+          time: data['time'],
+          pitch: isMatch ? data['venue'] : data['pitch'],
+          date: 'Jul ${_selectedDate.day}',
+        )));
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+          borderRadius: BorderRadius.circular(15),
         ),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(color: Colors.black.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
-            child: Icon(isMatch ? Icons.sports_soccer_rounded : Icons.fitness_center_rounded, color: Colors.white, size: 20),
-          ),
-          const SizedBox(width: 15),
-          Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(isMatch ? data['teams'] : data['title'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
-              Text('${data['time']} • ${isMatch ? data['venue'] : data['pitch']}', style: const TextStyle(color: Colors.white70, fontSize: 11)),
-            ]),
-          ),
-          Row(
-            children: [
-              _buildIconButton(Icons.edit_outlined, Colors.white, () {}),
-              _buildIconButton(Icons.delete_outline_rounded, Colors.white70, () {}),
-            ],
-          ),
-        ],
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(color: Colors.black.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
+              child: Icon(isMatch ? Icons.sports_soccer_rounded : Icons.fitness_center_rounded, color: Colors.white, size: 20),
+            ),
+            const SizedBox(width: 15),
+            Expanded(
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(isMatch ? data['teams'] : data['title'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
+                Text('${data['time']} • ${isMatch ? data['venue'] : data['pitch']}', style: const TextStyle(color: Colors.white70, fontSize: 11)),
+              ]),
+            ),
+            Row(
+              children: [
+                _buildIconButton(Icons.edit_outlined, Colors.white, () {}),
+                _buildIconButton(Icons.delete_outline_rounded, Colors.white70, () {}),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

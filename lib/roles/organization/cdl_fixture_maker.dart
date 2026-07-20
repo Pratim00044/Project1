@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'organiser_attendance_view.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color surfaceColor = Color(0xFF121212);
@@ -16,9 +17,9 @@ class CdlFixtureMaker extends StatelessWidget {
           const Text('GENERATED SCHEDULE', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 0.5)),
           const Text('Manage and fix upcoming league matches', style: TextStyle(color: Colors.white38, fontSize: 12)),
           const SizedBox(height: 25),
-          _buildFixtureCard('Core FC', 'Dubai Lions', 'Sat, 12 Jul', '07:00 PM', 'Zayed Sports City', [const Color(0xFF1E3A8A), const Color(0xFF312E81)]),
-          _buildFixtureCard('Eagle FC', 'Turan Dubai', 'Sat, 12 Jul', '09:00 PM', 'Dubai Sports World', [const Color(0xFF2E5B4F), const Color(0xFF3B2A50)]),
-          _buildFixtureCard('United FC', 'Emirates Club', 'Sun, 13 Jul', '06:00 PM', 'Al Barsha Pitch', [const Color(0xFF831843), const Color(0xFF701A75)]),
+          _buildFixtureCard(context, 'Core FC', 'Dubai Lions', 'Sat, 12 Jul', '07:00 PM', 'Zayed Sports City', [const Color(0xFF1E3A8A), const Color(0xFF312E81)]),
+          _buildFixtureCard(context, 'Eagle FC', 'Turan Dubai', 'Sat, 12 Jul', '09:00 PM', 'Dubai Sports World', [const Color(0xFF2E5B4F), const Color(0xFF3B2A50)]),
+          _buildFixtureCard(context, 'United FC', 'Emirates Club', 'Sun, 13 Jul', '06:00 PM', 'Al Barsha Pitch', [const Color(0xFF831843), const Color(0xFF701A75)]),
           const SizedBox(height: 40),
           _buildActionButton(
             label: 'AUTO FIX',
@@ -53,52 +54,62 @@ class CdlFixtureMaker extends StatelessWidget {
     );
   }
 
-  Widget _buildFixtureCard(String t1, String t2, String date, String time, String venue, List<Color> colors) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: colors,
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+  Widget _buildFixtureCard(BuildContext context, String t1, String t2, String date, String time, String venue, List<Color> colors) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => OrganiserAttendanceView(
+          title: '$t1 vs $t2',
+          date: date,
+          time: time,
+          location: venue,
+        )));
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: colors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(25),
+          boxShadow: [
+            BoxShadow(color: colors[0].withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 5)),
+          ],
         ),
-        borderRadius: BorderRadius.circular(25),
-        boxShadow: [
-          BoxShadow(color: colors[0].withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 5)),
-        ],
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              children: [
-                Expanded(child: Text(t1.toUpperCase(), textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14))),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(color: Colors.black.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
-                  child: const Text('VS', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 12)),
-                ),
-                Expanded(child: Text(t2.toUpperCase(), textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14))),
-              ],
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                children: [
+                  Expanded(child: Text(t1.toUpperCase(), textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14))),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(color: Colors.black.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
+                    child: const Text('VS', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 12)),
+                  ),
+                  Expanded(child: Text(t2.toUpperCase(), textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 14))),
+                ],
+              ),
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(15),
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.1),
-              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(25)),
+            Container(
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.1),
+                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(25)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildFixtureDetail(Icons.calendar_month, date),
+                  _buildFixtureDetail(Icons.access_time_filled, time),
+                  _buildFixtureDetail(Icons.location_on, venue),
+                ],
+              ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildFixtureDetail(Icons.calendar_month, date),
-                _buildFixtureDetail(Icons.access_time_filled, time),
-                _buildFixtureDetail(Icons.location_on, venue),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

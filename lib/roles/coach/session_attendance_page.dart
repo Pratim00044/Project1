@@ -78,6 +78,7 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
                   title: widget.sessionTitle,
                   date: widget.date,
                   time: widget.time,
+                  isCoach: true,
                 )));
               }),
               _buildOptionItem(Icons.person_search_rounded, 'Full Player Profile', () {
@@ -124,6 +125,112 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
         if (p['status'] == null) p['status'] = 'Present';
       }
     });
+  }
+
+  void _showPresentConfirmation(int index) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => Container(
+        decoration: const BoxDecoration(
+          color: Color(0xFF0D0D0D),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+        ),
+        child: DraggableScrollableSheet(
+          initialChildSize: 0.6,
+          minChildSize: 0.4,
+          maxChildSize: 0.9,
+          expand: false,
+          builder: (context, scrollController) => SingleChildScrollView(
+            controller: scrollController,
+            padding: const EdgeInsets.all(25),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.white12, borderRadius: BorderRadius.circular(2)))),
+                const SizedBox(height: 25),
+                const Text('Mark as present?', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900)),
+                const SizedBox(height: 8),
+                Text('Confirm attendance for ${_players[index]['name']}', style: const TextStyle(color: Colors.white38, fontSize: 13)),
+                const SizedBox(height: 25),
+                Container(
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(color: surfaceColor, borderRadius: BorderRadius.circular(15)),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.white10, 
+                        radius: 18, 
+                        backgroundImage: _players[index]['image'] != null ? AssetImage(_players[index]['image']) : null,
+                        child: _players[index]['image'] == null 
+                          ? Text(_players[index]['name'].split(' ').map((e) => e[0]).join(), style: const TextStyle(color: Colors.white70, fontSize: 12))
+                          : null,
+                      ),
+                      const SizedBox(width: 15),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(_players[index]['name'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                            Text('${_players[index]['ratio']} sessions attended', style: const TextStyle(color: Colors.white38, fontSize: 11)),
+                          ],
+                        ),
+                      ),
+                      const Text('Present', style: TextStyle(color: greenAccent, fontWeight: FontWeight.bold, fontSize: 13)),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 15),
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(color: surfaceColor, borderRadius: BorderRadius.circular(15), border: Border.all(color: Colors.white.withOpacity(0.05))),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Reliability score impact', style: TextStyle(color: Colors.white38, fontSize: 11, fontWeight: FontWeight.bold)),
+                          Row(
+                            children: [
+                              const Text('Current: ', style: TextStyle(color: Colors.white24, fontSize: 11)),
+                              const Text('90%', style: TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.bold)),
+                              const Padding(padding: EdgeInsets.symmetric(horizontal: 10), child: Icon(Icons.arrow_forward, color: Colors.white12, size: 12)),
+                              const Text('After: ', style: TextStyle(color: Colors.white24, fontSize: 11)),
+                              const Text('92%', style: TextStyle(color: greenAccent, fontSize: 11, fontWeight: FontWeight.bold)),
+                            ],
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() => _players[index]['status'] = 'Present');
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    minimumSize: const Size(double.infinity, 55),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  ),
+                  child: const Text('Confirm present', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900)),
+                ),
+                const SizedBox(height: 15),
+                Center(
+                  child: TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Cancel — keep unmarked', style: TextStyle(color: Colors.white38, fontSize: 12, fontWeight: FontWeight.bold)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   void _showAbsentConfirmation(int index) {
@@ -283,20 +390,12 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(widget.sessionTitle, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
-                const SizedBox(height: 5),
+                const SizedBox(height: 15),
                 Row(
                   children: [
-                    const Icon(Icons.access_time, color: Colors.white38, size: 14),
-                    const SizedBox(width: 5),
-                    Text(widget.time, style: const TextStyle(color: Colors.white38, fontSize: 12, fontWeight: FontWeight.bold)),
-                    const SizedBox(width: 15),
-                    const Icon(Icons.location_on_outlined, color: Colors.white38, size: 14),
-                    const SizedBox(width: 5),
-                    Text(widget.pitch, style: const TextStyle(color: Colors.white38, fontSize: 12, fontWeight: FontWeight.bold)),
-                    const SizedBox(width: 15),
-                    const Icon(Icons.calendar_today_outlined, color: Colors.white38, size: 14),
-                    const SizedBox(width: 5),
-                    Text(widget.date, style: const TextStyle(color: Colors.white38, fontSize: 12, fontWeight: FontWeight.bold)),
+                    _buildInfoTile(Icons.access_time, 'TIME', widget.time),
+                    const SizedBox(width: 30),
+                    _buildInfoTile(Icons.location_on_outlined, 'VENUE', widget.pitch),
                   ],
                 ),
               ],
@@ -368,7 +467,7 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
                           ? Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                _buildActionButton('Present', greenAccent, () => setState(() => player['status'] = 'Present')),
+                                _buildActionButton('Present', greenAccent, () => _showPresentConfirmation(index)),
                                 const SizedBox(width: 8),
                                 _buildActionButton('Absent', Colors.redAccent, () => _showAbsentConfirmation(index)),
                               ],
@@ -434,6 +533,26 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildInfoTile(IconData icon, String label, String value) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
+          child: Icon(icon, color: Colors.white70, size: 14),
+        ),
+        const SizedBox(width: 10),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: const TextStyle(color: Colors.white38, fontSize: 8, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
+            Text(value, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+          ],
+        ),
+      ],
     );
   }
 
@@ -532,10 +651,11 @@ class AttendanceSavedPage extends StatelessWidget {
               const SizedBox(height: 20),
               TextButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const PitchRatingView(
-                    title: 'Under 12s Training',
-                    date: 'Jul 12',
-                    time: '11:00 AM',
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => PitchRatingView(
+                    title: sessionTitle,
+                    date: date,
+                    time: time,
+                    isCoach: true,
                   )));
                 },
                 child: const Row(

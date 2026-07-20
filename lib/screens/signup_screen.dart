@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/gestures.dart';
 import 'dart:math' as math;
+import 'terms_and_conditions_page.dart';
 import '../roles/organization/organization_home.dart';
 import '../roles/player/player_home.dart';
 import '../roles/coach/coach_home.dart';
@@ -27,6 +29,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   bool _obscurePassword = true;
   bool _isClubCodeStep = true;
+  bool _acceptTerms = false;
 
   final List<Map<String, dynamic>> _roles = [
     {'name': 'PLAYER', 'icon': Icons.directions_run_outlined, 'color': goldColor},
@@ -74,6 +77,16 @@ class _SignupScreenState extends State<SignupScreen> {
       if (_passwordController.text != _confirmPasswordController.text) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Passwords do not match')),
+        );
+        return;
+      }
+
+      if (!_acceptTerms) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please accept the Terms and Conditions to continue'),
+            backgroundColor: Colors.redAccent,
+          ),
         );
         return;
       }
@@ -243,7 +256,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                         ),
                                       ],
                                       
-                                      const SizedBox(height: 40),
+                                      const SizedBox(height: 25),
+                                      _buildTermsCheckbox(),
+                                      const SizedBox(height: 25),
                                       _buildRegisterButton(),
                                       const SizedBox(height: 30),
                                       
@@ -508,6 +523,53 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
+  Widget _buildTermsCheckbox() {
+    if (_isClubCodeStep) return const SizedBox.shrink();
+
+    return Row(
+      children: [
+        Theme(
+          data: ThemeData(unselectedWidgetColor: Colors.white24),
+          child: Checkbox(
+            value: _acceptTerms,
+            onChanged: (value) => setState(() => _acceptTerms = value ?? false),
+            activeColor: goldColor,
+            checkColor: Colors.black,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+            visualDensity: VisualDensity.compact,
+          ),
+        ),
+        Expanded(
+          child: RichText(
+            text: TextSpan(
+              style: const TextStyle(color: Colors.white70, fontSize: 12),
+              children: [
+                const TextSpan(text: 'I accept the '),
+                TextSpan(
+                  text: 'Terms and Conditions',
+                  style: const TextStyle(
+                    color: goldColor,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const TermsAndConditionsPage(),
+                        ),
+                      );
+                    },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildRegisterButton() {
     bool isStepOne = _roles[_currentIndex]['name'] != 'ORGANISER/HOST' && _isClubCodeStep;
     final roleColor = _roles[_currentIndex]['color'] as Color;
@@ -576,7 +638,7 @@ class _SignupScreenState extends State<SignupScreen> {
         const SizedBox(width: 8),
         Flexible(
           child: Text(
-            'JOIN THE LEGACY. BECOME A PRO.',
+            'ONE TEAM. ONE PASSION. ONE VICTORY.',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: isDesktop ? 11 : 9,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'league_builder_page.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
@@ -78,6 +79,44 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: const Text('Pick a league, find a game, and play.', 
                 style: TextStyle(color: Colors.white38, fontSize: 13, fontWeight: FontWeight.w500)),
+            ),
+            const SizedBox(height: 25),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: GestureDetector(
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const LeagueBuilderPage(isCoach: false))),
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), shape: BoxShape.circle),
+                        child: const Icon(Icons.add_rounded, color: Colors.white, size: 24),
+                      ),
+                      const SizedBox(width: 15),
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('CREATE LEAGUE', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+                            Text('Start your own custom competition', style: TextStyle(color: Colors.white70, fontSize: 10, fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                      ),
+                      const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white38, size: 14),
+                    ],
+                  ),
+                ),
+              ),
             ),
             const SizedBox(height: 25),
             _buildPickADate(),
@@ -169,7 +208,8 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
               const SizedBox(width: 8),
               const Icon(Icons.circle, size: 4, color: Colors.white24),
               const SizedBox(width: 8),
-              const Text('APR 15', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+              Text('${_getDayWithSuffix(_selectedDate.day)} ${['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'][_selectedDate.month - 1]}',
+                style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
               const SizedBox(width: 8),
               const Icon(Icons.circle, size: 4, color: Colors.white24),
               const SizedBox(width: 8),
@@ -179,6 +219,16 @@ class _SocialLeaguesPageState extends State<SocialLeaguesPage> {
         ),
       ],
     );
+  }
+
+  String _getDayWithSuffix(int day) {
+    if (day >= 11 && day <= 13) return '${day}th';
+    switch (day % 10) {
+      case 1: return '${day}st';
+      case 2: return '${day}nd';
+      case 3: return '${day}rd';
+      default: return '${day}th';
+    }
   }
 
   Widget _buildArrowButton(IconData icon, VoidCallback onTap, {bool isGreen = false}) {

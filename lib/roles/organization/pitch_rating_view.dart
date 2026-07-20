@@ -10,12 +10,14 @@ class PitchRatingView extends StatefulWidget {
   final String title;
   final String date;
   final String time;
+  final bool isCoach;
 
   const PitchRatingView({
     super.key,
     required this.title,
     this.date = 'Jul 12',
     this.time = '11:30 PM',
+    this.isCoach = false,
   });
 
   @override
@@ -233,7 +235,7 @@ class _PitchRatingViewState extends State<PitchRatingView> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => _RatingSheet(player: player),
+      builder: (context) => _RatingSheet(player: player, isCoach: widget.isCoach),
     ).then((value) {
       if (value == true) {
         setState(() {
@@ -270,7 +272,8 @@ class _PitchRatingViewState extends State<PitchRatingView> {
 
 class _RatingSheet extends StatefulWidget {
   final Map<String, dynamic> player;
-  const _RatingSheet({required this.player});
+  final bool isCoach;
+  const _RatingSheet({required this.player, this.isCoach = false});
 
   @override
   State<_RatingSheet> createState() => _RatingSheetState();
@@ -279,6 +282,7 @@ class _RatingSheet extends StatefulWidget {
 class _RatingSheetState extends State<_RatingSheet> {
   int goals = 2;
   int assists = 1;
+  final TextEditingController _feedbackController = TextEditingController();
   Map<String, int> ratings = {
     'Work ethic': 4,
     'Communication': 3,
@@ -288,6 +292,12 @@ class _RatingSheetState extends State<_RatingSheet> {
     'Defence': 2,
     'Stamina': 4,
   };
+
+  @override
+  void dispose() {
+    _feedbackController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -350,6 +360,32 @@ class _RatingSheetState extends State<_RatingSheet> {
             _buildRatingRow('Dribbling'),
             _buildRatingRow('Defence'),
             _buildRatingRow('Stamina'),
+            if (widget.isCoach) ...[
+              const SizedBox(height: 30),
+              const Text('WRITTEN FEEDBACK',
+                  style: TextStyle(
+                      color: Colors.white24,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.5)),
+              const SizedBox(height: 15),
+              TextField(
+                controller: _feedbackController,
+                maxLines: 4,
+                style: const TextStyle(color: Colors.white, fontSize: 14),
+                decoration: InputDecoration(
+                  hintText: 'Add performance notes...',
+                  hintStyle: const TextStyle(color: Colors.white24, fontSize: 13),
+                  filled: true,
+                  fillColor: Colors.white.withValues(alpha: 0.03),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+                  contentPadding: const EdgeInsets.all(15),
+                ),
+              ),
+            ],
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () => Navigator.pop(context, true),
