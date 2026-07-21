@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'custom_painters.dart';
+import 'profile_details/identity_verification_page.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
@@ -126,6 +127,47 @@ class DetailedPlayerProfile extends StatelessWidget {
                 _buildModernTile('Right', 'Foot', Icons.directions_run_rounded, const Color(0xFF4C1D95)),
                 _buildModernTile('#14', 'Rank', Icons.stars_rounded, const Color(0xFF831843)),
               ],
+            ),
+
+            const SizedBox(height: 35),
+            _buildSectionHeader('IDENTITY VERIFICATION'),
+            const SizedBox(height: 15),
+            GestureDetector(
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const IdentityVerificationPage())),
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: surfaceColor,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: goldColor.withValues(alpha: 0.1)),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: goldColor.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.badge_outlined, color: goldColor, size: 22),
+                    ),
+                    const SizedBox(width: 15),
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Photo & ID Documents', 
+                            style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                          SizedBox(height: 2),
+                          Text('Verification required for league play', 
+                            style: TextStyle(color: Colors.white38, fontSize: 11)),
+                        ],
+                      ),
+                    ),
+                    const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white24, size: 14),
+                  ],
+                ),
+              ),
             ),
 
             const SizedBox(height: 35),

@@ -44,13 +44,23 @@ class _CoachHomeState extends State<CoachHome> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         endDrawer: _buildDrawer(context),
-        floatingActionButton: const AnimatedChatBotFAB(),
         body: SafeArea(
           bottom: false,
           child: Column(
             children: [
               _buildHeader(context),
-              Expanded(child: _pages[_selectedIndex]),
+              Expanded(
+                child: Stack(
+                  children: [
+                    _pages[_selectedIndex],
+                    const Positioned(
+                      top: 10,
+                      right: 0,
+                      child: AnimatedChatBotFAB(),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
       ),

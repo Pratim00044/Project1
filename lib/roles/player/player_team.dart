@@ -53,7 +53,7 @@ class MyTeamsPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: goldColor.withValues(alpha: 0.5), width: 2),
                       ),
-                      child: Image.asset('assets/logo.png', fit: BoxFit.contain),
+                      child: Image.asset('assets/images/footlab.png', fit: BoxFit.contain),
                     ),
                     const SizedBox(width: 20),
                     const Column(

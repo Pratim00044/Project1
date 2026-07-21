@@ -7,6 +7,7 @@ import 'performance_dashboard.dart';
 import 'profile_details/security_detail.dart';
 import 'profile_details/help_center_detail.dart';
 import 'profile_details/notifications_page.dart';
+import 'profile_details/identity_verification_page.dart';
 import '../organization/player_performance_detail.dart';
 import 'profile_details/progress_page.dart';
 import 'drawer_pages.dart';
@@ -57,13 +58,23 @@ class PlayerHomeState extends State<PlayerHome> {
       backgroundColor: Colors.black,
       appBar: null,
       endDrawer: _buildDrawer(context),
-      floatingActionButton: const AnimatedChatBotFAB(),
       body: SafeArea(
         bottom: false,
         child: Column(
           children: [
             _buildHeader(context),
-            Expanded(child: _pages[_selectedIndex]),
+            Expanded(
+              child: Stack(
+                children: [
+                  _pages[_selectedIndex],
+                  const Positioned(
+                    top: 10,
+                    right: 0,
+                    child: AnimatedChatBotFAB(),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -132,7 +143,6 @@ class PlayerHomeState extends State<PlayerHome> {
                   ),
                   _buildDrawerItem(Icons.auto_graph_rounded, 'Professional Pathway', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfessionalPathwayScreen()))),
                   _buildDrawerItem(Icons.trending_up_rounded, 'Match Progress', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ProgressPage()))),
-                  _buildDrawerItem(Icons.analytics_rounded, 'Player Progress', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PlayerPerformanceDetail(name: 'Lionel Messi', pos: 'Forward', rating: 4.8)))),
                   _buildDrawerItem(Icons.sports_soccer_rounded, 'Match History', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PlayerMatchesScreen()))),
                   _buildDrawerItem(Icons.analytics_outlined, 'Performance Stats', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PlayerStatsScreen()))),
                   _buildDrawerItem(Icons.how_to_reg_rounded, 'Attendance History', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PlayerAttendanceScreen()))),
@@ -143,6 +153,7 @@ class PlayerHomeState extends State<PlayerHome> {
                     child: Text('APP SETTINGS', style: TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2)),
                   ),
                   _buildDrawerItem(Icons.person_outline_rounded, 'Account Preferences', () {}),
+                  _buildDrawerItem(Icons.badge_outlined, 'Photo & ID Verification', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const IdentityVerificationPage()))),
                   _buildDrawerItem(Icons.notifications_none_rounded, 'Notifications', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationsPage()))),
                   _buildDrawerItem(Icons.verified_user_outlined, 'Privacy & Security', () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SecurityDetail()))),
                   _buildDrawerItem(Icons.language_rounded, 'Language', () {}),

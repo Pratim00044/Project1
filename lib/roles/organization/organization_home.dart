@@ -82,7 +82,6 @@ class OrganisationHomeState extends State<OrganisationHome> {
                 ),
               ),
             const SizedBox(width: 12),
-            const AnimatedChatBotFAB(),
           ],
         ),
       ),
@@ -91,7 +90,18 @@ class OrganisationHomeState extends State<OrganisationHome> {
         child: Column(
           children: [
             _buildHeader(context),
-            Expanded(child: pages[_selectedIndex]),
+            Expanded(
+              child: Stack(
+                children: [
+                  pages[_selectedIndex],
+                  const Positioned(
+                    top: 10,
+                    right: 0,
+                    child: AnimatedChatBotFAB(),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
