@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../widgets/notification_service.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
@@ -59,10 +60,14 @@ class _IdentityVerificationPageState extends State<IdentityVerificationPage> {
             ),
             const SizedBox(height: 40),
             ElevatedButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Verification documents submitted successfully!')),
-                );
+              onPressed: () async {
+                await NotificationService.clearProfileNotifications();
+                
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Verification documents submitted successfully!')),
+                  );
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: goldColor,

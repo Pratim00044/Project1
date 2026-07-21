@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/gestures.dart';
 import 'dart:math' as math;
-import 'terms_and_conditions_page.dart';
+import 'terms_and_conditions_page.dart' hide surfaceColor;
 import '../roles/organization/organization_home.dart';
-import '../roles/player/player_home.dart';
+import '../roles/player/player_home.dart' hide surfaceColor;
 import '../roles/coach/coach_home.dart';
 import '../roles/manager/manager_home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../widgets/notification_service.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
+const Color surfaceColor = Color(0xFF121212);
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -21,6 +25,7 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _mobileController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -53,6 +58,7 @@ class _SignupScreenState extends State<SignupScreen> {
   void dispose() {
     _pageController.dispose();
     _nameController.dispose();
+    _usernameController.dispose();
     _emailController.dispose();
     _mobileController.dispose();
     _passwordController.dispose();
@@ -61,7 +67,7 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
-  void _handleRegister() {
+  Future<void> _handleRegister() async {
     if (_isClubCodeStep) {
       if (_clubCodeController.text.trim().isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -91,13 +97,74 @@ class _SignupScreenState extends State<SignupScreen> {
         return;
       }
 
-      Widget homePage = PlayerHome();
+      _showLoadingDialog();
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => homePage),
-      );
+      try {
+        // Use email as unique document ID to avoid Auth UID requirement
+        final String email = _emailController.text.trim();
+
+        // 1. Store in Firestore (to record registration and status)
+        await FirebaseFirestore.instance.collection('users').doc(email).set({
+          'fullName': _nameController.text.trim(),
+          'username': _usernameController.text.trim(),
+          'email': email,
+          'phone': _mobileController.text.trim(),
+          'role': 'PLAYER',
+          'profileComplete': false,
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+
+        // 2. Trigger System Notification
+        await NotificationService.showCompleteProfileNotification();
+
+        if (mounted) {
+          Navigator.pop(context); // Close loading dialog
+          _showSuccessAndRedirect();
+        }
+      } catch (e) {
+        if (mounted) {
+          Navigator.pop(context); // Close loading dialog
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Registration failed: ${e.toString()}')),
+          );
+        }
+      }
     }
+  }
+
+  void _showLoadingDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(color: goldColor),
+      ),
+    );
+  }
+
+  void _showSuccessAndRedirect() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: surfaceColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text('Account Created', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
+        content: const Text(
+          'Your account has been registered successfully. Please check your notifications to complete your profile and then log in.',
+          style: TextStyle(color: Colors.white70),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Close dialog
+              Navigator.pushReplacementNamed(context, '/login');
+            },
+            child: const Text('LOG IN NOW', style: TextStyle(color: goldColor, fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -188,6 +255,17 @@ class _SignupScreenState extends State<SignupScreen> {
                                           validator: (value) {
                                             if (value == null || value.trim().isEmpty) return 'Required';
                                             if (value.trim().split(' ').length < 2) return 'Enter full name';
+                                            return null;
+                                          },
+                                        ),
+                                        const SizedBox(height: 24),
+                                        _buildLabel('Username / Initials', Icons.alternate_email_rounded),
+                                        const SizedBox(height: 10),
+                                        _buildTextField(
+                                          controller: _usernameController,
+                                          hint: 'e.g. JP',
+                                          validator: (value) {
+                                            if (value == null || value.trim().isEmpty) return 'Required';
                                             return null;
                                           },
                                         ),
@@ -506,7 +584,7 @@ class _SignupScreenState extends State<SignupScreen> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: value,
-          hint: Text(hint, style: TextStyle(color: Colors.white.withValues(alpha: 0.3), fontSize: 14)),
+          hint: Text(hint, style: TextStyle(color: Colors.white38, fontSize: 14)),
           dropdownColor: const Color(0xFF1A1A1A),
           icon: const Icon(Icons.arrow_drop_down, color: Colors.white24),
           isExpanded: true,
@@ -652,4 +730,3 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 }
-

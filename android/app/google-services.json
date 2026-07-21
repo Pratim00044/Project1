@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "967678508347",
+    "project_id": "statixa-4298a",
+    "storage_bucket": "statixa-4298a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:967678508347:android:3497e7caabe8129e654b1e",
+        "android_client_info": {
+          "package_name": "com.example.statixa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4qeBfl8THRZB50SIGfrF810bWueckuTA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

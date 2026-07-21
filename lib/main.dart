@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import 'screens/splash_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/signup_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'widgets/notification_service.dart';
 
-void main() {
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await NotificationService.init(navigatorKey);
   runApp(const StatixaApp());
 }
 
@@ -18,6 +25,7 @@ class StatixaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'STATIXA',
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,

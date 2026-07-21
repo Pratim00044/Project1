@@ -7,6 +7,7 @@ import '../roles/organization/organization_home.dart';
 import '../roles/player/player_home.dart';
 import '../roles/coach/coach_home.dart';
 import '../roles/manager/manager_home.dart';
+import '../widgets/notification_service.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color darkBg = Color(0xFF080808);
@@ -45,6 +46,9 @@ class _LoginScreenState extends State<LoginScreen> {
       viewportFraction: 0.35,
       initialPage: _currentIndex,
     );
+    
+    // Clear any profile reminders once the user enters the app
+    NotificationService.clearProfileNotifications();
   }
 
   @override

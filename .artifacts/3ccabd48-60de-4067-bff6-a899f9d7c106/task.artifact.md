@@ -1,0 +1,3 @@
+- [x] Add `POST_NOTIFICATIONS` permission to `AndroidManifest.xml`
+- [x] Implement permission request in `notification_service.dart`
+- [x] Verify notification triggering

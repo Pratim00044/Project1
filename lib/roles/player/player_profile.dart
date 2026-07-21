@@ -9,6 +9,7 @@ const Color greenAccent = Color(0xFF2ECC71);
 
 class PlayerProfile extends StatelessWidget {
   final String playerName;
+  final String? username;
   final String? playerNumber;
   final bool isReadOnly;
   final bool showBackButton;
@@ -16,6 +17,7 @@ class PlayerProfile extends StatelessWidget {
   const PlayerProfile({
     super.key,
     this.playerName = 'Lionel Messi',
+    this.username,
     this.playerNumber,
     this.isReadOnly = false,
     this.showBackButton = false,
@@ -25,6 +27,7 @@ class PlayerProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return DetailedPlayerProfile(
       name: playerName,
+      username: username,
       pos: 'Forward',
       club: 'Core FC',
       isMe: !isReadOnly,
@@ -35,6 +38,7 @@ class PlayerProfile extends StatelessWidget {
 
 class DetailedPlayerProfile extends StatelessWidget {
   final String name;
+  final String? username;
   final String pos;
   final String club;
   final bool isMe;
@@ -44,6 +48,7 @@ class DetailedPlayerProfile extends StatelessWidget {
   const DetailedPlayerProfile({
     super.key,
     required this.name,
+    this.username,
     required this.pos,
     required this.club,
     this.isMe = false,
@@ -97,6 +102,8 @@ class DetailedPlayerProfile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(name, style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w900)),
+                      if (username != null)
+                        Text('@$username', style: const TextStyle(color: goldColor, fontSize: 14, fontWeight: FontWeight.bold, letterSpacing: 0.5)),
                     ],
                   ),
                 ),

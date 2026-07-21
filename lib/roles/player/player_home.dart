@@ -8,6 +8,7 @@ import 'profile_details/security_detail.dart';
 import 'profile_details/help_center_detail.dart';
 import 'profile_details/notifications_page.dart';
 import 'profile_details/identity_verification_page.dart';
+import 'profile_details/complete_profile_page.dart';
 import '../organization/player_performance_detail.dart';
 import 'profile_details/progress_page.dart';
 import 'drawer_pages.dart';
@@ -21,7 +22,9 @@ const Color surfaceColor = Color(0xFF121212);
 
 class PlayerHome extends StatefulWidget {
   final int initialIndex;
-  const PlayerHome({super.key, this.initialIndex = 0});
+  final bool isNewUser;
+  final String? username;
+  const PlayerHome({super.key, this.initialIndex = 0, this.isNewUser = false, this.username});
 
   @override
   State<PlayerHome> createState() => PlayerHomeState();
@@ -34,6 +37,48 @@ class PlayerHomeState extends State<PlayerHome> {
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
+
+    if (widget.isNewUser) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showCompleteProfileNotification();
+      });
+    }
+  }
+
+  void _showCompleteProfileNotification() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Row(
+          children: [
+            Icon(Icons.stars_rounded, color: goldColor),
+            SizedBox(width: 15),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('ACTION REQUIRED', style: TextStyle(color: goldColor, fontWeight: FontWeight.w900, fontSize: 10)),
+                  Text('Complete your profile to unlock all features.', style: TextStyle(color: Colors.white, fontSize: 12)),
+                ],
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: const Color(0xFF161616),
+        duration: const Duration(seconds: 10),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        margin: const EdgeInsets.fromLTRB(15, 0, 15, 30),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        action: SnackBarAction(
+          label: 'COMPLETE',
+          textColor: goldColor,
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const CompleteProfilePage()));
+          },
+        ),
+      ),
+    );
   }
 
   void changeTab(int index) {
@@ -44,12 +89,12 @@ class PlayerHomeState extends State<PlayerHome> {
     }
   }
 
-  final List<Widget> _pages = [
+  List<Widget> get _pages => [
     const PlayerDashboard(),
     const MyTeamsPage(),
     const PlayerGamesPage(),
     const PerformanceDashboard(),
-    const PlayerProfile(),
+    PlayerProfile(username: widget.username),
   ];
 
   @override
