@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'session_attendance_page.dart';
+import '../../widgets/venue_colors.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color surfaceColor = Color(0xFF121212);
@@ -19,14 +20,15 @@ class _DashboardPageState extends State<DashboardPage> {
   final Map<String, Map<String, List<Map<String, dynamic>>>> _scheduleData = {
     '2024-07-12': {
       'sessions': [
-        {'title': 'Under 8s Training', 'time': '09:00 AM', 'pitch': 'Pitch 1', 'attending': 8, 'pending': 2, 'max': 10, 'status': 'Open', 'color': Color(0xFF1E3A8A)},
-        {'title': 'Under 12s Training', 'time': '11:00 AM', 'pitch': 'Pitch 3', 'attending': 12, 'pending': 3, 'max': 16, 'status': 'Open', 'color': Color(0xFF3730A3)},
-        {'title': 'Under 16s Training', 'time': '02:00 PM', 'pitch': 'Main Pitch', 'attending': 9, 'pending': 5, 'max': 14, 'status': 'Later', 'color': Color(0xFF5B21B6)},
+        {'title': 'Under 8s Training', 'time': '09:00 AM', 'pitch': 'Pitch 1', 'attend': 8, 'pending': 2, 'max': 10, 'status': 'Open'},
+        {'title': 'Under 12s Training', 'time': '11:00 AM', 'pitch': 'Pitch 3', 'attend': 12, 'pending': 3, 'max': 16, 'status': 'Open'},
+        {'title': 'Under 16s Training', 'time': '02:00 PM', 'pitch': 'Main Pitch', 'attend': 9, 'pending': 5, 'max': 14, 'status': 'Later'},
+        {'title': 'Elite Advanced Session', 'time': '05:00 PM', 'pitch': 'Pitch 1', 'attend': 0, 'pending': 12, 'max': 12, 'status': 'Open'},
       ]
     },
     '2024-07-13': {
       'sessions': [
-        {'title': 'Under 10s Skills', 'time': '04:00 PM', 'pitch': 'Pitch 2', 'attending': 10, 'pending': 4, 'max': 15, 'status': 'Open', 'color': Color(0xFF7C3AED)},
+        {'title': 'Under 10s Skills', 'time': '04:00 PM', 'pitch': 'Pitch 2', 'attend': 10, 'pending': 4, 'max': 15, 'status': 'Open'},
       ]
     },
   };
@@ -81,10 +83,9 @@ class _DashboardPageState extends State<DashboardPage> {
                 s['time'],
                 s['pitch'],
                 s['status'],
-                s['attending'],
+                s['attend'],
                 s['pending'],
                 s['max'],
-                s['color'],
               );
             },
             childCount: sessions.length,
@@ -164,9 +165,10 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _buildSessionCard(String title, String time, String pitch, String status, int attending, int pending, int max, Color bgColor) {
-    double progress = attending / max;
+  Widget _buildSessionCard(String title, String time, String pitch, String status, int attend, int pending, int max) {
+    double progress = attend / max;
     Color statusColor = status == 'Open' ? greenAccent : goldColor;
+    final List<Color> cardGradient = VenueStyles.getVenueGradient(pitch);
 
     return GestureDetector(
       onTap: () {
@@ -180,8 +182,8 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Container(
         margin: const EdgeInsets.fromLTRB(20, 0, 20, 15),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+          gradient: LinearGradient(
+            colors: cardGradient,
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),
@@ -244,7 +246,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildMiniStat(attending.toString(), 'Attending', Colors.white),
+                      _buildMiniStat(attend.toString(), 'Attend', Colors.white),
                       _buildMiniStat(pending.toString(), 'Pending', Colors.white60),
                       _buildMiniStat(max.toString(), 'Max', Colors.white),
                     ],

@@ -128,9 +128,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           const SizedBox(height: 10),
                           _buildInteractiveCurvedSelector(false),
-                          
+
                           const SizedBox(height: 20),
-                          
+
                           Container(
                             width: formWidth,
                             padding: const EdgeInsets.symmetric(horizontal: 32.0),
@@ -161,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     },
                                   ),
                                   const SizedBox(height: 16),
-                                  
+
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
@@ -209,8 +209,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   _buildLoginButton(),
                                   const SizedBox(height: 20),
 
-                                  if (_roles[_currentIndex]['name'] == 'PLAYER') ...[
-                                    Center(
+                                  Visibility(
+                                    visible: _roles[_currentIndex]['name'] == 'PLAYER',
+                                    maintainSize: true,
+                                    maintainAnimation: true,
+                                    maintainState: true,
+                                    child: Center(
                                       child: Wrap(
                                         alignment: WrapAlignment.center,
                                         crossAxisAlignment: WrapCrossAlignment.center,
@@ -240,8 +244,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ],
                                       ),
                                     ),
-                                  ],
-                                  
+                                  ),
+
                                   const SizedBox(height: 30),
                                 ],
                               ),

@@ -331,6 +331,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                             if (value == null || value.trim().isEmpty) return 'Confirm password is required';
                                             return null;
                                           },
+                                          togglePassword: () {
+                                            setState(() {
+                                              _obscurePassword = !_obscurePassword;
+                                            });
+                                          },
                                         ),
                                       ],
                                       

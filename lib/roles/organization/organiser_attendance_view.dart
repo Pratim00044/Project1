@@ -27,15 +27,15 @@ class OrganiserAttendanceView extends StatefulWidget {
 
 class _OrganiserAttendanceViewState extends State<OrganiserAttendanceView> {
   final List<Map<String, dynamic>> _players = [
-    {'name': 'James Doe', 'image': 'assets/images/sunil.png', 'wallet': 120, 'fee': 20, 'status': 'Attended', 'color': Colors.blueAccent},
-    {'name': 'Marcus Reid', 'image': 'assets/images/sunil.png', 'wallet': 90, 'fee': 20, 'status': 'Attended', 'color': Colors.greenAccent},
+    {'name': 'James Doe', 'image': 'assets/images/sunil.png', 'wallet': 120, 'fee': 20, 'status': 'Attend', 'color': Colors.blueAccent},
+    {'name': 'Marcus Reid', 'image': 'assets/images/sunil.png', 'wallet': 90, 'fee': 20, 'status': 'Attend', 'color': Colors.greenAccent},
     {'name': 'Sam Khan', 'image': 'assets/images/sunil.png', 'wallet': 60, 'fee': 20, 'status': 'Pending', 'color': Colors.pinkAccent},
     {'name': 'Omar Patel', 'image': 'assets/images/sunil.png', 'wallet': 0, 'fee': 20, 'status': 'Absent', 'color': Colors.orangeAccent},
     {'name': 'Lena Shah', 'image': 'assets/images/sunil.png', 'wallet': 45, 'fee': 20, 'status': 'Pending', 'color': Colors.grey},
     {'name': 'Zoe Miller', 'image': 'assets/images/sunil.png', 'wallet': 15, 'fee': 20, 'status': 'Pending', 'color': Colors.amberAccent},
   ];
 
-  int get _attendedCount => _players.where((p) => p['status'] == 'Attended').length;
+  int get _attendCount => _players.where((p) => p['status'] == 'Attend').length;
   int get _absentCount => _players.where((p) => p['status'] == 'Absent').length;
   int get _reservedCount => _players.length;
 
@@ -286,7 +286,7 @@ class _OrganiserAttendanceViewState extends State<OrganiserAttendanceView> {
   void _showConfirmation(int index, String method) {
     final player = _players[index];
     setState(() {
-      _players[index]['status'] = 'Attended';
+      _players[index]['status'] = 'Attend';
       if (method == 'Wallet') {
         _players[index]['wallet'] -= player['fee'];
       }
@@ -307,7 +307,7 @@ class _OrganiserAttendanceViewState extends State<OrganiserAttendanceView> {
 
   @override
   Widget build(BuildContext context) {
-    double attendancePercentage = _attendedCount / _reservedCount;
+    double attendancePercentage = _attendCount / _reservedCount;
 
     return Scaffold(
       backgroundColor: darkBg,
@@ -353,7 +353,7 @@ class _OrganiserAttendanceViewState extends State<OrganiserAttendanceView> {
               children: [
                 _buildSummaryBox(_reservedCount.toString(), 'Reserved', Colors.white.withValues(alpha: 0.1)),
                 const SizedBox(width: 10),
-                _buildSummaryBox(_attendedCount.toString(), 'Attended', greenAccent.withValues(alpha: 0.1), textColor: greenAccent),
+                _buildSummaryBox(_attendCount.toString(), 'Attend', greenAccent.withValues(alpha: 0.1), textColor: greenAccent),
                 const SizedBox(width: 10),
                 _buildSummaryBox(_absentCount.toString(), 'Absent', Colors.redAccent.withValues(alpha: 0.1), textColor: Colors.redAccent),
               ],
@@ -430,19 +430,19 @@ class _OrganiserAttendanceViewState extends State<OrganiserAttendanceView> {
                               const SizedBox(height: 4),
                               if (isPending)
                                 Text('Wallet: ${p['wallet']} cr · Fee: ${p['fee']} cr', style: const TextStyle(color: Colors.white38, fontSize: 10, fontWeight: FontWeight.w600))
-                              else if (p['status'] == 'Attended')
-                                const Text('Attended · Fee processed', style: TextStyle(color: greenAccent, fontSize: 10, fontWeight: FontWeight.bold))
+                              else if (p['status'] == 'Attend')
+                                const Text('Attend · Fee processed', style: TextStyle(color: greenAccent, fontSize: 10, fontWeight: FontWeight.bold))
                               else
                                 const Text('Cash paid · Fee: 20 cr', style: TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.bold)),
                             ],
                           ),
                         ),
                         if (isPending) ...[
-                          _buildActionBtn('Attended', greenAccent, () => _showPaymentPopup(index)),
+                          _buildActionBtn('Attend', greenAccent, () => _showPaymentPopup(index)),
                           const SizedBox(width: 8),
                           _buildActionBtn('Absent', Colors.redAccent, () => _showAbsentConfirmation(index), isOutline: true),
                         ] else
-                          _buildStatusPill(p['status']),
+                          _buildStatusPill(p['status'], index),
                       ],
                     ),
                   ),
@@ -517,16 +517,32 @@ class _OrganiserAttendanceViewState extends State<OrganiserAttendanceView> {
     );
   }
 
-  Widget _buildStatusPill(String status) {
-    bool isAttended = status == 'Attended';
-    Color color = isAttended ? greenAccent : Colors.redAccent;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Text(status, style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.w900)),
+  Widget _buildStatusPill(String status, int index) {
+    bool isAttend = status == 'Attend';
+    Color color = isAttend ? greenAccent : Colors.redAccent;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(status, style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.w900)),
+        ),
+        const SizedBox(width: 8),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              _players[index]['status'] = 'Pending';
+            });
+          },
+          icon: const Icon(Icons.refresh, color: Colors.white24, size: 18),
+          constraints: const BoxConstraints(),
+          padding: EdgeInsets.zero,
+        ),
+      ],
     );
   }
 }

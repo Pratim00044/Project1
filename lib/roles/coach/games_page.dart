@@ -5,6 +5,7 @@ import 'player_detail_page.dart';
 import 'session_attendance_page.dart';
 import '../organization/social_leagues_page.dart';
 import '../organization/league_builder_page.dart';
+import '../../widgets/venue_colors.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color surfaceColor = Color(0xFF121212);
@@ -37,6 +38,7 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
       'sessions': [
         {'title': 'Under 8s Training', 'time': '09:00 AM', 'pitch': 'Pitch 1', 'status': 'Open', 'type': 'SESSION'},
         {'title': 'Under 12s Training', 'time': '11:00 AM', 'pitch': 'Pitch 3', 'status': 'Open', 'type': 'SESSION'},
+        {'title': 'Goalkeeper Clinic', 'time': '07:00 PM', 'pitch': 'Pitch 3', 'status': 'Open', 'type': 'SESSION'},
       ],
       'matches': [
         {'teams': 'CORE FC vs EAGLES', 'time': '04:00 PM', 'venue': 'Main Pitch', 'league': 'League Match', 'type': 'MATCH'},
@@ -142,8 +144,8 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
             ),
           ),
 
-        ...sessions.map((s) => _buildActivityTile(s, Colors.greenAccent)),
-        ...matches.map((m) => _buildActivityTile(m, const Color(0xFF007CFE))),
+        ...sessions.map((s) => _buildActivityTile(s)),
+        ...matches.map((m) => _buildActivityTile(m)),
         
         const SizedBox(height: 50),
       ],
@@ -355,14 +357,17 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
     );
   }
 
-  Widget _buildActivityTile(Map<String, dynamic> data, Color color) {
+  Widget _buildActivityTile(Map<String, dynamic> data) {
     bool isMatch = data['type'] == 'MATCH';
+    String venue = isMatch ? data['venue'] : data['pitch'];
+    final List<Color> cardGradient = VenueStyles.getVenueGradient(venue);
+
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) => SessionAttendancePage(
           sessionTitle: isMatch ? data['teams'] : data['title'],
           time: data['time'],
-          pitch: isMatch ? data['venue'] : data['pitch'],
+          pitch: venue,
           date: 'Jul ${_selectedDate.day}',
         )));
       },
@@ -370,8 +375,8 @@ class _GamesPageState extends State<GamesPage> with SingleTickerProviderStateMix
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF2E5B4F), Color(0xFF3B2A50)],
+          gradient: LinearGradient(
+            colors: cardGradient,
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),

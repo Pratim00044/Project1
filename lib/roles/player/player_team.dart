@@ -187,6 +187,30 @@ class MyTeamsPage extends StatelessWidget {
                                           fontWeight: FontWeight.w900
                                         )
                                       ),
+                                      const SizedBox(width: 15),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                        decoration: BoxDecoration(
+                                          color: Colors.black.withValues(alpha: 0.4),
+                                          borderRadius: BorderRadius.circular(10),
+                                          border: Border.all(color: goldColor.withValues(alpha: 0.3), width: 1),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Image.asset('assets/images/footlab.png', height: 18, fit: BoxFit.contain),
+                                            const SizedBox(width: 8),
+                                            const Text(
+                                              'CORE FC',
+                                              style: TextStyle(
+                                                color: goldColor,
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w900,
+                                                letterSpacing: 1.0,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ],

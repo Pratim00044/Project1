@@ -4,6 +4,7 @@ import 'create_match_page.dart';
 import 'organiser_attendance_view.dart';
 import 'player_progress_dashboard.dart';
 import 'org_footer.dart';
+import '../../widgets/venue_colors.dart';
 
 const Color goldColor = Color(0xFFD4AF37);
 const Color greenAccent = Color(0xFF2ECC71);
@@ -99,17 +100,18 @@ class _OrganisationDashboardState extends State<OrganisationDashboard> {
         SliverToBoxAdapter(child: _buildFilterSection()),
         SliverToBoxAdapter(
           child: _buildCategorySection('MIXED', [
-            _buildLeagueCard(context, 'Midweek Turbo 5s', 'Wed, Apr 15 • 11:00 PM', 'Business Bay Courts', 'Jun 12', '55 AED', category: 'OPEN', bgImage: _cardImages[0], reserved: 6, total: 10, gradient: tileColors[1]),
-            _buildLeagueCard(context, 'Thursday Social 7s', 'Thu, Apr 16 • 11:30 PM', 'Dubai Sports City', 'Jun 14', '75 AED', category: 'OPEN', bgImage: _cardImages[1], reserved: 8, total: 14, gradient: tileColors[0]),
-            _buildLeagueCard(context, 'Friday Night Lights 7s', 'Sat, Apr 18 • 10:00 PM', 'JBR Arena', 'Jun 15', '75 AED', category: 'OPEN', bgImage: _cardImages[2], reserved: 6, total: 14, gradient: tileColors[5]),
+            _buildLeagueCard(context, 'Midweek Turbo 5s', 'Wed, Apr 15 • 11:00 PM', 'Business Bay Courts', 'Jun 12', '55 AED', category: 'OPEN', bgImage: _cardImages[0], reserved: 6, total: 10),
+            _buildLeagueCard(context, 'Thursday Social 7s', 'Thu, Apr 16 • 11:30 PM', 'Dubai Sports City', 'Jun 14', '75 AED', category: 'OPEN', bgImage: _cardImages[1], reserved: 8, total: 14),
+            _buildLeagueCard(context, 'Friday Night Lights 7s', 'Sat, Apr 18 • 10:00 PM', 'JBR Arena', 'Jun 15', '75 AED', category: 'OPEN', bgImage: _cardImages[2], reserved: 6, total: 14),
+            _buildLeagueCard(context, 'Morning Skills Session', 'Thu, Apr 16 • 09:00 AM', 'Dubai Sports City', 'Jun 14', '45 AED', category: 'MIXED', bgImage: _cardImages[3], reserved: 4, total: 12),
           ]),
         ),
         SliverToBoxAdapter(
           child: _buildCategorySection('MEN', [
-            _buildLeagueCard(context, '5-A-SIDE', '2 FIXTURES', 'Kite Beach', 'Jun 10', '45 AED', category: 'MEN', bgImage: _cardImages[3], gradient: tileColors[1]),
-            _buildLeagueCard(context, '11-A-SIDE', '0 FIXTURES', 'Main Stadium', 'Jun 20', '99 AED', category: 'MEN', bgImage: _cardImages[4], gradient: tileColors[4]),
-            _buildLeagueCard(context, '6-A-SIDE', '3 FIXTURES', 'JLT Pitch', 'Jun 18', '55 AED', category: 'MEN', bgImage: _cardImages[0], gradient: tileColors[2]),
-            _buildLeagueCard(context, '5-A-SIDE', '1 FIXTURE', 'Dubai Hills', 'Jun 13', '45 AED', category: 'MEN', bgImage: _cardImages[1], gradient: tileColors[3]),
+            _buildLeagueCard(context, '5-A-SIDE', '2 FIXTURES', 'Kite Beach', 'Jun 10', '45 AED', category: 'MEN', bgImage: _cardImages[3]),
+            _buildLeagueCard(context, '11-A-SIDE', '0 FIXTURES', 'Main Stadium', 'Jun 20', '99 AED', category: 'MEN', bgImage: _cardImages[4]),
+            _buildLeagueCard(context, '6-A-SIDE', '3 FIXTURES', 'JLT Pitch', 'Jun 18', '55 AED', category: 'MEN', bgImage: _cardImages[0]),
+            _buildLeagueCard(context, '5-A-SIDE', '1 FIXTURE', 'Dubai Hills', 'Jun 13', '45 AED', category: 'MEN', bgImage: _cardImages[1]),
           ]),
         ),
         const SliverToBoxAdapter(child: SizedBox(height: 50)),
@@ -448,10 +450,10 @@ class _OrganisationDashboardState extends State<OrganisationDashboard> {
     );
   }
 
-  Widget _buildLeagueCard(BuildContext context, String type, String time, String location, String date, String price, {required String category, required String bgImage, int reserved = 0, int total = 10, List<Color>? gradient}) {
+  Widget _buildLeagueCard(BuildContext context, String type, String time, String location, String date, String price, {required String category, required String bgImage, int reserved = 0, int total = 10}) {
     int slotsLeft = total - reserved;
     double progress = (reserved / total).clamp(0.0, 1.0);
-    final List<Color> cardGradient = gradient ?? tileColors[1];
+    final List<Color> cardGradient = VenueStyles.getVenueGradient(location);
 
     return GestureDetector(
       onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => OrganiserAttendanceView(

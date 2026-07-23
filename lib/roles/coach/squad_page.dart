@@ -334,6 +334,10 @@ class _SquadPageState extends State<SquadPage> {
               Text(player['name'].toUpperCase(), 
                   style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 1)),
               const SizedBox(height: 30),
+              _buildOptionItem(Icons.chat_bubble_outline_rounded, 'Give Player Feedback', () {
+                Navigator.pop(context);
+                _showFeedbackDialog(player['name']);
+              }),
               _buildOptionItem(Icons.auto_graph_rounded, 'View Progress & Records', () {
                 Navigator.pop(context);
                 Navigator.push(context, MaterialPageRoute(builder: (context) => PlayerPerformanceDetail(
@@ -367,13 +371,14 @@ class _SquadPageState extends State<SquadPage> {
 
   Widget _buildOptionItem(IconData icon, String title, VoidCallback onTap) {
     bool isProgress = title == 'View Progress & Records';
+    bool isFeedback = title == 'Give Player Feedback';
     return GestureDetector(
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 15),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: isProgress ? Colors.white.withOpacity(0.03) : Colors.transparent,
+          color: (isProgress || isFeedback) ? Colors.white.withOpacity(0.03) : Colors.transparent,
           borderRadius: BorderRadius.circular(15),
         ),
         child: Row(
@@ -382,6 +387,71 @@ class _SquadPageState extends State<SquadPage> {
             const SizedBox(width: 20),
             Text(title, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
           ],
+        ),
+      ),
+    );
+  }
+
+  void _showFeedbackDialog(String playerName) {
+    final TextEditingController feedbackController = TextEditingController();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Container(
+          padding: const EdgeInsets.all(30),
+          decoration: const BoxDecoration(
+            color: Color(0xFF161616),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(35)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.white10, borderRadius: BorderRadius.circular(2)))),
+              const SizedBox(height: 25),
+              Text('GIVE FEEDBACK', style: TextStyle(color: goldColor, fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 2)),
+              const SizedBox(height: 8),
+              Text('Evaluation for $playerName', style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 25),
+              TextField(
+                controller: feedbackController,
+                maxLines: 5,
+                style: const TextStyle(color: Colors.white, fontSize: 14),
+                decoration: InputDecoration(
+                  hintText: 'Write your notes about performance, attitude, or technical skills...',
+                  hintStyle: const TextStyle(color: Colors.white24, fontSize: 13),
+                  filled: true,
+                  fillColor: Colors.white.withOpacity(0.03),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(20), borderSide: BorderSide.none),
+                  contentPadding: const EdgeInsets.all(20),
+                ),
+              ),
+              const SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: () {
+                  if (feedbackController.text.trim().isNotEmpty) {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Feedback saved for $playerName'),
+                        backgroundColor: greenAccent,
+                      ),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: goldColor,
+                  minimumSize: const Size(double.infinity, 60),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                ),
+                child: const Text('SUBMIT FEEDBACK', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, letterSpacing: 1)),
+              ),
+              const SizedBox(height: 15),
+            ],
+          ),
         ),
       ),
     );

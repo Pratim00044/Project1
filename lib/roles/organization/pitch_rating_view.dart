@@ -35,7 +35,7 @@ class _PitchRatingViewState extends State<PitchRatingView> {
   ];
 
   int get _ratedCount => _players.where((p) => p['rated'] && !p['absent']).length;
-  int get _attendedCount => _players.where((p) => !p['absent']).length;
+  int get _attendCount => _players.where((p) => !p['absent']).length;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class _PitchRatingViewState extends State<PitchRatingView> {
           Center(
             child: Padding(
               padding: const EdgeInsets.only(right: 20),
-              child: Text('$_ratedCount/$_attendedCount rated', 
+              child: Text('$_ratedCount/$_attendCount rated', 
                 style: const TextStyle(color: greenAccent, fontWeight: FontWeight.bold, fontSize: 12)),
             ),
           )
@@ -252,8 +252,8 @@ class _PitchRatingViewState extends State<PitchRatingView> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildStatIndicator(Icons.check, '$_ratedCount rated', greenAccent),
-          _buildStatIndicator(Icons.access_time, '${_attendedCount - _ratedCount} pending', goldColor),
-          _buildStatIndicator(Icons.close, '${_players.length - _attendedCount} absent', Colors.white24),
+          _buildStatIndicator(Icons.access_time, '${_attendCount - _ratedCount} pending', goldColor),
+          _buildStatIndicator(Icons.close, '${_players.length - _attendCount} absent', Colors.white24),
         ],
       ),
     );

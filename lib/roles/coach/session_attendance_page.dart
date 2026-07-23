@@ -32,11 +32,11 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
     {'name': 'Lena Shah', 'ratio': '7/10', 'status': null, 'image': 'assets/images/sunil.png'},
     {'name': 'Omar Patel', 'ratio': '5/10', 'status': null, 'image': 'assets/images/sunil.png'},
     {'name': 'Sam Khan', 'ratio': '9/10', 'status': null, 'image': 'assets/images/sunil.png'},
-    {'name': 'Leo Messi', 'ratio': '10/10', 'status': 'Present', 'image': 'assets/images/sunil.png'},
+    {'name': 'Leo Messi', 'ratio': '10/10', 'status': 'Attend', 'image': 'assets/images/sunil.png'},
     {'name': 'Cristiano R.', 'ratio': '9/10', 'status': 'Absent', 'image': 'assets/images/sunil.png'},
   ];
 
-  int get presentCount => _players.where((p) => p['status'] == 'Present').length;
+  int get attendCount => _players.where((p) => p['status'] == 'Attend').length;
   int get absentCount => _players.where((p) => p['status'] == 'Absent').length;
   int get unmarkedCount => _players.where((p) => p['status'] == null).length;
 
@@ -68,6 +68,10 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
               Text(player['name'].toUpperCase(), 
                   style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 1)),
               const SizedBox(height: 30),
+              _buildOptionItem(Icons.chat_bubble_outline_rounded, 'Give Player Feedback', () {
+                Navigator.pop(context);
+                _showFeedbackDialog(player['name']);
+              }),
               _buildOptionItem(Icons.auto_graph_rounded, 'View Progress & Records', () {
                 Navigator.pop(context);
                 // Navigate to Progress
@@ -99,18 +103,19 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
 
   Widget _buildOptionItem(IconData icon, String title, VoidCallback onTap) {
     bool isProgress = title == 'View Progress & Records';
+    bool isFeedback = title == 'Give Player Feedback';
     return GestureDetector(
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 15),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: isProgress ? Colors.white.withOpacity(0.03) : Colors.transparent,
+          color: (isProgress || isFeedback) ? Colors.white.withOpacity(0.03) : Colors.transparent,
           borderRadius: BorderRadius.circular(15),
         ),
         child: Row(
           children: [
-            Icon(icon, color: isProgress ? goldColor : goldColor, size: 24),
+            Icon(icon, color: isProgress || isFeedback ? goldColor : goldColor, size: 24),
             const SizedBox(width: 20),
             Text(title, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
           ],
@@ -119,15 +124,80 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
     );
   }
 
-  void _markAllPresent() {
+  void _showFeedbackDialog(String playerName) {
+    final TextEditingController feedbackController = TextEditingController();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Container(
+          padding: const EdgeInsets.all(30),
+          decoration: const BoxDecoration(
+            color: Color(0xFF161616),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(35)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.white10, borderRadius: BorderRadius.circular(2)))),
+              const SizedBox(height: 25),
+              Text('GIVE FEEDBACK', style: TextStyle(color: goldColor, fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 2)),
+              const SizedBox(height: 8),
+              Text('Evaluation for $playerName', style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 25),
+              TextField(
+                controller: feedbackController,
+                maxLines: 5,
+                style: const TextStyle(color: Colors.white, fontSize: 14),
+                decoration: InputDecoration(
+                  hintText: 'Write your notes about performance, attitude, or technical skills...',
+                  hintStyle: const TextStyle(color: Colors.white24, fontSize: 13),
+                  filled: true,
+                  fillColor: Colors.white.withOpacity(0.03),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(20), borderSide: BorderSide.none),
+                  contentPadding: const EdgeInsets.all(20),
+                ),
+              ),
+              const SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: () {
+                  if (feedbackController.text.trim().isNotEmpty) {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Feedback saved for $playerName'),
+                        backgroundColor: greenAccent,
+                      ),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: goldColor,
+                  minimumSize: const Size(double.infinity, 60),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                ),
+                child: const Text('SUBMIT FEEDBACK', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900, letterSpacing: 1)),
+              ),
+              const SizedBox(height: 15),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _markAllAttend() {
     setState(() {
       for (var p in _players) {
-        if (p['status'] == null) p['status'] = 'Present';
+        if (p['status'] == null) p['status'] = 'Attend';
       }
     });
   }
 
-  void _showPresentConfirmation(int index) {
+  void _showAttendConfirmation(int index) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -150,7 +220,7 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
               children: [
                 Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.white12, borderRadius: BorderRadius.circular(2)))),
                 const SizedBox(height: 25),
-                const Text('Mark as present?', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900)),
+                const Text('Mark as attend?', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900)),
                 const SizedBox(height: 8),
                 Text('Confirm attendance for ${_players[index]['name']}', style: const TextStyle(color: Colors.white38, fontSize: 13)),
                 const SizedBox(height: 25),
@@ -173,11 +243,11 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(_players[index]['name'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                            Text('${_players[index]['ratio']} sessions attended', style: const TextStyle(color: Colors.white38, fontSize: 11)),
+                            Text('${_players[index]['ratio']} sessions attend', style: const TextStyle(color: Colors.white38, fontSize: 11)),
                           ],
                         ),
                       ),
-                      const Text('Present', style: TextStyle(color: greenAccent, fontWeight: FontWeight.bold, fontSize: 13)),
+                      const Text('Attend', style: TextStyle(color: greenAccent, fontWeight: FontWeight.bold, fontSize: 13)),
                     ],
                   ),
                 ),
@@ -208,7 +278,7 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
                 const SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () {
-                    setState(() => _players[index]['status'] = 'Present');
+                    setState(() => _players[index]['status'] = 'Attend');
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
@@ -216,7 +286,7 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
                     minimumSize: const Size(double.infinity, 55),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                   ),
-                  child: const Text('Confirm present', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900)),
+                  child: const Text('Confirm attend', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900)),
                 ),
                 const SizedBox(height: 15),
                 Center(
@@ -279,7 +349,7 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(_players[index]['name'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                            Text('${_players[index]['ratio']} sessions attended', style: const TextStyle(color: Colors.white38, fontSize: 11)),
+                            Text('${_players[index]['ratio']} sessions attend', style: const TextStyle(color: Colors.white38, fontSize: 11)),
                           ],
                         ),
                       ),
@@ -344,7 +414,7 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
       sessionTitle: widget.sessionTitle,
       date: widget.date,
       time: widget.time,
-      present: presentCount,
+      attend: attendCount,
       absent: absentCount,
     )));
   }
@@ -375,8 +445,8 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
         ),
         actions: [
           TextButton(
-            onPressed: _markAllPresent,
-            child: const Text('Mark all present', style: TextStyle(color: goldColor, fontWeight: FontWeight.w900, fontSize: 13)),
+            onPressed: _markAllAttend,
+            child: const Text('Mark all attend', style: TextStyle(color: goldColor, fontWeight: FontWeight.w900, fontSize: 13)),
           ),
           const SizedBox(width: 5),
         ],
@@ -406,7 +476,7 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
-                _buildSummaryBox(presentCount.toString(), 'Present', [const Color(0xFF064E3B), const Color(0xFF14532D)]),
+                _buildSummaryBox(attendCount.toString(), 'Attend', [const Color(0xFF064E3B), const Color(0xFF14532D)]),
                 const SizedBox(width: 12),
                 _buildSummaryBox(absentCount.toString(), 'Absent', [const Color(0xFF7F1D1D), const Color(0xFF450A0A)]),
                 const SizedBox(width: 12),
@@ -421,7 +491,7 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
               children: [
                 Container(height: 4, decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), borderRadius: BorderRadius.circular(2))),
                 FractionallySizedBox(
-                  widthFactor: (presentCount + absentCount) / _players.length,
+                  widthFactor: (attendCount + absentCount) / _players.length,
                   child: Container(height: 4, decoration: BoxDecoration(color: greenAccent, borderRadius: BorderRadius.circular(2))),
                 ),
               ],
@@ -430,7 +500,7 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
           const SizedBox(height: 30),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text('PLAYERS (12 CONFIRMED ATTENDING)', style: TextStyle(color: Colors.white24, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
+            child: Text('PLAYERS (12 CONFIRMED ATTEND)', style: TextStyle(color: Colors.white24, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1.5)),
           ),
           const SizedBox(height: 10),
           Expanded(
@@ -462,17 +532,17 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
                           : null,
                       ),
                       title: Text(player['name'], style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
-                      subtitle: Text('Attended ${player['ratio']} sessions', style: const TextStyle(color: Colors.white38, fontSize: 11)),
+                      subtitle: Text('Attend ${player['ratio']} sessions', style: const TextStyle(color: Colors.white38, fontSize: 11)),
                       trailing: player['status'] == null
                           ? Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                _buildActionButton('Present', greenAccent, () => _showPresentConfirmation(index)),
+                                _buildActionButton('Attend', greenAccent, () => _showAttendConfirmation(index)),
                                 const SizedBox(width: 8),
                                 _buildActionButton('Absent', Colors.redAccent, () => _showAbsentConfirmation(index)),
                               ],
                             )
-                          : _buildStatusPill(player['status']),
+                          : _buildStatusPill(player['status'], index),
                     ),
                   ),
                 );
@@ -571,17 +641,33 @@ class _SessionAttendancePageState extends State<SessionAttendancePage> {
     );
   }
 
-  Widget _buildStatusPill(String status) {
-    Color color = status == 'Present' ? greenAccent : Colors.redAccent;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(10)),
-      child: Text(status, style: const TextStyle(color: Colors.black, fontSize: 11, fontWeight: FontWeight.bold)),
+  Widget _buildStatusPill(String status, int index) {
+    Color color = status == 'Attend' ? greenAccent : Colors.redAccent;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(10)),
+          child: Text(status, style: const TextStyle(color: Colors.black, fontSize: 11, fontWeight: FontWeight.bold)),
+        ),
+        const SizedBox(width: 8),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              _players[index]['status'] = null;
+            });
+          },
+          icon: const Icon(Icons.refresh, color: Colors.white24, size: 18),
+          constraints: const BoxConstraints(),
+          padding: EdgeInsets.zero,
+        ),
+      ],
     );
   }
 
   Color _getStatusColor(String? status) {
-    if (status == 'Present') return greenAccent;
+    if (status == 'Attend') return greenAccent;
     if (status == 'Absent') return Colors.redAccent;
     return Colors.white38;
   }
@@ -591,7 +677,7 @@ class AttendanceSavedPage extends StatelessWidget {
   final String sessionTitle;
   final String date;
   final String time;
-  final int present;
+  final int attend;
   final int absent;
 
   const AttendanceSavedPage({
@@ -599,13 +685,13 @@ class AttendanceSavedPage extends StatelessWidget {
     required this.sessionTitle,
     required this.date,
     required this.time,
-    required this.present,
+    required this.attend,
     required this.absent,
   });
 
   @override
   Widget build(BuildContext context) {
-    double rate = (present / (present + absent)) * 100;
+    double rate = (attend / (attend + absent)) * 100;
 
     return Scaffold(
       backgroundColor: darkBg,
@@ -631,7 +717,7 @@ class AttendanceSavedPage extends StatelessWidget {
                 child: Column(
                   children: [
                     _buildRow('Session', sessionTitle, Colors.white),
-                    _buildRow('Present', '$present players', goldColor),
+                    _buildRow('Attend', '$attend players', goldColor),
                     _buildRow('Absent', '$absent players', Colors.redAccent),
                     _buildRow('Attendance rate', '${rate.toStringAsFixed(0)}%', goldColor),
                     _buildRow('Reliability scores', 'Updated', goldColor),
